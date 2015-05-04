@@ -6,7 +6,7 @@ INCLUDE_DIRS = -I. -Istm32f10x_lib/inc -ICM730_HW/inc -ICM730_APP/inc
 #INCLUDE_DIRS = -I.
 LIBRARY_DIRS = -Lstm32f10x_lib
 
-TCHAIN_PREFIX=arm-eabi-
+TCHAIN_PREFIX=arm-none-eabi-
 
 
 CC = $(TCHAIN_PREFIX)gcc
