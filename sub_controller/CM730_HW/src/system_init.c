@@ -84,9 +84,9 @@ void System_Configuration(void)
 	Timer_Configuration();
 
 
-#if 0
 	SPI_Configuration();
 
+#if 0
 	Buzzer_Configuration();
 #endif
 
@@ -105,10 +105,8 @@ void System_Configuration(void)
 
 
 
-#if 0
 	Gyro_Configuration();
 	ACC_Configuration();
-#endif
 
 
 
@@ -296,7 +294,7 @@ void RCC_Configuration(void)
 	/* Enable USART5, GPIOA, GPIOB, and AFIO clocks */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_TIM1 | RCC_APB2Periph_TIM8 |
 							RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD |
-							RCC_APB2Periph_ADC1 | RCC_APB2Periph_ADC2 | RCC_APB2Periph_AFIO, ENABLE);
+							RCC_APB2Periph_ADC1 | RCC_APB2Periph_ADC2 | RCC_APB2Periph_AFIO | RCC_APB2Periph_SPI1, ENABLE);
 
 	RCC_APB1PeriphClockCmd ( RCC_APB1Periph_TIM2 | RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4 | RCC_APB1Periph_TIM5 |
 							 RCC_APB1Periph_USART3 |  RCC_APB1Periph_UART5 | RCC_APB1Periph_SPI2|
@@ -456,7 +454,6 @@ void ADC_Configuration(void)
 #endif
 
 
-#if 0
 void SPI_Configuration(void)
 {
 
@@ -477,8 +474,10 @@ void SPI_Configuration(void)
 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
 	SPI_InitStructure.SPI_CRCPolynomial = 7;
 
-	//SPI_Init(SPI1, &SPI_InitStructure);
+	SPI_Init(SPI1, &SPI_InitStructure);
+#if 0
 	SPI_Init(SPI2, &SPI_InitStructure);
+#endif
 
 
 	/* Enable SPI2 RXNE interrupt */
@@ -486,14 +485,15 @@ void SPI_Configuration(void)
 	//SPI_I2S_ITConfig(SPI2, SPI_I2S_IT_TXE, DISABLE);
 
 	/* Enable SPI1 */
-	//SPI_Cmd(SPI1, ENABLE);
+	SPI_Cmd(SPI1, ENABLE);
 
 	/* Enable SPI2 */
+#if 0
     SPI_Cmd(SPI2, ENABLE);
+#endif
 
 
 }
-#endif
 
 
 
@@ -543,6 +543,15 @@ void GPIO_Configuration(void)
 	GPIO_Init(GPIOA , &GPIO_InitStructure);
 #endif
 
+	GPIO_InitStructure.GPIO_Pin = PIN_SIG_ACC_CS | PIN_SIG_GYRO_CS;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_SIG_SCK  | PIN_SIG_MOSI | PIN_SIG_MISO;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	// PORTB CONFIG
 #if 0

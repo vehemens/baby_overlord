@@ -512,13 +512,17 @@ void TIM2_IRQHandler(void)
 			ISR_LED_RGB_TIMER();
 
 		}
+#endif
 		if( !( gwCounter1 & 31 ) ) // 3840us, 250Hz
 		{
 			ISR_SPI_READ();
+#if 0
 			__ISR_Buzzer_Manage();
 			GB_BUTTON = ReadButton();
+#endif
 		}
 
+#if 0
 		if( !( gwCounter1 & 0x3FF ) ) // 125ms
 		{
 			LED_SetState(LED_RX,OFF);

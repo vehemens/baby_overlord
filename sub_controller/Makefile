@@ -53,7 +53,8 @@ MAIN_OBJS = \
  CM730_APP/src/CM_DXL_COM.o \
  CM730_HW/src/system_init.o \
  CM730_HW/src/system_func.o \
- CM730_HW/src/usart.o
+ CM730_HW/src/usart.o \
+ CM730_HW/src/gyro_acc.o
  
  
 

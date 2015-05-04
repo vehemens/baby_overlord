@@ -86,12 +86,10 @@ void ISR_1ms_TIMER(void)
 	gbMiliSec++;
 }
 
-#if 0
 void ISR_SPI_READ(void)
 {
 	__GYRO_ACC_READ_ISR();
 }
-#endif
 
 void ISR_USART_DXL(void)
 {
