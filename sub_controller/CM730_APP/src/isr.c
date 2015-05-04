@@ -51,6 +51,7 @@ vu8 bLedBlinkFlag=0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 #define LOW_BATTERY_LIMIT
+#if 0
 void ISR_BATTERY_CHECK(void)
 {
 
@@ -78,26 +79,31 @@ void ISR_BATTERY_CHECK(void)
 	}
 
 }
+#endif
 
 void ISR_1ms_TIMER(void)
 {
 	gbMiliSec++;
 }
 
+#if 0
 void ISR_SPI_READ(void)
 {
 	__GYRO_ACC_READ_ISR();
 }
+#endif
 
 void ISR_USART_DXL(void)
 {
 	__ISR_USART_DXL();
 
 }
+#if 0
 void ISR_USART_ZIGBEE(void)
 {
 	__ISR_USART_ZIGBEE();
 }
+#endif
 
 void ISR_USART_PC(void)
 {
@@ -105,6 +111,7 @@ void ISR_USART_PC(void)
 }
 
 
+#if 0
 void ISR_LED_RGB_TIMER(void)
 {
 	vu8 gbUSB_Enable = 0;
@@ -205,6 +212,7 @@ void ISR_LED_RGB_TIMER(void)
 		GPIO_ResetBits(PORT_LED6_B, PIN_LED6_B);
 	}
 }
+#endif
 
 
 void ISR_DELAY(void)
@@ -212,6 +220,7 @@ void ISR_DELAY(void)
 	__ISR_DELAY();
 }
 
+#if 0
 void ISR_ADC(void)
 {
 	__ISR_ADC();
@@ -226,6 +235,7 @@ void ISR_MOTOR_CONTROL(void)
 {
 
 }
+#endif
 
 //gyro read.
 //while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET);

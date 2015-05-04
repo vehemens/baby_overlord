@@ -370,17 +370,21 @@ void __ISR_DELAY(void)
 
 }
 
+#if 0
 void dxl_set_power(PowerState state)
 {
 	if(state == ON) GPIO_SetBits(PORT_ENABLE_DXLPWR, PIN_ENABLE_DXLPWR);
 	else			GPIO_ResetBits(PORT_ENABLE_DXLPWR, PIN_ENABLE_DXLPWR);
 	//gbDxlPwr = state;
 }
+#endif
 
+#if 0
 u8 getVoltage(void)
 {
     return ( gbVoltageTable[ (getADC(0)) >>4 ] );
 }
+#endif
 
 
 u16 EEPROM_Read( u32 Offset )

@@ -372,7 +372,9 @@ void DMA1_Channel7_IRQHandler(void)
 *******************************************************************************/
 void ADC1_2_IRQHandler(void)
 {
+#if 0
 	ISR_ADC();
+#endif
 }
 
 /*******************************************************************************
@@ -492,7 +494,9 @@ void TIM2_IRQHandler(void)
 	if (TIM_GetITStatus(TIM2, TIM_IT_CC4) != RESET) // 120us, 8000Hz
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_CC4);
+#if 0
 		ISR_ADC();
+#endif
 		capture = TIM_GetCapture4(TIM2);
 		TIM_SetCompare4(TIM2, capture + CCR4_Val);
 
@@ -502,6 +506,7 @@ void TIM2_IRQHandler(void)
 			ISR_1ms_TIMER();
 		}
 
+#if 0
 		if( !( gwCounter1 & 3 ) ) // 480us, 2000Hz
 		{
 			ISR_LED_RGB_TIMER();
@@ -528,6 +533,7 @@ void TIM2_IRQHandler(void)
 
 
 		}
+#endif
 
 
 
@@ -841,7 +847,9 @@ void UART4_IRQHandler(void)
 *******************************************************************************/
 void UART5_IRQHandler(void)
 {
+#if 0
 	ISR_USART_ZIGBEE();
+#endif
 }
 
 /*******************************************************************************

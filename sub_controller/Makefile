@@ -50,17 +50,10 @@ MAIN_OBJS = \
  CM730_APP/src/main.o \
  CM730_APP/src/serial.o \
  CM730_APP/src/isr.o \
- CM730_APP/src/zigbee.o \
- CM730_APP/src/zgb_hal.o \
  CM730_APP/src/CM_DXL_COM.o \
- CM730_HW/src/button.o \
- CM730_HW/src/led.o \
  CM730_HW/src/system_init.o \
  CM730_HW/src/system_func.o \
- CM730_HW/src/adc.o \
- CM730_HW/src/usart.o \
- CM730_HW/src/sound.o \
- CM730_HW/src/gyro_acc.o
+ CM730_HW/src/usart.o
  
  
 
@@ -112,4 +105,4 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 
 clean:
-	-rm $(MAIN_OBJS) $(LIBSTM32_OBJS) $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_HEX) $(MAIN_OUT_BIN) $(MAIN_OUT_LSS) $(MAIN_OUT_ELF).map
+	-rm -f $(MAIN_OBJS) $(LIBSTM32_OBJS) $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_HEX) $(MAIN_OUT_BIN) $(MAIN_OUT_LSS) $(MAIN_OUT_ELF).map

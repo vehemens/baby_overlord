@@ -17,6 +17,7 @@
 
 
 ///////////////////PORTA//////////////////////////////////////////////////////////
+#if 0
 #define PIN_ADC4				GPIO_Pin_0
 #define PIN_ADC5				GPIO_Pin_1
 #define PIN_ADC6				GPIO_Pin_2
@@ -51,9 +52,11 @@
 #define PORT_PA13				GPIOA
 #define PORT_SW_MODE			GPIOA
 #define PORT_SW_START			GPIOA
+#endif
 
 
 ///////////////////PORTB//////////////////////////////////////////////////////////
+#if 0
 #define PIN_ADC14				GPIO_Pin_0
 #define PIN_ADC15				GPIO_Pin_1
 #define PIN_BOOT1				GPIO_Pin_2
@@ -87,12 +90,26 @@
 #define PORT_SIG_SCK				GPIOB
 #define PORT_SIG_MISO				GPIOB
 #define PORT_SIG_MOSI				GPIOB
+#endif
 
+// OpenCM9.04
+#define PIN_DXL_DIR				GPIO_Pin_5
+#define PIN_DXL_TXD				GPIO_Pin_6
+#define PIN_DXL_RXD				GPIO_Pin_7
 
+#define PIN_PC_TXD				GPIO_Pin_10
+#define PIN_PC_RXD				GPIO_Pin_11
 
+#define PORT_DXL_DIR				GPIOB 
+#define PORT_DXL_TXD				GPIOB
+#define PORT_DXL_RXD				GPIOB
+
+#define PORT_PC_TXD				GPIOB
+#define PORT_PC_RXD				GPIOB
 
 
 ///////////////////PORTC//////////////////////////////////////////////////////////
+#if 0
 #define PIN_ADC0				GPIO_Pin_0
 #define PIN_ADC1				GPIO_Pin_1
 #define PIN_ADC2				GPIO_Pin_2
@@ -127,15 +144,19 @@
 #define PORT_LED_TX				GPIOC
 #define PORT_LED_RX				GPIOC
 #define PORT_LED2				GPIOC
+#endif
 
 
 
 ///////////////////PORTD///////////////////////////////////////////////////////
+#if 0
 #define PIN_ZIGBEE_RXD			GPIO_Pin_2
 #define PORT_ZIGBEE_RXD			GPIOD
+#endif
 
 
 /////////////////////////// LED REDEFINE /////////////////////////////////////////
+#if 0
 #define PIN_LED_MANAGE		PIN_LED2
 #define PIN_LED_EDIT		PIN_LED3
 #define PIN_LED_PLAY		PIN_LED4
@@ -146,6 +167,7 @@
 #define PORT_LED_EDIT		PORT_LED3
 #define PORT_LED_PLAY		PORT_LED4
 #define PORT_LED_POWER		PORT_LED6_R
+#endif
 
 
 /*

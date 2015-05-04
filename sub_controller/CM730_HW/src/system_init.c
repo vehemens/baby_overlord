@@ -62,7 +62,9 @@ void System_Configuration(void)
 	/* USART Configuration */
 	USART_Configuration(USART_DXL,Baudrate_DXL);
 	//dxl_initialize(USART_DXL,Baudrate_DXL);
+#if 0
 	zgb_initialize(0);
+#endif
 	//USART_Configuration(USART_ZIGBEE,Baudrate_ZIGBEE);
 
 	//USART_Configuration(USART_PC,1000000);
@@ -71,7 +73,9 @@ void System_Configuration(void)
 
 
 	/* ADC Configuration */
+#if 0
 	ADC_Configuration();
+#endif
 	
 	
 
@@ -80,22 +84,31 @@ void System_Configuration(void)
 	Timer_Configuration();
 
 
+#if 0
 	SPI_Configuration();
 
 	Buzzer_Configuration();
+#endif
 
 
+#if 0
 	GPIO_ResetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Disable
 	GPIO_SetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Enable
+#endif
+	GPIO_ResetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// RX Enable
+#if 0
 	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
 	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+#endif
 
 	__enable_interrupt();
 
 
 
+#if 0
 	Gyro_Configuration();
 	ACC_Configuration();
+#endif
 
 
 
@@ -106,6 +119,7 @@ void System_Configuration(void)
 
 
 
+#if 0
 void Buzzer_Configuration(void)
 {
 
@@ -139,6 +153,7 @@ void Buzzer_Configuration(void)
 
 
 }
+#endif
 
 
 
@@ -322,6 +337,7 @@ void USART_Configuration(u8 PORT, u32 baudrate)
 		/* Enable the USART1 */
 		USART_Cmd(USART1, ENABLE);
 	}
+#if 0
 	else if( PORT == USART_ZIGBEE )
 	{
 		Baudrate_ZIGBEE = baudrate;
@@ -337,6 +353,7 @@ void USART_Configuration(u8 PORT, u32 baudrate)
 		/* Enable the UART5 */
 		USART_Cmd(UART5, ENABLE);
 	}
+#endif
 	else if( PORT == USART_PC )
 	{
 		Baudrate_PC = baudrate;
@@ -362,10 +379,12 @@ u32 USART_GetBaudrate(u8 PORT)
 	{
 		return Baudrate_DXL;
 	}
+#if 0
 	else if( PORT == USART_ZIGBEE )
 	{
 		return Baudrate_ZIGBEE;
 	}
+#endif
 	else if( PORT == USART_PC )
 	{
 		return Baudrate_PC;
@@ -374,6 +393,7 @@ u32 USART_GetBaudrate(u8 PORT)
 	return 0;
 }
 
+#if 0
 void ADC_Configuration(void)
 {
 	
@@ -433,8 +453,10 @@ void ADC_Configuration(void)
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	ADC_SoftwareStartConvCmd(ADC2, ENABLE);
 }
+#endif
 
 
+#if 0
 void SPI_Configuration(void)
 {
 
@@ -471,6 +493,7 @@ void SPI_Configuration(void)
 
 
 }
+#endif
 
 
 
@@ -488,6 +511,7 @@ void GPIO_Configuration(void)
 	GPIO_StructInit(&GPIO_InitStructure);
 	
 	// PORTA CONFIG
+#if 0
 	GPIO_InitStructure.GPIO_Pin = 	PIN_LED6_R | PIN_LED6_G | PIN_LED6_B ;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -517,9 +541,11 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Pin = PIN_SW_MODE | PIN_SW_START ;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(GPIOA , &GPIO_InitStructure);
+#endif
 
 
 	// PORTB CONFIG
+#if 0
 	GPIO_InitStructure.GPIO_Pin = 	PIN_ENABLE_ZIGBEE | PIN_ENABLE_TXD | PIN_ENABLE_RXD | PIN_ENABLE_DXLPWR |
 									PIN_BOOT1  | PIN_LED3 ;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -552,10 +578,24 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Pin = PIN_ADC14 | PIN_ADC15 ;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+#endif
 
+	GPIO_InitStructure.GPIO_Pin = PIN_DXL_DIR;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
+	GPIO_InitStructure.GPIO_Pin = PIN_DXL_RXD | PIN_PC_RXD;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_DXL_TXD | PIN_PC_TXD ;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	// PORTC CONFIG
+#if 0
 	GPIO_InitStructure.GPIO_Pin = PIN_LED4 | PIN_LED5_R | PIN_LED5_G | PIN_LED5_B | PIN_SIG_ACC_CS | PIN_SIG_GYRO_CS | PIN_LED_TX | PIN_LED_RX | PIN_LED2  ;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -571,16 +611,21 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Pin = PIN_ADC0 | PIN_ADC1 | PIN_ADC2 | PIN_ADC3 | PIN_ADC12 | PIN_ADC13 ;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
+#endif
 	
 
 	// PORTD CONFIG
+#if 0
 	GPIO_InitStructure.GPIO_Pin = PIN_ZIGBEE_RXD;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
+#endif
 
 	/* Configure USART1 Remap enable */
 	GPIO_PinRemapConfig( GPIO_Remap_USART1, ENABLE);
+#if 0
 	GPIO_PinRemapConfig( GPIO_Remap_SWJ_Disable, ENABLE);
+#endif
 }
 
 /*******************************************************************************
@@ -619,11 +664,13 @@ void NVIC_Configuration(void)
 	NVIC_Init(&NVIC_InitStructure);
 
 
+#if 0
 	NVIC_InitStructure.NVIC_IRQChannel = UART5_IRQChannel;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+#endif
 
 
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQChannel;

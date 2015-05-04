@@ -48,9 +48,13 @@ int main(void)
 
 	System_Configuration();
 
+#if 0
 	dxl_set_power(OFF);
+#endif
 	//dxl_set_power(ON);
+#if 0
 	Zigbee_SetState(ON);
+#endif
 	//gbDxlPwr = ON;
 
 	//LED_SetState(LED_POWER, ON);
@@ -61,7 +65,9 @@ int main(void)
 	BufferClear(USART_PC);
 	BufferClear(USART_ZIGBEE);
 
+#if 0
 	setBuzzerOff();
+#endif
 
 /*
 	for(bCount =0; bCount < 50; bCount++ )
@@ -139,12 +145,14 @@ int main(void)
 
 
 
+#if 0
 	for (bCount = 0; bCount < 3; bCount++) {
 		LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, ON);
 		mDelay(50);
 		LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
 		mDelay(50);
 	}
+#endif
 /*
 	dxl_set_power(1);
 	gbDxlPwr = 1;

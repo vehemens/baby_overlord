@@ -25,8 +25,10 @@
 volatile u16 gwpUSART_DXL_Buffer[USART_BUFFER_SIZE+1];
 volatile u16 gwUSART_DXL_ReadPtr, gwUSART_DXL_WritePtr;
 */
+#if 0
 volatile u16 gwpUSART_ZIGBEE_Buffer[USART_BUFFER_SIZE+1];
 volatile u16 gwUSART_ZIGBEE_ReadPtr, gwUSART_ZIGBEE_WritePtr;
+#endif
 
 /*
 volatile u16 gwpUSART_PC_Buffer[USART_BUFFER_SIZE+1];
@@ -41,19 +43,23 @@ extern u8 gbDxlPwr;
 
 void BufferClear(u8 PORT)
 {
+#if 0
 	if( PORT == USART_ZIGBEE ) // || PORT == USART_IR
 	{
 		gwUSART_ZIGBEE_ReadPtr = gwUSART_ZIGBEE_WritePtr = 0;
 	}
+#endif
 
 }
 
 u8 IsRXD_Ready(u8 PORT)
 {
+#if 0
 	if( PORT == USART_ZIGBEE ) // || PORT == USART_IR
 	{
 		return (gwUSART_ZIGBEE_ReadPtr != gwUSART_ZIGBEE_WritePtr);
 	}
+#endif
 
 	return -1;
 }
@@ -61,11 +67,13 @@ u8 IsRXD_Ready(u8 PORT)
 u8 RxDBuffer(u8 PORT)
 {
 
+#if 0
 	if( PORT == USART_ZIGBEE ) // || PORT == USART_IR
 	{
 		gwUSART_ZIGBEE_ReadPtr++;
 		return (u8)(gwpUSART_ZIGBEE_Buffer[gwUSART_ZIGBEE_ReadPtr&USART_BUFFER_SIZE]);
 	}
+#endif
 
 	return -1;
 }
@@ -74,20 +82,28 @@ void TxDData(u8 PORT, u8 dat)
 {
 	if( PORT == USART_DXL )
 	{
+#if 0
 		GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
 		GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
+#endif
+		GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
 
 		USART_SendData(USART1,dat);		
 		while( USART_GetFlagStatus(USART1, USART_FLAG_TC)==RESET );
 
+#if 0
 		GPIO_ResetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Disable
 		GPIO_SetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Enable
+#endif
+		GPIO_ResetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Disable
 	}
+#if 0
 	else if( PORT == USART_ZIGBEE )
 	{
 		USART_SendData(UART5,dat);
 		while( USART_GetFlagStatus(UART5, USART_FLAG_TC)==RESET );
 	}
+#endif
 	else if( PORT == USART_PC )
 	{
 		USART_SendData(USART3,dat);		
@@ -96,6 +112,7 @@ void TxDData(u8 PORT, u8 dat)
 }
 
 
+#if 0
 void __ISR_USART_ZIGBEE(void)
 {
 	u16 ReceivedData;
@@ -110,6 +127,7 @@ void __ISR_USART_ZIGBEE(void)
 		//TxDHex8(ReceivedData);
 	}
 }
+#endif
 
 
 void __ISR_USART_PC(void)
@@ -122,7 +140,9 @@ void __ISR_USART_PC(void)
 		// Read one byte from the receive data register
 		ReceivedData = USART_ReceiveData(USART3); 
 
+#if 0
 		LED_SetState(LED_TX, ON);
+#endif
 
 		gbpTxD0Buffer[gbTxD0BufferWritePointer] = gbpRxInterruptBuffer[gbRxBufferWritePointer] =   gbpRxD1Buffer[gbRxD1BufferWritePointer] = ReceivedData;
 		gbRxBufferWritePointer++;
@@ -134,10 +154,14 @@ void __ISR_USART_PC(void)
 
 
 					//if( GB_DYNAMIXEL_POWER)
+#if 0
 		if ( GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_RESET) {
 			//if (TXD0_FINISH) {
 			GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
 			GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
+#endif
+		if ( GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
+			GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
 
 			USART_SendData(USART1, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
 			//gbTxD0BufferReadPointer &= 0x3FF;
@@ -201,7 +225,9 @@ void __ISR_USART_DXL(void)
 			if( gbDxlPwr == Bit_SET )
 			{
 				USART_SendData(USART3, gbpTxD1Buffer[gbTxD1BufferReadPointer]);
+#if 0
 				LED_SetState(LED_RX, ON);
+#endif
 			}
 			gbTxD1BufferReadPointer++;
 			//gbTxD1BufferReadPointer &= 0x3FF;
@@ -228,8 +254,11 @@ void __ISR_USART_DXL(void)
 		//    TXD0_FINISH = 1;
 		}
 		else {
+#if 0
 			GPIO_ResetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Disable
 			GPIO_SetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Enable
+#endif
+			GPIO_ResetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Disable
 			//LED_SetState(LED_TX, OFF);
 			//gbTxD0Transmitting = 0;
 			USART_ITConfig(USART1, USART_IT_TC, DISABLE);

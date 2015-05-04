@@ -371,7 +371,9 @@ void Process(void)
 	gbLEDEyeG = (GW_LED_EYE>>5)&0x1f;
 	gbLEDEyeB = (GW_LED_EYE>>10)&0x1f;
 
+#if 0
   GW_ZIGBEE_ID = ScanZigbee();
+#endif
 
 
 
@@ -643,6 +645,7 @@ void Process(void)
 					  byte bFixedData;
 					  word wFixedData;
 
+#if 0
 					  if( bCount == P_RX_REMOCON_DATA_ARRIVED)
 					  {
 						  GB_RX_REMOCON_DATA_ARRIVED = zgb_rx_check();
@@ -651,6 +654,7 @@ void Process(void)
 					  {
 						  GW_RX_REMOCON_DATA = zgb_rx_data();
 					  }
+#endif
 
 					  if(gbpDataSize[bCount] == 2 && bCount < bEndAddress)
 					  {
@@ -688,11 +692,15 @@ void Process(void)
 						//TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
 					}
 
+#if 0
 					if ( GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_RESET) {
 						//TxDString(USART_ZIGBEE,"\r\n TEST0");
 						//if (TXD0_FINISH) {
 						GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
 						GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
+#endif
+					if ( GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
+						GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
 
 						USART_SendData(USART1, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
 						USART_ITConfig(USART1, USART_IT_TC, ENABLE);
@@ -933,13 +941,17 @@ void ProcessAfterWriting(void)
 		break;
 
 		case	P_DYNAMIXEL_POWER:
+#if 0
 				dxl_set_power(GB_DYNAMIXEL_POWER);
+#endif
 				gbDxlPwr = GB_DYNAMIXEL_POWER;
 		break;
+#if 0
 		case	P_LED_PANNEL:
 				LED_SetState(GB_LED_MODE, ON);
 				LED_SetState(~GB_LED_MODE, OFF);
 		break;
+#endif
 		case	P_LED_HEAD:
 		    gbLEDHeadR = GW_LED_HEAD&0x1f;
 		    gbLEDHeadG = (GW_LED_HEAD>>5)&0x1f;
@@ -952,6 +964,7 @@ void ProcessAfterWriting(void)
 		    gbLEDEyeB = (GW_LED_EYE>>10)&0x1f;
 		break;
 
+#if 0
 		case	P_BUZZER_DATA0:
 
 			setBuzzerPlayLength(GB_BUZZER_DATA1);
@@ -968,19 +981,24 @@ void ProcessAfterWriting(void)
 				PlayBuzzer();
 			}
 		break;
+#endif
 
+#if 0
 		case	P_BUZZER_DATA1:
 			if( GB_BUZZER_DATA1 == 0x00 )
 			{
 				setBuzzerOff();
 			}
 		break;
+#endif
 
+#if 0
 		case	P_TX_REMOCON_DATA_L:
 				zgb_tx_data(GW_TX_REMOCON_DATA);
 				//TxDData(USART_ZIGBEE,'a');
 
 				break;
+#endif
 
 		/*
 		case	P_GPIO_MODE:
