@@ -687,8 +687,8 @@ void Process(void)
 					if (gbTxD1Transmitting==0) {
 					  gbTxD1Transmitting = 1;
 					//  if (TXD1_FINISH) {
-						USART_SendData(USART3, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-						USART_ITConfig(USART3, USART_IT_TC, ENABLE);
+						USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+						USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
 						//TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
 					}
 
@@ -702,8 +702,8 @@ void Process(void)
 					if ( GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
 						GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
 
-						USART_SendData(USART1, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
-						USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+						USART_SendData(DXL_USART, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
+						USART_ITConfig(DXL_USART, USART_IT_TC, ENABLE);
 
 					}
 
@@ -908,8 +908,8 @@ void ReturnPacket(byte bError)
     if (gbTxD1Transmitting==0) {
       gbTxD1Transmitting = 1;
     //  if (TXD1_FINISH) {
-		USART_SendData(USART3, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-		USART_ITConfig(USART3, USART_IT_TC, ENABLE);
+		USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+		USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
       //TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
     }
 

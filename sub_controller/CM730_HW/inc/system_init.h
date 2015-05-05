@@ -108,19 +108,19 @@
 #endif
 
 // OpenCM9.04
-#define PIN_DXL_DIR				GPIO_Pin_5
-#define PIN_DXL_TXD				GPIO_Pin_6
-#define PIN_DXL_RXD				GPIO_Pin_7
+#define PORT_USART1_DIR				GPIOB 
+#define PORT_USART1_TXD				GPIOB
+#define PORT_USART1_RXD				GPIOB
 
-#define PIN_PC_TXD				GPIO_Pin_10
-#define PIN_PC_RXD				GPIO_Pin_11
+#define PORT_USART3_TXD				GPIOB
+#define PORT_USART3_RXD				GPIOB
 
-#define PORT_DXL_DIR				GPIOB 
-#define PORT_DXL_TXD				GPIOB
-#define PORT_DXL_RXD				GPIOB
+#define PIN_USART1_DIR				GPIO_Pin_5
+#define PIN_USART1_TXD				GPIO_Pin_6
+#define PIN_USART1_RXD				GPIO_Pin_7
 
-#define PORT_PC_TXD				GPIOB
-#define PORT_PC_RXD				GPIOB
+#define PIN_USART3_TXD				GPIO_Pin_10
+#define PIN_USART3_RXD				GPIO_Pin_11
 
 #define PORT_SW_MODE				GPIOB
 #define PORT_SW_START				GPIOB
@@ -174,6 +174,10 @@
 #define PORT_LED2				GPIOC
 #endif
 
+// OpenCM9.04
+#define PORT_USART3_DIR				GPIOC 
+
+#define PIN_USART3_DIR				GPIO_Pin_14
 
 
 ///////////////////PORTD///////////////////////////////////////////////////////
@@ -198,6 +202,28 @@
 #if 0
 #define PORT_LED_POWER		PORT_LED6_R
 #endif
+
+
+/////////////////////////// USART REDEFINE ///////////////////////////////////////
+// OpenCM9.04
+#define DXL_USART		USART3
+#define PC_USART		USART1
+
+#define PORT_DXL_DIR		PORT_USART3_DIR
+#define PORT_DXL_TXD		PORT_USART3_TXD
+#define PORT_DXL_RXD		PORT_USART3_RXD
+
+#define PORT_PC_DIR		PORT_USART1_DIR
+#define PORT_PC_TXD		PORT_USART1_TXD
+#define PORT_PC_RXD		PORT_USART1_RXD
+
+#define PIN_DXL_DIR		PIN_USART3_DIR
+#define PIN_DXL_TXD		PIN_USART3_TXD
+#define PIN_DXL_RXD		PIN_USART3_RXD
+
+#define PIN_PC_DIR		PIN_USART1_DIR
+#define PIN_PC_TXD		PIN_USART1_TXD
+#define PIN_PC_RXD		PIN_USART1_RXD
 
 
 /*

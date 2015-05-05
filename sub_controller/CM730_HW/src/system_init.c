@@ -95,6 +95,7 @@ void System_Configuration(void)
 	GPIO_ResetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Disable
 	GPIO_SetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Enable
 #endif
+	GPIO_SetBits(PORT_PC_DIR, PIN_PC_DIR);	// Disable Bi-Directional Logic
 	GPIO_ResetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// RX Enable
 	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
 	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
@@ -322,16 +323,16 @@ void USART_Configuration(u8 PORT, u32 baudrate)
 	{
 		Baudrate_DXL = baudrate;
 
-		USART_DeInit(USART1);
-		/* Configure the USART1 */
-		USART_Init(USART1, &USART_InitStructure);
+		USART_DeInit(DXL_USART);
+		/* Configure the DXL_USART */
+		USART_Init(DXL_USART, &USART_InitStructure);
 		
-		/* Enable USART1 Receive and Transmit interrupts */
-		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+		/* Enable DXL_USART Receive and Transmit interrupts */
+		USART_ITConfig(DXL_USART, USART_IT_RXNE, ENABLE);
 		//USART_ITConfig(USART1, USART_IT_TC, ENABLE);
 		
-		/* Enable the USART1 */
-		USART_Cmd(USART1, ENABLE);
+		/* Enable the DXL_USART */
+		USART_Cmd(DXL_USART, ENABLE);
 	}
 #if 0
 	else if( PORT == USART_ZIGBEE )
@@ -354,17 +355,17 @@ void USART_Configuration(u8 PORT, u32 baudrate)
 	{
 		Baudrate_PC = baudrate;
 		
-		USART_DeInit(USART3);
+		USART_DeInit(PC_USART);
 		
-		/* Configure the USART3 */
-		USART_Init(USART3, &USART_InitStructure);
+		/* Configure the PC_USART */
+		USART_Init(PC_USART, &USART_InitStructure);
 
-		/* Enable USART3 Receive and Transmit interrupts */
-		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+		/* Enable PC_USART Receive and Transmit interrupts */
+		USART_ITConfig(PC_USART, USART_IT_RXNE, ENABLE);
 		//USART_ITConfig(USART3, USART_IT_TC, ENABLE);
 		
-		/* Enable the USART3 */
-		USART_Cmd(USART3, ENABLE);
+		/* Enable the PC_USART */
+		USART_Cmd(PC_USART, ENABLE);
 	}
 	
 }
@@ -587,16 +588,16 @@ void GPIO_Configuration(void)
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 #endif
 
-	GPIO_InitStructure.GPIO_Pin = PIN_DXL_DIR;
+	GPIO_InitStructure.GPIO_Pin = PIN_USART1_DIR;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_DXL_RXD | PIN_PC_RXD;
+	GPIO_InitStructure.GPIO_Pin = PIN_USART1_RXD | PIN_USART3_RXD;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_DXL_TXD | PIN_PC_TXD ;
+	GPIO_InitStructure.GPIO_Pin = PIN_USART1_TXD | PIN_USART3_TXD ;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
@@ -636,6 +637,11 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 #endif
+
+	GPIO_InitStructure.GPIO_Pin = PIN_USART3_DIR;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	/* Configure USART1 Remap enable */
 	GPIO_PinRemapConfig( GPIO_Remap_USART1, ENABLE);
