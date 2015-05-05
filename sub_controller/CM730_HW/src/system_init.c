@@ -96,10 +96,8 @@ void System_Configuration(void)
 	GPIO_SetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Enable
 #endif
 	GPIO_ResetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// RX Enable
-#if 0
 	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
 	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
-#endif
 
 	__enable_interrupt();
 
