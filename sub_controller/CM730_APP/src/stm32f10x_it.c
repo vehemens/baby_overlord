@@ -518,8 +518,8 @@ void TIM2_IRQHandler(void)
 			ISR_SPI_READ();
 #if 0
 			__ISR_Buzzer_Manage();
-			GB_BUTTON = ReadButton();
 #endif
+			GB_BUTTON = ReadButton();
 		}
 
 #if 0

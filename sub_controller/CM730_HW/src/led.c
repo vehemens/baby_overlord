@@ -27,20 +27,24 @@ void LED_SetState(u8 LED_PORT, PowerState NewState)
 		if( LED_PORT & LED_MANAGE )	GPIO_ResetBits(PORT_LED_MANAGE, PIN_LED_MANAGE);
 		if( LED_PORT & LED_EDIT ) 	GPIO_ResetBits(PORT_LED_EDIT, PIN_LED_EDIT);
 		if( LED_PORT & LED_PLAY ) 	GPIO_ResetBits(PORT_LED_PLAY, PIN_LED_PLAY);
+#if 0
 		if( LED_PORT & LED_TX ) 	GPIO_ResetBits(PORT_LED_TX, PIN_LED_TX);
 		if( LED_PORT & LED_RX ) 	GPIO_ResetBits(PORT_LED_RX, PIN_LED_RX);
 		//if( LED_PORT & LED_AUX ) 	GPIO_ResetBits(PORT_LED_AUX, PIN_LED_AUX);
 		if( LED_PORT & LED_POWER ) 	GPIO_ResetBits(PORT_LED_POWER, PIN_LED_POWER);
+#endif
 	}
 	else
 	{
 		if( LED_PORT & LED_MANAGE )	GPIO_SetBits(PORT_LED_MANAGE, PIN_LED_MANAGE);
 		if( LED_PORT & LED_EDIT ) 	GPIO_SetBits(PORT_LED_EDIT, PIN_LED_EDIT);
 		if( LED_PORT & LED_PLAY ) 	GPIO_SetBits(PORT_LED_PLAY, PIN_LED_PLAY);
+#if 0
 		if( LED_PORT & LED_TX ) 	GPIO_SetBits(PORT_LED_TX, PIN_LED_TX);
 		if( LED_PORT & LED_RX ) 	GPIO_SetBits(PORT_LED_RX, PIN_LED_RX);
 		//if( LED_PORT & LED_AUX ) 	GPIO_SetBits(PORT_LED_AUX, PIN_LED_AUX);
 		if( LED_PORT & LED_POWER ) 	GPIO_SetBits(PORT_LED_POWER, PIN_LED_POWER);
+#endif
 	}
 }
 
@@ -61,6 +65,7 @@ PowerState LED_GetState(u8 LED_PORT)
 		if( GPIO_ReadOutputDataBit(PORT_LED_PLAY , 	PIN_LED_PLAY) != SET ) 			return ON;
 		else																		return OFF;
     }
+#if 0
     else if( LED_PORT == LED_TX )
     {
 		if( GPIO_ReadOutputDataBit(PORT_LED_TX , 	PIN_LED_TX) != SET ) 			return ON;
@@ -76,6 +81,7 @@ PowerState LED_GetState(u8 LED_PORT)
 		if( GPIO_ReadOutputDataBit(PORT_LED_POWER , 	PIN_LED_POWER) != SET ) 		return ON;
 		else																		return OFF;
     }
+#endif
     else
     	return OFF;
 
@@ -89,6 +95,7 @@ PowerState LED_GetState(u8 LED_PORT)
 	return OFF;
 }
 
+#if 0
 void LED_RGB_SetState(u8 RGB)
 {
 	if( RGB & LED_R ) 	GPIO_ResetBits(PORT_LED5_R, PIN_LED5_R);
@@ -114,6 +121,7 @@ u8 LED_RGB_GetState()
 	return rgb;
 
 }
+#endif
 
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/

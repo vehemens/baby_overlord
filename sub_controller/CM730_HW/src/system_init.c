@@ -600,6 +600,15 @@ void GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_SW_MODE | PIN_SW_START ;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_LED4 | PIN_LED3 | PIN_LED2;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	// PORTC CONFIG
 #if 0
@@ -633,6 +642,7 @@ void GPIO_Configuration(void)
 #if 0
 	GPIO_PinRemapConfig( GPIO_Remap_SWJ_Disable, ENABLE);
 #endif
+	GPIO_PinRemapConfig( GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
 /*******************************************************************************

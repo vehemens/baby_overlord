@@ -946,12 +946,10 @@ void ProcessAfterWriting(void)
 #endif
 				gbDxlPwr = GB_DYNAMIXEL_POWER;
 		break;
-#if 0
 		case	P_LED_PANNEL:
 				LED_SetState(GB_LED_MODE, ON);
 				LED_SetState(~GB_LED_MODE, OFF);
 		break;
-#endif
 		case	P_LED_HEAD:
 		    gbLEDHeadR = GW_LED_HEAD&0x1f;
 		    gbLEDHeadG = (GW_LED_HEAD>>5)&0x1f;

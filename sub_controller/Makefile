@@ -51,6 +51,8 @@ MAIN_OBJS = \
  CM730_APP/src/serial.o \
  CM730_APP/src/isr.o \
  CM730_APP/src/CM_DXL_COM.o \
+ CM730_HW/src/button.o \
+ CM730_HW/src/led.o \
  CM730_HW/src/system_init.o \
  CM730_HW/src/system_func.o \
  CM730_HW/src/usart.o \

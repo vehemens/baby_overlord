@@ -145,14 +145,12 @@ int main(void)
 
 
 
-#if 0
 	for (bCount = 0; bCount < 3; bCount++) {
 		LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, ON);
 		mDelay(50);
 		LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
 		mDelay(50);
 	}
-#endif
 /*
 	dxl_set_power(1);
 	gbDxlPwr = 1;

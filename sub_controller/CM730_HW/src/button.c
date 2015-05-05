@@ -34,8 +34,8 @@ u8 ReadButton(void)
 {
 	u8 retval=0;
 
-	if( GPIO_ReadInputDataBit(PORT_SW_START, 	PIN_SW_START) != SET ) 	retval |= BUTTON_START;
-	if( GPIO_ReadInputDataBit(PORT_SW_MODE, 	PIN_SW_MODE)  != SET ) 	retval |= BUTTON_MODE;
+	if( GPIO_ReadInputDataBit(PORT_SW_START, 	PIN_SW_START) == SET ) 	retval |= BUTTON_START;
+	if( GPIO_ReadInputDataBit(PORT_SW_MODE, 	PIN_SW_MODE)  == SET ) 	retval |= BUTTON_MODE;
 	
 	return retval;
 }
