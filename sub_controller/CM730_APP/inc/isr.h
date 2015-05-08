@@ -17,6 +17,8 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 
+void ISR_1ms_TIMER(void);
+
 void ISR_USART_DXL(void);
 void ISR_USART_ZIGBEE(void);
 void ISR_USART_PC(void);

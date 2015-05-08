@@ -17,6 +17,7 @@
 #include "system_func.h"
 #include "CM_DXL_COM.h"
 #include "system_init.h"
+#include "gyro_acc.h"
 
 
 

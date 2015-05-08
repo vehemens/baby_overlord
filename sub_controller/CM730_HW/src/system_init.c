@@ -14,6 +14,7 @@
 #include "usart.h"
 #include "dynamixel.h"
 #include "zigbee.h"
+#include "gyro_acc.h"
 
 
 /* Private typedef -----------------------------------------------------------*/

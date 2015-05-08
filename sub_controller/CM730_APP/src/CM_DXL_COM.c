@@ -348,8 +348,10 @@ u8 gbDxlPwr;
 void Process(void)
 {
   byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn,bPrevID;;
+#if 0
   word wTemp;
   byte bTemp;
+#endif
 
 
   GB_ID = DEFAULT_ID;
@@ -921,11 +923,16 @@ void ReturnPacket(byte bError)
 
 void ProcessAfterWriting(void)
 {
+#if 0
   byte bCount, bComplianceFlag;
   word wTemp;
+#endif
+  byte bCount;
   u32 lTemp;
 
+#if 0
   bComplianceFlag = 0;
+#endif
   for(bCount = 0; bCount < gbParameterLength-1; bCount++) //Range Check
   {
     switch(gbStartAddress+bCount)

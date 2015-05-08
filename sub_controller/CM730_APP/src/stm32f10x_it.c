@@ -24,6 +24,7 @@
 #include "led.h"
 #include "sound.h"
 #include "CM_DXL_COM.h"
+#include "button.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -489,7 +490,9 @@ void TIM1_CC_IRQHandler(void)
 *******************************************************************************/
 void TIM2_IRQHandler(void)
 {
-	static b1Sec=0;
+#if 0
+	static int b1Sec=0;
+#endif
 
 	if (TIM_GetITStatus(TIM2, TIM_IT_CC4) != RESET) // 120us, 8000Hz
 	{

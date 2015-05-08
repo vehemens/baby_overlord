@@ -44,7 +44,9 @@ int main(void)
 {
 
 	byte bCount;
+#if 0
 	long lTemp;
+#endif
 
 	System_Configuration();
 
