@@ -1,0 +1,31 @@
+Board Configuration:
+
+OpenCM9.04
+NA
+
+FT232R-Breakout-v3.7
+S1 to 3.3V
+
+LSM9DS0-Breakout
+NA
+
+
+Board Connections:
+
+OpenCM9.04         FT232R-Breakout-v3.7
+Signal   Pin       Signal   Pin
+DGND     J12-4     GND      JP3-4
+VCC_33L  J12-3	   3.3V     JP3-1
+DXL_RXD  J13-13    TxD      JP3-2
+DXL_TXD  J13-14    RxD      JP3-3
+
+OpenCM9.04         LSM9DS0-Breakout
+Signal   Pin       Signal   Pin
+DGND     J12-4     GND      JP1-6
+VCC_33L  J12-3     VCC      JP1-7
+PA7      J12-12    SDA      JP1-8
+PA5      J12-6     SCL      JP1-9
+PA6      J12-11    SDO_XM   JP1-10
+""       ""        SDO_G    JP1-11
+PA1      J12-8     CS_XM    JP1-12
+PA0      J12-7     CS_G     JP1-13
