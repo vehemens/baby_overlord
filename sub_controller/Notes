@@ -1,3 +1,9 @@
+OpenOCD
+
+Note that the version of openocd used is a local build as of git commit
+db8029b which is newer then the 0.8.0 release.
+
+
 Board Configuration:
 
 OpenCM9.04
@@ -15,7 +21,7 @@ Board Connections:
 OpenCM9.04         FT232R-Breakout-v3.7
 Signal   Pin       Signal   Pin
 DGND     J12-4     GND      JP3-4
-VCC_33L  J12-3	   3.3V     JP3-1
+VCC_33L  J12-3     3.3V     JP3-1
 DXL_RXD  J13-13    TxD      JP3-2
 DXL_TXD  J13-14    RxD      JP3-3
 
