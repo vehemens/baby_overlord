@@ -1,0 +1,5 @@
+~/robotics/myrobot/openocd-code/src/openocd \
+ -s ~/robotics/myrobot/openocd-code/tcl \
+ -f ~/robotics/myrobot/openocd-code/tcl/board/opencm9.04.cfg \
+ -f Virtual_COM_Port_openocd.cfg \
+ -c "exit"
