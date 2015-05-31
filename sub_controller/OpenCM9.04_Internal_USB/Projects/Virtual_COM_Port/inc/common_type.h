@@ -17,7 +17,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "cortexm3_macro.h"
+//#include "cortexm3_macro.h"
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum {OFF = 0, ON = !OFF} PowerState;

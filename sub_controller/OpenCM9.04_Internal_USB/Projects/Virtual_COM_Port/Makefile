@@ -65,7 +65,8 @@ OPTIMIZE       = -Os
 CFLAGS	= $(MCFLAGS)  $(OPTIMIZE)  $(DEFS) -I. -I./ $(STM32_INCLUDES)  -Wl,-T,stm32_flash.ld
 AFLAGS	= $(MCFLAGS) 
 
-SRC = src/hw_config.c \
+SRC = src/CM_DXL_COM.c \
+	src/hw_config.c \
 	src/main.c \
 	src/stm3210e_eval.c \
 	src/stm32_it.c \

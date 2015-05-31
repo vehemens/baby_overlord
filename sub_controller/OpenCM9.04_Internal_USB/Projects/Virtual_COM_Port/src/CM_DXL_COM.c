@@ -1,17 +1,19 @@
 
+#include "stm32f10x.h"
+
 #include "common_type.h"
 #include "dynamixel.h"
-#include "stm32f10x_lib.h"
-#include "system_func.h"
-#include "adc.h"
-#include "led.h"
-#include "system_init.h"
+//#include "stm32f10x_lib.h"
+//#include "system_func.h"
+//#include "adc.h"
+//#include "led.h"
+//#include "system_init.h"
 #include "CM_DXL_COM.h"
-#include "gyro_acc.h"
-#include "button.h"
-#include "sound.h"
-#include "zigbee.h"
-#include "usart.h"
+//#include "gyro_acc.h"
+//#include "button.h"
+//#include "sound.h"
+//#include "zigbee.h"
+//#include "usart.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //	<Compile Option>
@@ -460,7 +462,7 @@ void Process(void)
       for(bCount = 0; bCount < GB_RETURN_DELAY_TIME; bCount++)
       {
         // __delay_cycles(32);//2usec
-    	  uDelay(2);
+    	  //uDelay(2);
       }
       if(bCheckSum != 0xff)
       {
@@ -562,7 +564,7 @@ void Process(void)
 
 						  for(bCount = 0; bCount < GB_RETURN_DELAY_TIME; bCount++)
 						  {
-							  uDelay(2);
+							  //uDelay(2);
 
 							//__delay_cycles(32);//2usec
 					#ifdef	PLL_CLOCK_48MHZ
@@ -689,8 +691,8 @@ void Process(void)
 					if (gbTxD1Transmitting==0) {
 					  gbTxD1Transmitting = 1;
 					//  if (TXD1_FINISH) {
-						USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-						USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
+						//USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+						//USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
 						//TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
 					}
 
@@ -701,13 +703,13 @@ void Process(void)
 						GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
 						GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
 #endif
-					if ( GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
-						GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
+					//if ( GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
+						//GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);	// TX Enable
 
-						USART_SendData(DXL_USART, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
-						USART_ITConfig(DXL_USART, USART_IT_TC, ENABLE);
+						//USART_SendData(DXL_USART, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
+						//USART_ITConfig(DXL_USART, USART_IT_TC, ENABLE);
 
-					}
+					//}
 
 
 					while(gbTxD1Transmitting);
@@ -806,7 +808,7 @@ void Process(void)
           if(gbRxID == BROADCASTING_ID) //for avoiding data crush
           {
 //            MiliSec((word)(GB_ID<<1));
-        	  mDelay((word)(GB_ID<<0)); //Ver0x14
+        	  //mDelay((word)(GB_ID<<0)); //Ver0x14
           }
           ReturnPacket(0);
         }
@@ -816,14 +818,14 @@ void Process(void)
 
           //EEPROM_Write( P_OPERATING_MODE, 0xFF );
           //EEP_GB_OPERATING_MODE = 0xff;
-          SYSTEM_RESET;
+          //SYSTEM_RESET;
         }
         else if(gbInstruction == INST_DIGITAL_RESET)
         {
           ReturnPacket(0);
           //EEPROM_Write( P_OPERATING_MODE, 0x11 );
           //EEP_GB_OPERATING_MODE = 0x11;
-          SYSTEM_RESET;
+          //SYSTEM_RESET;
           //MiliSec(20);
         }
         else
@@ -910,8 +912,8 @@ void ReturnPacket(byte bError)
     if (gbTxD1Transmitting==0) {
       gbTxD1Transmitting = 1;
     //  if (TXD1_FINISH) {
-		USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-		USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
+		//USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+		//USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
       //TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
     }
 
@@ -942,8 +944,8 @@ void ProcessAfterWriting(void)
 			//EEPROM_Write(P_BAUD_RATE,GB_BAUD_RATE);
     		lTemp = 2000000;
 			lTemp /= (GB_BAUD_RATE+1);
-			USART_Configuration(USART_DXL,lTemp);
-			USART_Configuration(USART_PC,lTemp);
+			//USART_Configuration(USART_DXL,lTemp);
+			//USART_Configuration(USART_PC,lTemp);
 
 		break;
 
@@ -954,8 +956,8 @@ void ProcessAfterWriting(void)
 				gbDxlPwr = GB_DYNAMIXEL_POWER;
 		break;
 		case	P_LED_PANNEL:
-				LED_SetState(GB_LED_MODE, ON);
-				LED_SetState(~GB_LED_MODE, OFF);
+				//LED_SetState(GB_LED_MODE, ON);
+				//LED_SetState(~GB_LED_MODE, OFF);
 		break;
 		case	P_LED_HEAD:
 		    gbLEDHeadR = GW_LED_HEAD&0x1f;
