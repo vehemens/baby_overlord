@@ -58,9 +58,7 @@ STM32_INCLUDES = -Iinc/ -I../../Libraries/CMSIS/Device/ST/STM32F10x/Include/ \
 	-I../../Libraries/CMSIS/Include/ \
 	-I../../Libraries/STM32F10x_StdPeriph_Driver/inc/ \
 	-I../../Libraries/STM32_USB-FS-Device_Driver/inc/ \
-	-I../../Libraries/STM32_USB-FS-Device_Driver/inc/ \
-	-I../../Utilities/STM32_EVAL/Common/ \
-	-I../../Utilities/STM32_EVAL/STM3210E_EVAL/
+	-I../../Libraries/STM32_USB-FS-Device_Driver/inc/
 
 OPTIMIZE       = -Os
 
@@ -69,6 +67,7 @@ AFLAGS	= $(MCFLAGS)
 
 SRC = src/hw_config.c \
 	src/main.c \
+	src/stm3210e_eval.c \
 	src/stm32_it.c \
 	src/system_stm32f10x.c \
 	src/usb_desc.c \
@@ -76,7 +75,6 @@ SRC = src/hw_config.c \
 	src/usb_istr.c \
 	src/usb_prop.c \
 	src/usb_pwr.c \
-	../../Utilities/STM32_EVAL/STM3210E_EVAL/stm3210e_eval.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/misc.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c \
