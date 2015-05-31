@@ -289,24 +289,24 @@ byte ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RAT
 
 volatile byte gbpRxInterruptBuffer[256];
 volatile byte gbpTxInterruptBuffer[256];
-volatile byte gbRxBufferWritePointer;
-volatile byte gbRxBufferReadPointer;
-volatile byte gbTxBufferWritePointer;
-volatile byte gbTxBufferReadPointer;
+volatile byte gbRxBufferWritePointer = 0;
+volatile byte gbRxBufferReadPointer = 0;
+volatile byte gbTxBufferWritePointer = 0;
+volatile byte gbTxBufferReadPointer = 0;
 
 volatile byte gbpRxD0Buffer[256];
 volatile byte gbpTxD0Buffer[256];
-volatile byte gbRxD0BufferWritePointer;
-volatile byte gbRxD0BufferReadPointer;
-volatile byte gbTxD0BufferWritePointer;
-volatile byte gbTxD0BufferReadPointer;
+volatile byte gbRxD0BufferWritePointer = 0;
+volatile byte gbRxD0BufferReadPointer = 0;
+volatile byte gbTxD0BufferWritePointer = 0;
+volatile byte gbTxD0BufferReadPointer = 0;
 
 volatile byte gbpRxD1Buffer[256];
 volatile byte gbpTxD1Buffer[256];
-volatile byte gbRxD1BufferWritePointer;
-volatile byte gbRxD1BufferReadPointer;
-volatile byte gbTxD1BufferWritePointer;
-volatile byte gbTxD1BufferReadPointer;
+volatile byte gbRxD1BufferWritePointer = 0;
+volatile byte gbRxD1BufferReadPointer = 0;
+volatile byte gbTxD1BufferWritePointer = 0;
+volatile byte gbTxD1BufferReadPointer = 0;
 
 volatile byte gbTxD0Transmitting;
 volatile byte gbTxD1Transmitting;
@@ -382,6 +382,10 @@ void Process(void)
 
 
 
+	for(bCount=0; bCount < ROM_CONTROL_TABLE_LEN; bCount++)
+	{
+		gbpControlTable[bCount] = ROM_INITIAL_DATA[bCount];
+	}
 
 
 
@@ -688,13 +692,13 @@ void Process(void)
 
 
 
-					if (gbTxD1Transmitting==0) {
-					  gbTxD1Transmitting = 1;
+					//if (gbTxD1Transmitting==0) {
+					  //gbTxD1Transmitting = 1;
 					//  if (TXD1_FINISH) {
 						//USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
 						//USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
 						//TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
-					}
+					//}
 
 #if 0
 					if ( GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_RESET) {
@@ -711,8 +715,10 @@ void Process(void)
 
 					//}
 
+					while (gbTxD1BufferWritePointer != gbTxD1BufferReadPointer)
+						CNTR_To_USB_Send_Data(gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
 
-					while(gbTxD1Transmitting);
+					//while(gbTxD1Transmitting);
 
 
 
@@ -909,15 +915,18 @@ void ReturnPacket(byte bError)
     gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bError;
     gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bCheckSum;
 
-    if (gbTxD1Transmitting==0) {
-      gbTxD1Transmitting = 1;
+    //if (gbTxD1Transmitting==0) {
+      //gbTxD1Transmitting = 1;
     //  if (TXD1_FINISH) {
 		//USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
 		//USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
       //TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
-    }
+    //}
 
-    while(gbTxD1Transmitting);
+    while (gbTxD1BufferWritePointer != gbTxD1BufferReadPointer)
+	CNTR_To_USB_Send_Data(gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+
+    //while(gbTxD1Transmitting);
 
   }
 }

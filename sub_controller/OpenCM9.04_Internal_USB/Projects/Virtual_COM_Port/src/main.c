@@ -54,6 +54,8 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
   
+  Process();
+
   while (1)
   {
   }
