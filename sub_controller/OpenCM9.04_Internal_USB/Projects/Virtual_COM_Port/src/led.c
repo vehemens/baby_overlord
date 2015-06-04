@@ -21,6 +21,21 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+void InitLED(void)
+{
+	int bCount;
+
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_StructInit(&GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_LED4 | PIN_LED3 | PIN_LED2;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
+}
+
 void LED_SetState(u8 LED_PORT, PowerState NewState)
 {
 	if( NewState == ON )

@@ -31,6 +31,18 @@
 * Return         : Return RIGHT, LEFT, SEL, UP, DOWN or NOKEY
 *******************************************************************************/
 
+void InitButton(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_StructInit(&GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_SW_MODE | PIN_SW_START;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+}
+
 u8 ReadButton(void)
 {
 	u8 retval=0;

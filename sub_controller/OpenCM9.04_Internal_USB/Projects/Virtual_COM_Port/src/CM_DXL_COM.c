@@ -390,6 +390,9 @@ void Process(void)
     RX_PACKET_START:
     RX_PACKET_TIMEOUT:
 
+    //XXX
+    GB_BUTTON = ReadButton();
+
     bCount0xff = 0;
     while(1)
     {
@@ -858,8 +861,8 @@ void ProcessAfterWriting(void)
 				gbDxlPwr = GB_DYNAMIXEL_POWER;
 		break;
 		case	P_LED_PANNEL:
-				//LED_SetState(GB_LED_MODE, ON);
-				//LED_SetState(~GB_LED_MODE, OFF);
+				LED_SetState(GB_LED_MODE, ON);
+				LED_SetState(~GB_LED_MODE, OFF);
 		break;
 		case	P_LED_HEAD:
 		    gbLEDHeadR = GW_LED_HEAD&0x1f;
