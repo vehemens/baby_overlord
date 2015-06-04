@@ -362,11 +362,6 @@ void Process(void)
   GW_LED_HEAD = ((0>>3)<<10)|((255>>3)<<5)|(0>>3);
   GW_LED_EYE =  ((255>>3)<<10)|((0>>3)<<5)|(0>>3);
 
-
-  /*
-	GW_LED_HEAD = ((0>>3)<<10)|((128>>3)<<5)|(255>>3);
-	GW_LED_EYE =  ((255>>3)<<10)|((0>>3)<<5)|(0>>3);
-*/
 	gbLEDHeadR = GW_LED_HEAD&0x1f;
 	gbLEDHeadG = (GW_LED_HEAD>>5)&0x1f;
 	gbLEDHeadB = (GW_LED_HEAD>>10)&0x1f;
@@ -587,14 +582,11 @@ void Process(void)
 				}
 				bPrevID = gbpParameter[bCount];
 			  }
-			  //bPrevID = gbpParameter[bCount];
 			}
         if(gbInstruction == INST_SYNC_WRITE || gbInstruction == INST_SYNC_REG_WRITE) //INST_SYNC_WR or INST_SYNC_REG_WR
         {
           byte bTmpLength, bCount0;
           bTmpLength = gbpParameter[1];
-          //Blink(bTmpLength);
-//          for(bCount = 2; bCount < bLength; bCount += (bTmpLength+1) ) ;;;;;;;
           for(bCount = 2; bCount < bLength-3; bCount += (bTmpLength+1) )
           {
             if(gbpParameter[bCount] == GB_ID)
@@ -627,8 +619,6 @@ void Process(void)
 
           if(gbRxID != BROADCASTING_ID && GB_RETURN_LEVEL >= RETURN_READ_PACKET)
           {
-        	  	  	//byte readData;
-					//Call routine processing item : InstructionError,ChecksumError,TimeoutError
 					bEndAddress = gbStartAddress+gbpParameter[1]-1;
 					bLength = gbpParameter[1]+2; //Errorstatus,Checksum
 					bCheckSum = GB_ID + bLength + gbInterruptCheckError;
@@ -702,8 +692,6 @@ void Process(void)
 
 #if 0
 					if ( GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_RESET) {
-						//TxDString(USART_ZIGBEE,"\r\n TEST0");
-						//if (TXD0_FINISH) {
 						GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
 						GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
 #endif
@@ -720,77 +708,6 @@ void Process(void)
 
 					//while(gbTxD1Transmitting);
 
-
-
-					/*
-
-					LED_SetState(LED_PLAY,OFF);
-					LED_SetState(LED_EDIT,OFF);
-
-
-
-					if(gbTxD0BufferWritePointer != gbTxD0BufferReadPointer ) 	LED_SetState(LED_PLAY,ON);
-					else														LED_SetState(LED_EDIT,ON);
-
-					*/
-
-
-/*
-					for(bTemp = gbTxD0BufferReadPointer; bTemp < gbTxD0BufferWritePointer; bTemp++ )
-					{
-						TxDString(USART_ZIGBEE,"\r\n");
-						TxDHex8(gbpTxD0Buffer[bTemp]);
-
-					}
-
-*/
-
-
-					//USART_ITConfig(USART1, USART_IT_TC, ENABLE);
-
-/*
-					gbTxD0Transmitting = 1;
-				//  if (TXD1_FINISH) {
-					USART_SendData(USART1, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
-					USART_ITConfig(USART1, USART_IT_TC, ENABLE);
-
-					while(gbTxD0Transmitting);
-
-*/
-
-
-
-
-
-
-
-										//TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
-
-
-/*
-					while(gbTxD0BufferReadPointer != gbTxD0BufferWritePointer);
-
-
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= GB_ID;
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= bLength;
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= gbInterruptCheckError;
-					gbpTxD0Buffer[gbTxD0BufferWritePointer++]= bCheckSum;
-
-
-					while(GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_SET);
-
-					GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);	// RX Disable
-					GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);	// TX Enable
-
-					USART_SendData(USART1, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
-					USART_ITConfig(USART1, USART_IT_TC, ENABLE);
-*/
-
-
-
-
 			  }
         }
         else if(gbInstruction == INST_SYSTEM_WRITE)
@@ -801,11 +718,8 @@ void Process(void)
           {
             if (gbStartAddress < CONTROL_TABLE_LEN) {
             	BKP_WriteBackupRegister((gbStartAddress+1)<<2, gbpParameter[1]);
-            	//ROM_CAST(gbStartAddress) = gbpControlTable[gbStartAddress] = gbpParameter[1];
             }
             else {
-            	//BKP_WriteBackupRegister(gbStartAddress<<2, gbpParameter[1]);
-            	//ROM_CAST(gbStartAddress) = gbpParameter[1];
             }
           }
         }
@@ -813,7 +727,6 @@ void Process(void)
         {
           if(gbRxID == BROADCASTING_ID) //for avoiding data crush
           {
-//            MiliSec((word)(GB_ID<<1));
         	  //mDelay((word)(GB_ID<<0)); //Ver0x14
           }
           ReturnPacket(0);
@@ -822,17 +735,12 @@ void Process(void)
         {
           ReturnPacket(0);
 
-          //EEPROM_Write( P_OPERATING_MODE, 0xFF );
-          //EEP_GB_OPERATING_MODE = 0xff;
           //SYSTEM_RESET;
         }
         else if(gbInstruction == INST_DIGITAL_RESET)
         {
           ReturnPacket(0);
-          //EEPROM_Write( P_OPERATING_MODE, 0x11 );
-          //EEP_GB_OPERATING_MODE = 0x11;
           //SYSTEM_RESET;
-          //MiliSec(20);
         }
         else
         {
@@ -848,7 +756,6 @@ void WriteControlTable(void)
 {
   byte bCount, bPointer;
   for(bCount = 1; bCount < gbParameterLength; bCount++) //Writing
-  //bCount = 0 : address value
   {
     bPointer = gbStartAddress+bCount-1;
     if(gbpDataSize[bPointer] == 2) //&& bCount < gbParameterLength-2) //length was already checked.
@@ -858,14 +765,6 @@ void WriteControlTable(void)
       if(bPointer < ROM_CONTROL_TABLE_LEN) BKP_WriteBackupRegister((bPointer+1)<<2, WORD_CAST(gbpParameter[bCount]));
       bCount++;
 
-/*
-      if(bPointer < ROM_CONTROL_TABLE_LEN) { WORD_ROM_CAST((bPointer)) = WORD_CAST(gbpParameter[bCount]);}
-      if(bPointer < ROM_CONTROL_TABLE_LEN) { WORD_CAST(gbpControlTable[bPointer]) = WORD_ROM_CAST((bPointer))+1;}
-      else {
-        WORD_CAST(gbpControlTable[bPointer]) = WORD_CAST(gbpParameter[bCount]);
-      }
-      bCount++;
-*/
     }
     else //if(gbpDataSize[bPointer] == 1)//length was already checked.
     {
@@ -900,13 +799,10 @@ byte WriteControlTableRangeCheck(void)
 void ReturnPacket(byte bError)
 {
   byte bCheckSum;
-  //if(GB_OPERATING_MODE == ANALOG_MODE) return;
   if(gbInstruction == INST_PING || (gbRxID != BROADCASTING_ID && GB_RETURN_LEVEL >= RETURN_ALL_PACKET))
   {
     bError |= gbInterruptCheckError;
-    //Call routine processing item : InstructionError,ChecksumError,TimeoutError
     bCheckSum = ~(GB_ID+ 2 + bError);
-//    RS485_TXD;
 
     gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
     gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
@@ -917,10 +813,8 @@ void ReturnPacket(byte bError)
 
     //if (gbTxD1Transmitting==0) {
       //gbTxD1Transmitting = 1;
-    //  if (TXD1_FINISH) {
 		//USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
 		//USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
-      //TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
     //}
 
     while (gbTxD1BufferWritePointer != gbTxD1BufferReadPointer)
@@ -950,7 +844,6 @@ void ProcessAfterWriting(void)
     {
 
     	case P_BAUD_RATE:
-			//EEPROM_Write(P_BAUD_RATE,GB_BAUD_RATE);
     		lTemp = 2000000;
 			lTemp /= (GB_BAUD_RATE+1);
 			//USART_Configuration(USART_DXL,lTemp);
@@ -1011,57 +904,10 @@ void ProcessAfterWriting(void)
 #if 0
 		case	P_TX_REMOCON_DATA_L:
 				zgb_tx_data(GW_TX_REMOCON_DATA);
-				//TxDData(USART_ZIGBEE,'a');
 
 				break;
 #endif
 
-		/*
-		case	P_GPIO_MODE:
-		{
-			wTemp = (word)(GB_GPIO_MODE);
-            wTemp = ((wTemp&(0x0010|0x0008))<<7)|((wTemp&(0x0004|0x0002|0x0001))<<13);
-
-			GPIO_InitTypeDef GPIO_InitStructure;
-			GPIO_StructInit(&GPIO_InitStructure);
-            GPIO_InitStructure.GPIO_Pin = wTemp;
-            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-          	GPIO_Init(PORT_OLLO0 , &GPIO_InitStructure);
-
-          	wTemp = ~wTemp;
-          	wTemp = (wTemp&(0x0800|0x0400))|(wTemp&(0x8000|0x4000|0x2000));
-			GPIO_InitStructure.GPIO_Pin = wTemp;
-          	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-			GPIO_Init(PORT_OLLO0 , &GPIO_InitStructure);
-		}
-
-		break;
-		case	P_GPIO_OUT:
-		{
-			//GPIO_InitTypeDef GPIO_InitStructure;
-          	//GPIO_StructInit(&GPIO_InitStructure);
-            //GPIO_InitStructure.GPIO_Pin = PIN_OLLO3 | PIN_OLLO4 | PIN_OLLO0 | PIN_OLLO1 | PIN_OLLO2 ;
-        	//GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-            //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-          	//GPIO_Init(GPIOC , &GPIO_InitStructure);
-            wTemp = (word)(GB_GPIO_OUT);
-            wTemp = ((wTemp&(0x0010|0x0008))<<7)|((wTemp&(0x0004|0x0002|0x0001))<<13);
-            GPIO_Write(PORT_OLLO0, wTemp);
-
-            if (GB_GPIO_OUT&0x10) 	GPIO_SetBits(PORT_OLLO4, PIN_OLLO4);
-			else					GPIO_ResetBits(PORT_OLLO4, PIN_OLLO4);
-			if (GB_GPIO_OUT&0x08) 	GPIO_SetBits(PORT_OLLO3, PIN_OLLO3);
-			else					GPIO_ResetBits(PORT_OLLO3, PIN_OLLO3);
-			if (GB_GPIO_OUT&0x04) 	GPIO_SetBits(PORT_OLLO2, PIN_OLLO2);
-			else					GPIO_ResetBits(PORT_OLLO2, PIN_OLLO2);
-			if (GB_GPIO_OUT&0x02) 	GPIO_SetBits(PORT_OLLO1, PIN_OLLO1);
-			else					GPIO_ResetBits(PORT_OLLO1, PIN_OLLO1);
-			if (GB_GPIO_OUT&0x01) 	GPIO_SetBits(PORT_OLLO0, PIN_OLLO0);
-			else					GPIO_ResetBits(PORT_OLLO0, PIN_OLLO0);
-
-		}
-		break;
-*/
       default:
         break;
     }
