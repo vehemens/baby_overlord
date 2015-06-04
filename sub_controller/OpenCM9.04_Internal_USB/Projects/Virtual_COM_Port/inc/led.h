@@ -14,6 +14,22 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
+#define PORT_LED2			GPIOB
+#define PORT_LED3			GPIOB
+#define PORT_LED4			GPIOB
+
+#define PIN_LED2			GPIO_Pin_14
+#define PIN_LED3			GPIO_Pin_13
+#define PIN_LED4			GPIO_Pin_12
+
+#define PIN_LED_MANAGE			PIN_LED2
+#define PIN_LED_EDIT			PIN_LED3
+#define PIN_LED_PLAY			PIN_LED4
+
+#define PORT_LED_MANAGE			PORT_LED2
+#define PORT_LED_EDIT			PORT_LED3
+#define PORT_LED_PLAY			PORT_LED4
+
 #define LED_MANAGE			0x1
 #define LED_EDIT			0x2
 #define	LED_PLAY			0x4

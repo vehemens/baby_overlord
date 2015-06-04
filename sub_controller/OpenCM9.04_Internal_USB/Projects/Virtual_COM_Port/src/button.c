@@ -7,11 +7,12 @@
 *******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_lib.h"
-#include "stm32f10x_type.h"
+#include "stm32f10x.h"
+//#include "stm32f10x_lib.h"
+//#include "stm32f10x_type.h"
 #include "common_type.h"
 #include "button.h"
-#include "system_init.h"
+//#include "system_init.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

@@ -7,11 +7,12 @@
 *******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
 #include "gyro_acc.h"
-#include "stm32f10x_type.h"
-#include "stm32f10x_lib.h"
-#include "system_init.h"
-#include "serial.h"
+//#include "stm32f10x_type.h"
+//#include "stm32f10x_lib.h"
+//#include "system_init.h"
+//#include "serial.h"
 #include "CM_DXL_COM.h"
 
 
@@ -47,7 +48,7 @@ vu8 SPI_RxBuffer[18];
 vu8 SPI_RxBufferPointer=0;
 vu8 SPI_TxBufferPointer=0;
 
-vu8 GYRO_ACC_ENABLE = FALSE ;
+//vu8 GYRO_ACC_ENABLE = FALSE ;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
