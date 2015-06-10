@@ -73,12 +73,12 @@ SRC = src/button.c \
 	src/main.c \
 	src/stm3210e_eval.c \
 	src/stm32_it.c \
-	src/system_stm32f10x.c \
 	src/usb_desc.c \
 	src/usb_endp.c \
 	src/usb_istr.c \
 	src/usb_prop.c \
 	src/usb_pwr.c \
+	../../Libraries/CMSIS/Device/ST/STM32F10x/Source/Templates/system_stm32f10x.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/misc.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.c \
 	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c \
