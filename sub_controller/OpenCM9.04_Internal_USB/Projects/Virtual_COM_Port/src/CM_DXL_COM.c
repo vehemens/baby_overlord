@@ -390,9 +390,6 @@ void Process(void)
     RX_PACKET_START:
     RX_PACKET_TIMEOUT:
 
-    //XXX
-    GB_BUTTON = ReadButton();
-
     bCount0xff = 0;
     while(1)
     {

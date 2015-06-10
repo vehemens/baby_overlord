@@ -51,6 +51,9 @@ int main(void)
 {
   Set_System();
   Set_USBClock();
+
+  Timer_Configuration();
+
   USB_Interrupts_Config();
   USB_Init();
   

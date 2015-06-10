@@ -142,6 +142,83 @@ void Set_System(void)
   EXTI_Init(&EXTI_InitStructure);
 }
 
+// CCR unit= 10uS
+vu16 CCR1_Val = 100;		// 1ms
+vu16 CCR2_Val = 778;		// 7.81ms
+vu16 CCR3_Val = 12400;		// 125ms
+vu16 CCR4_Val = 12;		// 12us
+
+void Timer_Configuration(void)
+{
+	/* Enable peripheral clock */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+	/* Enable interrupt */
+	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+
+	NVIC_Init(&NVIC_InitStructure);
+
+
+	/* Configure timer */
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+	TIM_OCStructInit(&TIM_OCInitStructure);
+
+	TIM_DeInit(TIM2);
+
+	/* Time base configuration */
+	TIM_TimeBaseStructure.TIM_Period = 65535;
+	TIM_TimeBaseStructure.TIM_Prescaler = 0;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+	/* Prescaler configuration */
+	TIM_PrescalerConfig(TIM2, 722, TIM_PSCReloadMode_Immediate);
+
+	/* Output Compare Timing Mode configuration: Channel1 */
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+/*
+	TIM_OCInitStructure.TIM_Pulse = CCR1_Val ;
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
+
+*/
+	/*
+	TIM_OCInitStructure.TIM_Pulse = CCR2_Val ;
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Disable);
+
+
+
+	TIM_OCInitStructure.TIM_Pulse = CCR3_Val ;
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Disable);
+*/
+
+	TIM_OCInitStructure.TIM_Pulse = CCR4_Val ;
+	TIM_OC4Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Disable);
+
+
+	/* TIM IT enable */
+	TIM_ITConfig(TIM2, /*TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 |*/ TIM_IT_CC4 , ENABLE);
+
+	/* TIM2 enable counter */
+	TIM_Cmd(TIM2, ENABLE);
+}
+
 /*******************************************************************************
 * Function Name  : Set_USBClock
 * Description    : Configures USB Clock input (48MHz)

@@ -175,6 +175,76 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
   USB_Istr();
 }
 
+#include "CM_DXL_COM.h"
+
+extern vu16 CCR1_Val;       // from system_init.c
+extern vu16 CCR2_Val;       // from system_init.c
+extern vu16 CCR3_Val;       // from system_init.c
+extern vu16 CCR4_Val;       // from system_init.c
+
+vu32 capture = 0;
+vu8 Counter = 0;
+vu16 gwCounter1 = 0;
+
+extern vu8 gbMiliSec;
+
+void TIM2_IRQHandler(void)
+{
+	static b1Sec=0;
+
+	if (TIM_GetITStatus(TIM2, TIM_IT_CC4) != RESET) // 120us, 8000Hz
+	{
+		TIM_ClearITPendingBit(TIM2, TIM_IT_CC4);
+		//ISR_ADC();
+		capture = TIM_GetCapture4(TIM2);
+		TIM_SetCompare4(TIM2, capture + CCR4_Val);
+
+
+		if( !( gwCounter1 & 7 ) ) // 840us
+		{
+			//ISR_1ms_TIMER();
+			gbMiliSec++;
+		}
+
+		if( !( gwCounter1 & 3 ) ) // 480us, 2000Hz
+		{
+			//ISR_LED_RGB_TIMER();
+
+		}
+		if( !( gwCounter1 & 31 ) ) // 3840us, 250Hz
+		{
+			//ISR_SPI_READ();
+			//__ISR_Buzzer_Manage();
+			GB_BUTTON = ReadButton();
+		}
+
+		if( !( gwCounter1 & 0x3FF ) ) // 125ms
+		{
+				//LED_SetState(LED_RX,OFF);
+				//LED_SetState(LED_TX,OFF);
+
+		if( !(b1Sec&0x07) )
+		{
+			//ISR_BATTERY_CHECK();
+		}
+
+		b1Sec++;
+
+
+		}
+
+
+
+                /*
+ 		iff( !( Counter1 & 32 ) ) // 3960us, 250Hz
+		{
+		}
+		*/
+		gwCounter1++;
+        }
+
+}
+
 /*******************************************************************************
 * Function Name  : EVAL_COM1_IRQHandler
 * Description    : This function handles EVAL_COM1 global interrupt request.
