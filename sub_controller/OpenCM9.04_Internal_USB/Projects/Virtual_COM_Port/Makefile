@@ -71,7 +71,6 @@ SRC = src/button.c \
 	src/hw_config.c \
 	src/led.c \
 	src/main.c \
-	src/stm3210e_eval.c \
 	src/stm32_it.c \
 	src/usb_desc.c \
 	src/usb_endp.c \
