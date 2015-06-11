@@ -48,7 +48,7 @@ vu8 SPI_RxBuffer[18];
 vu8 SPI_RxBufferPointer=0;
 vu8 SPI_TxBufferPointer=0;
 
-//vu8 GYRO_ACC_ENABLE = FALSE ;
+vu8 GYRO_ACC_ENABLE = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -357,6 +357,7 @@ void ACC_Configuration(void)
 	Clear_SPI_Data();
 
 
+	GYRO_ACC_ENABLE = 1;
 }
 
 
@@ -364,6 +365,9 @@ void __GYRO_ACC_READ_ISR(void)
 {
 
 	int i;
+
+	if (!GYRO_ACC_ENABLE)
+		return;
 
 	//gyro read
 	for(i=0;i<9;i++)
