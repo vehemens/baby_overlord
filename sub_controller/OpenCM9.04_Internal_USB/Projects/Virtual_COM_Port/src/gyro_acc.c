@@ -53,6 +53,46 @@ vu8 SPI_TxBufferPointer=0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+void Gyro_Acc_Init(void)
+{
+	// configure GPIO
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_StructInit(&GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_SIG_ACC_CS | PIN_SIG_GYRO_CS;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = PIN_SIG_SCK  | PIN_SIG_MOSI | PIN_SIG_MISO;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	// configure SPI
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+
+	SPI_InitTypeDef SPI_InitStructure;
+
+	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+
+	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+	SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
+	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
+	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStructure.SPI_CRCPolynomial = 7;
+
+	SPI_Init(SPI1, &SPI_InitStructure);
+
+	SPI_Cmd(SPI1, ENABLE);
+}
 
 void Push_SPI_Data(u16 dat)
 {

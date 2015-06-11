@@ -214,6 +214,7 @@ void TIM2_IRQHandler(void)
 		if( !( gwCounter1 & 31 ) ) // 3840us, 250Hz
 		{
 			//ISR_SPI_READ();
+			__GYRO_ACC_READ_ISR();
 			//__ISR_Buzzer_Manage();
 			GB_BUTTON = ReadButton();
 		}

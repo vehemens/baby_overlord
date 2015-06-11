@@ -60,6 +60,11 @@ int main(void)
   InitLED();
   InitButton();
 
+  Gyro_Acc_Init();
+
+  Gyro_Configuration();
+  ACC_Configuration();
+
   Process();
 
   while (1)
