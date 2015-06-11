@@ -35,7 +35,6 @@
 #define	LED_PLAY			0x4
 #define LED_TX				0x8
 #define LED_RX				0x10
-//#define LED_AUX				0x20
 #define LED_POWER			0x40
 #define LED_ALL				0x7F
 

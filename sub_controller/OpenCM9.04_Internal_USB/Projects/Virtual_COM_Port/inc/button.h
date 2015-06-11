@@ -20,10 +20,6 @@
 #define PIN_SW_START				GPIO_Pin_3
 #define PIN_SW_MODE				GPIO_Pin_4
 
-/*
-#define BUTTON_DXLPWR				0x1
-#define BUTTON_START				0x2
-*/
 
 #define BUTTON_START				0x1
 #define BUTTON_MODE					0x2
