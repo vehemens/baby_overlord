@@ -671,9 +671,13 @@ void NVIC_Configuration(void)
 	// Set the Vector Table base location at 0x20000000  
 	NVIC_SetVectorTable(NVIC_VectTab_RAM, 0x0); 
 #else  // VECT_TAB_FLASH  
+#if 0
 	// Set the Vector Table base location at 0x08003000
 	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x3000);   
-//	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);     
+#else
+	// Set the Vector Table base location at 0x08000000
+	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);     
+#endif
 #endif
 
 
