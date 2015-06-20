@@ -44,21 +44,17 @@
 #define USB_DISCONNECT_PIN                  GPIO_Pin_13
 #define RCC_APB2Periph_GPIO_DISCONNECT      RCC_APB2Periph_GPIOC
 
-/**
- * @brief Definition for COM port1, connected to USART1
- */ 
-
-#define EVAL_COM1                        USART1
-#define EVAL_COM1_CLK                    RCC_APB2Periph_USART1
-#define EVAL_COM1_TX_PIN                 GPIO_Pin_9
-#define EVAL_COM1_TX_GPIO_PORT           GPIOA
-#define EVAL_COM1_TX_GPIO_CLK            RCC_APB2Periph_GPIOA
-#define EVAL_COM1_RX_PIN                 GPIO_Pin_10
-#define EVAL_COM1_RX_GPIO_PORT           GPIOA
-#define EVAL_COM1_RX_GPIO_CLK            RCC_APB2Periph_GPIOA
-#define EVAL_COM1_IRQn                   USART1_IRQn
-
-#define EVAL_COM1_IRQHandler              USART1_IRQHandler
+#define DXL_USART			USART1
+#define DXL_USART_CLK			RCC_APB2Periph_USART1
+#define DXL_USART_IRQHandler		USART1_IRQHandler
+#define DXL_USART_IRQn			USART1_IRQn
+#define DXL_USART_GPIO_CLK		RCC_APB2Periph_GPIOB
+#define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_6
+#define DXL_USART_TXD_GPIO_PORT		GPIOB
+#define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_7
+#define DXL_USART_RXD_GPIO_PORT		GPIOB
+#define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_5
+#define DXL_USART_DIR_GPIO_PORT		GPIOB
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/

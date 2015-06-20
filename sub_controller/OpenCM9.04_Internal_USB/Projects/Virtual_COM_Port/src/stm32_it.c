@@ -189,18 +189,18 @@ void TIM2_IRQHandler(void)
 
 }
 
-void EVAL_COM1_IRQHandler(void)
+void DXL_USART_IRQHandler(void)
 {
-  if (USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)
+  if (USART_GetITStatus(DXL_USART, USART_IT_RXNE) != RESET)
   {
     /* Send the received data to the PC Host*/
     USART_To_USB_Send_Data();
   }
 
   /* If overrun condition occurs, clear the ORE flag and recover communication */
-  if (USART_GetFlagStatus(EVAL_COM1, USART_FLAG_ORE) != RESET)
+  if (USART_GetFlagStatus(DXL_USART, USART_FLAG_ORE) != RESET)
   {
-    (void)USART_ReceiveData(EVAL_COM1);
+    (void)USART_ReceiveData(DXL_USART);
   }
 }
 

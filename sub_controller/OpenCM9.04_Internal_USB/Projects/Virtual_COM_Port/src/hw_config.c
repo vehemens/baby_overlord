@@ -236,7 +236,7 @@ void USB_Interrupts_Config(void)
   NVIC_Init(&NVIC_InitStructure);
 
   /* Enable USART Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannel = DXL_USART_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
   NVIC_Init(&NVIC_InitStructure);
 }
@@ -267,64 +267,44 @@ void USB_Cable_Config (FunctionalState NewState)
 *******************************************************************************/
 void USART_Config_Default(void)
 {
-  /* EVAL_COM1 default configuration */
-  /* EVAL_COM1 configured as follow:
-        - BaudRate = 9600 baud  
-        - Word Length = 8 Bits
-        - One Stop Bit
-        - Parity Odd
-        - Hardware flow control disabled
-        - Receive and transmit enabled
-  */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+
+  RCC_APB2PeriphClockCmd(DXL_USART_CLK, ENABLE);
+
+  RCC_APB2PeriphClockCmd(DXL_USART_GPIO_CLK, ENABLE);
+
+  GPIO_InitTypeDef GPIO_InitStructure;
+  GPIO_StructInit(&GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_TXD_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(DXL_USART_TXD_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_RXD_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+  GPIO_Init(DXL_USART_RXD_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_DIR_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(DXL_USART_DIR_GPIO_PORT, &GPIO_InitStructure);
+
+  //XXX needed for buttons
+  GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
+
   USART_InitStructure.USART_BaudRate = 1000000;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
   USART_InitStructure.USART_Parity = USART_Parity_No;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_Init(DXL_USART, &USART_InitStructure);
 
-  /* Configure and enable the USART */
-  //STM_EVAL_COMInit(COM1, &USART_InitStructure);
-
-#define PORT_USART1_DIR GPIOB 
-#define PORT_USART1_TXD GPIOB
-#define PORT_USART1_RXD GPIOB
-
-#define PIN_USART1_DIR GPIO_Pin_5
-#define PIN_USART1_TXD GPIO_Pin_6
-#define PIN_USART1_RXD GPIO_Pin_7
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_StructInit(&GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = PIN_USART1_DIR;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = PIN_USART1_RXD;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = PIN_USART1_TXD;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-  GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
-
-  USART_Init(USART1, &USART_InitStructure);
-
-  USART_Cmd(USART1, ENABLE);
+  USART_Cmd(DXL_USART, ENABLE);
 
   /* Enable the USART Receive interrupt */
-  USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+  USART_ITConfig(DXL_USART, USART_IT_RXNE, ENABLE);
 }
 
 /*******************************************************************************
@@ -428,13 +408,13 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint8_t Nb_bytes)
   
   uint32_t i;
   
-  GPIO_SetBits(PORT_USART1_DIR, PIN_USART1_DIR);
+  GPIO_SetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
   for (i = 0; i < Nb_bytes; i++)
   {
-    USART_SendData(USART1, *(data_buffer + i));
-    while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET); 
+    USART_SendData(DXL_USART, *(data_buffer + i));
+    while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TC) == RESET); 
   }  
-  GPIO_ResetBits(PORT_USART1_DIR, PIN_USART1_DIR);
+  GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
 
   for (i = 0; i < Nb_bytes; i++)
   {
@@ -530,7 +510,7 @@ void USART_To_USB_Send_Data(void)
   else if (linecoding.datatype == 8)
 #endif
   {
-    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(USART1);
+    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(DXL_USART);
   }
   
   USART_Rx_ptr_in++;
