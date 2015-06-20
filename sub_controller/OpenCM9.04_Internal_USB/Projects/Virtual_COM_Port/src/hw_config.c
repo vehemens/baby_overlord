@@ -434,96 +434,56 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint8_t Nb_bytes)
 *******************************************************************************/
 void Handle_USBAsynchXfer (void)
 {
-  
-  uint16_t USB_Tx_ptr;
+  uint32_t i;
+  uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
   uint16_t USB_Tx_length;
-  
+
   if(USB_Tx_State != 1)
   {
-    if (USART_Rx_ptr_out == USART_RX_DATA_SIZE)
+    USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
+
+    if(USART_Rx_length == 0)
     {
-      USART_Rx_ptr_out = 0;
-    }
-    
-    if(USART_Rx_ptr_out == USART_Rx_ptr_in) 
-    {
-      USB_Tx_State = 0; 
-      return;
-    }
-    
-    if(USART_Rx_ptr_out > USART_Rx_ptr_in) /* rollback */
-    { 
-      USART_Rx_length = USART_RX_DATA_SIZE - USART_Rx_ptr_out;
-    }
-    else 
-    {
-      USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
-    }
-    
-    if (USART_Rx_length > VIRTUAL_COM_PORT_DATA_SIZE)
-    {
-      USB_Tx_ptr = USART_Rx_ptr_out;
-      USB_Tx_length = VIRTUAL_COM_PORT_DATA_SIZE;
-      
-      USART_Rx_ptr_out += VIRTUAL_COM_PORT_DATA_SIZE;	
-      USART_Rx_length -= VIRTUAL_COM_PORT_DATA_SIZE;	
+      USB_Tx_State = 0;
     }
     else
     {
-      USB_Tx_ptr = USART_Rx_ptr_out;
-      USB_Tx_length = USART_Rx_length;
-      
-      USART_Rx_ptr_out += USART_Rx_length;
-      USART_Rx_length = 0;
+      USB_Tx_length = USART_Rx_length < VIRTUAL_COM_PORT_DATA_SIZE ?
+        USART_Rx_length : VIRTUAL_COM_PORT_DATA_SIZE;
+
+      for (i = 0; i < USB_Tx_length; i++)
+      {
+        USB_Tx_Buffer[i] = USART_Rx_Buffer[USART_Rx_ptr_out++%USART_RX_DATA_SIZE];
+      }
+
+      USB_Tx_State = 1;
+      UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
+      SetEPTxCount(ENDP1, USB_Tx_length);
+      SetEPTxValid(ENDP1);
     }
-    USB_Tx_State = 1; 
-    UserToPMABufferCopy(&USART_Rx_Buffer[USB_Tx_ptr], ENDP1_TXADDR, USB_Tx_length);
-    SetEPTxCount(ENDP1, USB_Tx_length);
-    SetEPTxValid(ENDP1); 
-  }  
-  
+  }
 }
+
 /*******************************************************************************
-* Function Name  : UART_To_USB_Send_Data.
-* Description    : send the received data from UART 0 to USB.
+* Function Name  : CNTR_To_USB_Send_Data.
+* Description    : send the received data from CNTR to USB.
 * Input          : None.
 * Return         : none.
 *******************************************************************************/
 void CNTR_To_USB_Send_Data(uint8_t data)
 {
-
-  USART_Rx_Buffer[USART_Rx_ptr_in] = data;
-
-  USART_Rx_ptr_in++;
-
-  /* To avoid buffer overflow */
-  if(USART_Rx_ptr_in == USART_RX_DATA_SIZE)
-  {
-    USART_Rx_ptr_in = 0;
-  }
+  USART_Rx_Buffer[USART_Rx_ptr_in++%USART_RX_DATA_SIZE] = data;
 }
 
+/*******************************************************************************
+* Function Name  : USART_To_USB_Send_Data.
+* Description    : send the received data from USART to USB.
+* Input          : None.
+* Return         : none.
+*******************************************************************************/
 void USART_To_USB_Send_Data(void)
 {
-  
-#if 0
-  if (linecoding.datatype == 7)
-  {
-    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1) & 0x7F;
-  }
-  else if (linecoding.datatype == 8)
-#endif
-  {
-    USART_Rx_Buffer[USART_Rx_ptr_in] = USART_ReceiveData(DXL_USART);
-  }
-  
-  USART_Rx_ptr_in++;
-  
-  /* To avoid buffer overflow */
-  if(USART_Rx_ptr_in == USART_RX_DATA_SIZE)
-  {
-    USART_Rx_ptr_in = 0;
-  }
+  USART_Rx_Buffer[USART_Rx_ptr_in++%USART_RX_DATA_SIZE] = USART_ReceiveData(DXL_USART);
 }
 
 /*******************************************************************************
