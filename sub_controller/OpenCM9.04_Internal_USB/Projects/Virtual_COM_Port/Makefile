@@ -48,7 +48,8 @@ BIN=$(CP) -O ihex
 #
 # HSE_VALUE sets the value of the HSE clock, 8MHz in this case 
 
-DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE=8000000 -DUSE_STM3210E_EVAL
+DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE=8000000 -DUSE_DXL_USART3
+
 STARTUP = ../../Libraries/CMSIS/Device/ST/STM32F10x/Source/Templates/gcc_ride7/startup_stm32f10x_md.s
 
 MCU = cortex-m3

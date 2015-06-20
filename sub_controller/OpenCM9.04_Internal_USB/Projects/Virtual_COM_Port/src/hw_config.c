@@ -269,7 +269,11 @@ void USART_Config_Default(void)
 {
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
+#if defined USE_DXL_USART1
   RCC_APB2PeriphClockCmd(DXL_USART_CLK, ENABLE);
+#elif defined USE_DXL_USART3
+  RCC_APB1PeriphClockCmd(DXL_USART_CLK, ENABLE);
+#endif
 
   RCC_APB2PeriphClockCmd(DXL_USART_GPIO_CLK, ENABLE);
 
