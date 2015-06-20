@@ -37,7 +37,6 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-
 void NMI_Handler(void);
 void HardFault_Handler(void);
 void MemManage_Handler(void);
@@ -49,11 +48,8 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 void USB_LP_CAN1_RX0_IRQHandler(void);
 
-#if defined (USE_STM32L152_EVAL) || (USE_STM32373C_EVAL)
-void USART2_IRQHandler(void);
-#else
 void USART1_IRQHandler(void);
-#endif /* USE_STM32L152_EVAL */
+
 #endif /* __STM32_IT_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
