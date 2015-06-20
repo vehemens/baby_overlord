@@ -96,7 +96,7 @@ void ReadStep(CM730 *cm730)
 				if(value == 1)
 				{
 				    unsigned char table[50];
-				    if(cm730->ReadTable(id, MX28::P_P_GAIN, MX28::P_PRESENT_POSITION_H, table, 0) == CM730::SUCCESS)
+				    if(cm730->ReadTable(id, MX28::P_D_GAIN, MX28::P_PRESENT_POSITION_H, table, 0) == CM730::SUCCESS)
 				    {
 				        Step.position[id] = cm730->MakeWord(table[MX28::P_GOAL_POSITION_L], table[MX28::P_GOAL_POSITION_H]);
 				        PresentPos.position[id] = cm730->MakeWord(table[MX28::P_PRESENT_POSITION_L], table[MX28::P_PRESENT_POSITION_H]);
