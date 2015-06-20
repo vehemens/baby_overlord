@@ -409,15 +409,15 @@ extern uint8_t gbRxBufferWritePointer;
 
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint8_t Nb_bytes)
 {
-  
   uint32_t i;
-  
+
   GPIO_SetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
   for (i = 0; i < Nb_bytes; i++)
   {
     USART_SendData(DXL_USART, *(data_buffer + i));
-    while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TC) == RESET); 
-  }  
+    while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TXE) == RESET);
+  }
+  while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TC) == RESET);
   GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
 
   for (i = 0; i < Nb_bytes; i++)
