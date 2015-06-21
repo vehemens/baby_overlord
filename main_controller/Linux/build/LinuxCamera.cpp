@@ -384,7 +384,11 @@ int LinuxCamera::ReadFrame()
     assert (buf.index < n_buffers);
 
     //process_image (buffers[buf.index].start);
+#if 0 
     for(int i = 0; i < fbuffer->m_YUVFrame->m_ImageSize; i++)
+#else
+    for(int i = 0; i < buf.bytesused; i++)
+#endif
         fbuffer->m_YUVFrame->m_ImageData[i] = ((unsigned char*)buffers[buf.index].start)[i];
     ImgProcess::HFlipYUV(fbuffer->m_YUVFrame);
     ImgProcess::VFlipYUV(fbuffer->m_YUVFrame);
