@@ -390,8 +390,10 @@ int LinuxCamera::ReadFrame()
     for(int i = 0; i < buf.bytesused; i++)
 #endif
         fbuffer->m_YUVFrame->m_ImageData[i] = ((unsigned char*)buffers[buf.index].start)[i];
+#if 0
     ImgProcess::HFlipYUV(fbuffer->m_YUVFrame);
     ImgProcess::VFlipYUV(fbuffer->m_YUVFrame);
+#endif
     ImgProcess::YUVtoRGB(fbuffer);
     ImgProcess::RGBtoHSV(fbuffer);
 
