@@ -127,7 +127,11 @@ int LinuxActionScript::PlayMP3(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
+#if 0
         execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
+#else
+        execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#endif
         fprintf(stderr, "exec failed!! \n");
         break;
     default:
@@ -151,7 +155,11 @@ int LinuxActionScript::PlayMP3Wait(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
+#if 0
         execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
+#else
+        execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#endif
         fprintf(stderr, "exec failed!! \n");
         break;
     default:
