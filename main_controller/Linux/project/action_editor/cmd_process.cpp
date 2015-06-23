@@ -1339,19 +1339,24 @@ void GoCmd(CM730 *cm730, int index)
 		}
 		wStartPosition = MotionManager::GetInstance()->removeOffset(id, wStartPosition);
 
-		wGoalPosition = MotionManager::GetInstance()->applyOffset(id, Page.step[index].position[id]);
+		wGoalPosition = Page.step[index].position[id];
 		if( wStartPosition > wGoalPosition )
 			wDistance = wStartPosition - wGoalPosition;
 		else
 			wDistance = wGoalPosition - wStartPosition;
 
-		wDistance >>= 2;
-		if( wDistance < 8 )
-			wDistance = 8;
+#ifdef MX28_1024
+		wDistance >>= 3;
+#else
+		wDistance >>= 5;
+#endif
+		if( wDistance < 4 )
+			wDistance = 4;
 
 		param[n++] = id;
-		param[n++] = CM730::GetLowByte(wGoalPosition);
-		param[n++] = CM730::GetHighByte(wGoalPosition);
+		int value = MotionManager::GetInstance()->applyOffset(id, wGoalPosition);
+		param[n++] = CM730::GetLowByte(value);
+		param[n++] = CM730::GetHighByte(value);
 		param[n++] = CM730::GetLowByte(wDistance);
 		param[n++] = CM730::GetHighByte(wDistance);
 	}
