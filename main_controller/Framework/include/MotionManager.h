@@ -18,6 +18,7 @@
 #include "minIni.h"
 
 #define OFFSET_SECTION "Offset"
+#define INVERT_SECTION "Invert"
 #define INVALID_VALUE   -1024.0
 
 namespace Robot
@@ -47,6 +48,7 @@ namespace Robot
 	public:
 		bool DEBUG_PRINT;
         int m_Offset[JointData::NUMBER_OF_JOINTS];
+		bool m_invert[JointData::NUMBER_OF_JOINTS];
 
 		~MotionManager();
 

@@ -150,7 +150,7 @@ void GoToCursor(int col, int row)
 
 void MoveUpCursor()
 {
-	if(Col >= GOAL_COL && Col <= D_GAIN_COL)
+	if(Col >= GOAL_COL && Col <= INVERT_COL)
 	{
 		if( Row > ID_1_ROW )
 			GoToCursor(Col, Row-1);
@@ -159,7 +159,7 @@ void MoveUpCursor()
 
 void MoveDownCursor()
 {
-	if(Col >= GOAL_COL && Col <= D_GAIN_COL)
+	if(Col >= GOAL_COL && Col <= INVERT_COL)
 	{
 		if( Row < ID_20_ROW )
 			GoToCursor(Col, Row+1);
@@ -197,6 +197,10 @@ void MoveLeftCursor()
 	case D_GAIN_COL:
         GoToCursor(I_GAIN_COL, Row);
         break;
+
+	case INVERT_COL:
+        GoToCursor(D_GAIN_COL, Row);
+        break;
 	}
 }
 
@@ -231,6 +235,10 @@ void MoveRightCursor()
     case I_GAIN_COL:
         GoToCursor(D_GAIN_COL, Row);
         break;
+
+    case D_GAIN_COL:
+        GoToCursor(INVERT_COL, Row);
+        break;
 	}
 }
 
@@ -243,7 +251,7 @@ void DrawIntro(CM730 *cm730)
     for(int id=JointData::ID_R_SHOULDER_PITCH; id<JointData::NUMBER_OF_JOINTS; id++)
     {
         wStartPosition = MotionStatus::m_CurrentJoints.GetValue(id);
-        wGoalPosition = InitPose[id] + MotionManager::GetInstance()->m_Offset[id];
+        wGoalPosition = MotionManager::GetInstance()->applyOffset(id, InitPose[id]);
         if( wStartPosition > wGoalPosition )
             wDistance = wStartPosition - wGoalPosition;
         else
@@ -302,30 +310,30 @@ void DrawPage()
 
     system("clear");
     // 80    01234567890123456789012345678901234567890123456789012345678901234567890123456789     //24
-    printf( "ID: 1(R_SHO_PITCH)  [    ]        [    ]|                                      \n" );//0
-    printf( "ID: 2(L_SHO_PITCH)  [    ]        [    ]|                                      \n" );//1
-    printf( "ID: 3(R_SHO_ROLL)   [    ]        [    ]|                                      \n" );//2
-    printf( "ID: 4(L_SHO_ROLL)   [    ]        [    ]|                                      \n" );//3
-    printf( "ID: 5(R_ELBOW)      [    ]        [    ]|                                      \n" );//4
-    printf( "ID: 6(L_ELBOW)      [    ]        [    ]|                                      \n" );//5
-    printf( "ID: 7(R_HIP_YAW)    [    ]        [    ]|                                      \n" );//6
-    printf( "ID: 8(L_HIP_YAW)    [    ]        [    ]|                                      \n" );//7
-    printf( "ID: 9(R_HIP_ROLL)   [    ]        [    ]|                                      \n" );//8
-    printf( "ID:10(L_HIP_ROLL)   [    ]        [    ]|                                      \n" );//9
-    printf( "ID:11(R_HIP_PITCH)  [    ]        [    ]|                                      \n" );//0
-    printf( "ID:12(L_HIP_PITCH)  [    ]        [    ]|                                      \n" );//1
-    printf( "ID:13(R_KNEE)       [    ]        [    ]|                                      \n" );//2
-    printf( "ID:14(L_KNEE)       [    ]        [    ]|                                      \n" );//3
-    printf( "ID:15(R_ANK_PITCH)  [    ]        [    ]|                                      \n" );//4
-    printf( "ID:16(L_ANK_PITCH)  [    ]        [    ]|                                      \n" );//5
-    printf( "ID:17(R_ANK_ROLL)   [    ]        [    ]|                                      \n" );//6
-    printf( "ID:18(L_ANK_ROLL)   [    ]        [    ]|                                      \n" );//7
-    printf( "ID:19(HEAD_PAN)     [    ]        [    ]|                                      \n" );//8
-    printf( "ID:20(HEAD_TILT)    [    ]        [    ]|                                      \n" );//9
-    printf( "                     GOAL  OFFSET MODVAL PRSPOS ERRORS P_GAIN I_GAIN D_GAIN    \n" );//0
+    printf( "ID: 1(R_SHO_PITCH)  [    ]        [    ]|                                            \n" );//0
+    printf( "ID: 2(L_SHO_PITCH)  [    ]        [    ]|                                            \n" );//1
+    printf( "ID: 3(R_SHO_ROLL)   [    ]        [    ]|                                            \n" );//2
+    printf( "ID: 4(L_SHO_ROLL)   [    ]        [    ]|                                            \n" );//3
+    printf( "ID: 5(R_ELBOW)      [    ]        [    ]|                                            \n" );//4
+    printf( "ID: 6(L_ELBOW)      [    ]        [    ]|                                            \n" );//5
+    printf( "ID: 7(R_HIP_YAW)    [    ]        [    ]|                                            \n" );//6
+    printf( "ID: 8(L_HIP_YAW)    [    ]        [    ]|                                            \n" );//7
+    printf( "ID: 9(R_HIP_ROLL)   [    ]        [    ]|                                            \n" );//8
+    printf( "ID:10(L_HIP_ROLL)   [    ]        [    ]|                                            \n" );//9
+    printf( "ID:11(R_HIP_PITCH)  [    ]        [    ]|                                            \n" );//0
+    printf( "ID:12(L_HIP_PITCH)  [    ]        [    ]|                                            \n" );//1
+    printf( "ID:13(R_KNEE)       [    ]        [    ]|                                            \n" );//2
+    printf( "ID:14(L_KNEE)       [    ]        [    ]|                                            \n" );//3
+    printf( "ID:15(R_ANK_PITCH)  [    ]        [    ]|                                            \n" );//4
+    printf( "ID:16(L_ANK_PITCH)  [    ]        [    ]|                                            \n" );//5
+    printf( "ID:17(R_ANK_ROLL)   [    ]        [    ]|                                            \n" );//6
+    printf( "ID:18(L_ANK_ROLL)   [    ]        [    ]|                                            \n" );//7
+    printf( "ID:19(HEAD_PAN)     [    ]        [    ]|                                            \n" );//8
+    printf( "ID:20(HEAD_TILT)    [    ]        [    ]|                                            \n" );//9
+    printf( "                     GOAL  OFFSET MODVAL PRSPOS ERRORS P_GAIN I_GAIN D_GAIN INVERT   \n" );//0
     printf( "]                                                                              " );  //1
 
-	for(int i=0; i<=7; i++ )
+	for(int i=0; i<=8; i++ )
 		DrawStep(i);
 
 	GoToCursor(old_col, old_row);
@@ -418,6 +426,15 @@ void DrawStep(int index)
         {
             GoToCursor(col, id -1);
             printf("%4d", D_Gain[id]);
+        }
+        break;
+
+    case 8:
+        col = INVERT_COL;
+        for( int id=JointData::ID_R_SHOULDER_PITCH; id<JointData::NUMBER_OF_JOINTS; id++ )
+        {
+            GoToCursor(col, id -1);
+            printf("%4d", MotionManager::GetInstance()->m_invert[id]);
         }
         break;
 
@@ -530,6 +547,8 @@ int GetValue()
         return I_Gain[row + 1];
     else if( col == D_GAIN_COL )
         return D_Gain[row + 1];
+    else if( col == INVERT_COL )
+        return MotionManager::GetInstance()->m_invert[row + 1];
 
 	return -1;
 }
@@ -553,18 +572,19 @@ void SetValue(CM730 *cm730, int value)
 
 	if( col == GOAL_COL )
 	{
-        if(value+MotionManager::GetInstance()->m_Offset[row + 1] >= 0 && value+MotionManager::GetInstance()->m_Offset[row + 1] <= MX28::MAX_VALUE)
+        int goalPos = MotionManager::GetInstance()->applyOffset(row+1, value);
+        if(goalPos >= 0 && goalPos <= MX28::MAX_VALUE)
         {
             if(!(Step.position[row + 1] & Action::INVALID_BIT_MASK) && !(Step.position[row + 1] & Action::TORQUE_OFF_BIT_MASK))
             {
                 int error;
-                if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, value+MotionManager::GetInstance()->m_Offset[row + 1], &error) == CM730::SUCCESS)
+                if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, goalPos, &error) == CM730::SUCCESS)
                 {
                     if(!(error & CM730::ANGLE_LIMIT))
                     {
                         InitPose[row + 1] = value;
                         printf( "%.4d", value );
-                        Step.position[row + 1] = value+MotionManager::GetInstance()->m_Offset[row + 1];
+                        Step.position[row + 1] = goalPos;
                         GoToCursor(MODVAL_COL, row);
                         printf( "%.4d", Step.position[row + 1] );
                     }
@@ -575,18 +595,19 @@ void SetValue(CM730 *cm730, int value)
 	else if( col == OFFSET_COL )
 	{
         MotionManager::GetInstance()->m_Offset[row + 1] = value;
+        int goalPos = MotionManager::GetInstance()->applyOffset(row+1, InitPose[row+1]);
         printf( "%4d ", GetValue() );
 
-        if(InitPose[row + 1] + value >= 0 && InitPose[row + 1] + value <= MX28::MAX_VALUE)
+        if(goalPos >= 0 && goalPos <= MX28::MAX_VALUE)
         {
             if(!(Step.position[row + 1] & Action::INVALID_BIT_MASK) && !(Step.position[row + 1] & Action::TORQUE_OFF_BIT_MASK))
             {
                 int error;
-                if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, InitPose[row + 1] + value, &error) == CM730::SUCCESS)
+                if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, goalPos, &error) == CM730::SUCCESS)
                 {
                     if(!(error & CM730::ANGLE_LIMIT))
                     {
-                        Step.position[row + 1] = InitPose[row + 1] + value;
+                        Step.position[row + 1] = goalPos;
                         GoToCursor(MODVAL_COL, row);
                         printf( "%.4d", Step.position[row + 1] );
                     }
@@ -595,6 +616,12 @@ void SetValue(CM730 *cm730, int value)
         }
         bEdited = true;
 	}
+    else if( col == INVERT_COL )
+    {
+        MotionManager::GetInstance()->m_invert[row+1] = value;
+        printf( " %.4d", GetValue());
+        bEdited = true;
+    }
     else if( col == MODVAL_COL )
     {
         if(value >= MX28::MIN_VALUE && value <= MX28::MAX_VALUE)

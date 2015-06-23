@@ -25,7 +25,10 @@ MotionManager::MotionManager() :
         DEBUG_PRINT(false)
 {
     for(int i = 0; i < JointData::NUMBER_OF_JOINTS; i++)
+    {
         m_Offset[i] = 0;
+        m_invert[i] = false;
+    }
 }
 
 MotionManager::~MotionManager()
@@ -152,6 +155,7 @@ void MotionManager::LoadINISettings(minIni* ini, const std::string &section)
         char key[10];
         sprintf(key, "ID_%.2d", i);
         if((ivalue = ini->geti(section, key, INVALID_VALUE)) != INVALID_VALUE)  m_Offset[i] = ivalue;
+        if((ivalue = ini->geti(INVERT_SECTION, key, INVALID_VALUE)) != INVALID_VALUE) m_invert[i] = ivalue;
     }
 }
 void MotionManager::SaveINISettings(minIni* ini)
@@ -165,6 +169,7 @@ void MotionManager::SaveINISettings(minIni* ini, const std::string &section)
         char key[10];
         sprintf(key, "ID_%.2d", i);
         ini->put(section, key, m_Offset[i]);
+        ini->put(INVERT_SECTION, key, (int)m_invert[i]);
     }
 }
 
@@ -374,6 +379,8 @@ void MotionManager::SetJointDisable(int index)
 
 int MotionManager::applyOffset(int id, int position)
 {
+	if(m_invert[id])
+		position = -(position - 2048) + 2048;
 	position += m_Offset[id];
 
 	return position;
@@ -382,6 +389,8 @@ int MotionManager::applyOffset(int id, int position)
 int MotionManager::removeOffset(int id, int position)
 {
 	position -= m_Offset[id];
+	if(m_invert[id])
+		position = -(position - 2048) + 2048;
 
 	return position;
 }

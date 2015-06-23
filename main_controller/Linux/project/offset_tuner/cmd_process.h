@@ -19,6 +19,7 @@
 #define P_GAIN_COL      56
 #define I_GAIN_COL      63
 #define D_GAIN_COL      70
+#define INVERT_COL      78
 
 
 // Position of Row
