@@ -619,7 +619,7 @@ void SetValue(CM730 *cm730, int value)
     else if( col == INVERT_COL )
     {
         MotionManager::GetInstance()->m_invert[row+1] = value;
-        printf( " %.4d", GetValue());
+        printf( "%4d", GetValue());
         bEdited = true;
     }
     else if( col == MODVAL_COL )
