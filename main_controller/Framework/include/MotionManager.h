@@ -64,6 +64,9 @@ namespace Robot
 		int GetCalibrationStatus() { return m_CalibrationStatus; }
 		void SetJointDisable(int index);
 
+		int applyOffset(int id, int position);
+		int removeOffset(int id, int position);
+
 		void StartLogging();
 		void StopLogging();
 

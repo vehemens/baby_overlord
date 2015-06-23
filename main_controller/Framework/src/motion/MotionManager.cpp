@@ -54,6 +54,7 @@ bool MotionManager::Initialize(CM730 *cm730)
 		
 		if(m_CM730->ReadWord(id, MX28::P_PRESENT_POSITION_L, &value, &error) == CM730::SUCCESS)
 		{
+			value = removeOffset(id, value);
 			MotionStatus::m_CurrentJoints.SetValue(id, value);
 			MotionStatus::m_CurrentJoints.SetEnable(id, true);
 
@@ -90,6 +91,7 @@ bool MotionManager::Reinitialize()
 		
 		if(m_CM730->ReadWord(id, MX28::P_PRESENT_POSITION_L, &value, &error) == CM730::SUCCESS)
 		{
+			value = removeOffset(id, value);
 			MotionStatus::m_CurrentJoints.SetValue(id, value);
 			MotionStatus::m_CurrentJoints.SetEnable(id, true);
 
@@ -300,8 +302,10 @@ void MotionManager::Process()
                 param[n++] = MotionStatus::m_CurrentJoints.GetPGain(id);
                 param[n++] = 0;
 #endif
-                param[n++] = CM730::GetLowByte(MotionStatus::m_CurrentJoints.GetValue(id) + m_Offset[id]);
-                param[n++] = CM730::GetHighByte(MotionStatus::m_CurrentJoints.GetValue(id) + m_Offset[id]);
+		int value = MotionStatus::m_CurrentJoints.GetValue(id);
+		value = applyOffset(id, value);
+                param[n++] = CM730::GetLowByte(value);
+                param[n++] = CM730::GetHighByte(value);
                 joint_num++;
             }
 
@@ -366,4 +370,18 @@ void MotionManager::SetJointDisable(int index)
         for(std::list<MotionModule*>::iterator i = m_Modules.begin(); i != m_Modules.end(); i++)
             (*i)->m_Joint.SetEnable(index, false);
     }
+}
+
+int MotionManager::applyOffset(int id, int position)
+{
+	position += m_Offset[id];
+
+	return position;
+}
+
+int MotionManager::removeOffset(int id, int position)
+{
+	position -= m_Offset[id];
+
+	return position;
 }

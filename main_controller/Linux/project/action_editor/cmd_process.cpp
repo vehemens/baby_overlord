@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <ncurses.h>
 #include "cmd_process.h"
+#include "MotionManager.h"
 
 using namespace Robot;
 
@@ -89,7 +90,7 @@ void ReadStep(CM730 *cm730)
 				if(value == 1)
 				{
 					if(cm730->ReadWord(id, MX28::P_GOAL_POSITION_L, &value, 0) == CM730::SUCCESS)
-						Step.position[id] = value;
+						Step.position[id] = MotionManager::GetInstance()->removeOffset(id, value);
 					else
 						Step.position[id] = Action::INVALID_BIT_MASK;
 				}
@@ -673,7 +674,8 @@ void SetValue(CM730 *cm730, int value)
 				if(!(Step.position[row + 1] & Action::INVALID_BIT_MASK) && !(Step.position[row + 1] & Action::TORQUE_OFF_BIT_MASK))
 				{
 					int error;
-					if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, value, &error) == CM730::SUCCESS)
+					int raw_value = MotionManager::GetInstance()->applyOffset(row+1, value);
+					if(cm730->WriteWord(row + 1, MX28::P_GOAL_POSITION_L, raw_value, &error) == CM730::SUCCESS)
 					{
 						if(!(error & CM730::ANGLE_LIMIT))
 						{
@@ -850,6 +852,7 @@ void ToggleTorque(CM730 *cm730)
 		int value;
 		if(cm730->ReadWord(id, MX28::P_PRESENT_POSITION_L, &value, 0) != CM730::SUCCESS)
 			return;
+		value = MotionManager::GetInstance()->removeOffset(id, value);
 
 		Step.position[id] = value;
 		printf("%.4d", value);
@@ -986,12 +989,18 @@ void PlayCmd(CM730 *cm730, Robot::LinuxMotionTimer *timer)
 			if(value == 0)
 			{
 				if(cm730->ReadWord(id, MX28::P_PRESENT_POSITION_L, &value, 0) == CM730::SUCCESS)
+				{
+					value = MotionManager::GetInstance()->removeOffset(id, value);
 					MotionStatus::m_CurrentJoints.SetValue(id, value);
+				}
 			}
 			else
 			{
 				if(cm730->ReadWord(id, MX28::P_GOAL_POSITION_L, &value, 0) == CM730::SUCCESS)
+				{
+					value = MotionManager::GetInstance()->removeOffset(id, value);
 					MotionStatus::m_CurrentJoints.SetValue(id, value);
+				}
 			}
 		}
 	}
@@ -1327,8 +1336,9 @@ void GoCmd(CM730 *cm730, int index)
 			PrintCmd("Failed to read position");
 			return;
 		}
+		wStartPosition = MotionManager::GetInstance()->removeOffset(id, wStartPosition);
 
-		wGoalPosition = Page.step[index].position[id];
+		wGoalPosition = MotionManager::GetInstance()->applyOffset(id, Page.step[index].position[id]);
 		if( wStartPosition > wGoalPosition )
 			wDistance = wStartPosition - wGoalPosition;
 		else
