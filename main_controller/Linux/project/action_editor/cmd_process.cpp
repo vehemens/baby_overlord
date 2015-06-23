@@ -1004,6 +1004,7 @@ void PlayCmd(CM730 *cm730, Robot::LinuxMotionTimer *timer)
 			}
 		}
 	}
+	Action::GetInstance()->Initialize();
 
 	PrintCmd("Playing... ('s' to stop, 'b' to brake)");
 
