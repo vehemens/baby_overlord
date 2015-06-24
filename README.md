@@ -7,7 +7,7 @@ OpenCM485 boards.
 
 All code changes within this project are GPL GNU v3.
 
-Original ROBOTIS DARwIn-OP source code can be found here:
+Original DARwIn-OP source code can be found here:
 https://sourceforge.net/projects/darwinop/
 
 Original NimbRo-OP source code can be found here:
