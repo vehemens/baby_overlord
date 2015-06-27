@@ -46,10 +46,9 @@ EXTI_InitTypeDef EXTI_InitStructure;
 uint8_t  USART_Rx_Buffer [USART_RX_DATA_SIZE]; 
 uint32_t USART_Rx_ptr_in = 0;
 uint32_t USART_Rx_ptr_out = 0;
-uint32_t USART_Rx_length  = 0;
-
 uint8_t  USB_Tx_State = 0;
 static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
+
 /* Extern variables ----------------------------------------------------------*/
 
 extern LINE_CODING linecoding;
@@ -348,19 +347,16 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 *******************************************************************************/
 void Handle_USBAsynchXfer (void)
 {
-  uint32_t i;
+  uint32_t USART_Rx_length;
   uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
   uint16_t USB_Tx_length;
+  uint32_t i;
 
-  if(USB_Tx_State != 1)
+  if(USB_Tx_State == 0)
   {
     USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
 
-    if(USART_Rx_length == 0)
-    {
-      USB_Tx_State = 0;
-    }
-    else
+    if(USART_Rx_length != 0)
     {
       USB_Tx_length = USART_Rx_length < VIRTUAL_COM_PORT_DATA_SIZE ?
         USART_Rx_length : VIRTUAL_COM_PORT_DATA_SIZE;
@@ -370,10 +366,10 @@ void Handle_USBAsynchXfer (void)
         USB_Tx_Buffer[i] = USART_Rx_Buffer[USART_Rx_ptr_out++%USART_RX_DATA_SIZE];
       }
 
-      USB_Tx_State = 1;
       UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
       SetEPTxCount(ENDP1, USB_Tx_length);
       SetEPTxValid(ENDP1);
+      USB_Tx_State = 1;
     }
   }
 }

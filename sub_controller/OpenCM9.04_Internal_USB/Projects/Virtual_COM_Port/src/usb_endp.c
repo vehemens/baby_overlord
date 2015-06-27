@@ -46,7 +46,6 @@ uint8_t USB_Rx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
 extern  uint8_t USART_Rx_Buffer[];
 extern uint32_t USART_Rx_ptr_in;
 extern uint32_t USART_Rx_ptr_out;
-extern uint32_t USART_Rx_length;
 extern uint8_t  USB_Tx_State;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,19 +60,16 @@ extern uint8_t  USB_Tx_State;
 *******************************************************************************/
 void EP1_IN_Callback (void)
 {
-  uint32_t i;
+  uint32_t USART_Rx_length;
   uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
   uint16_t USB_Tx_length;
-  
-  if (USB_Tx_State == 1)
+  uint32_t i;
+
+  if (USB_Tx_State != 0)
   {
     USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
 
-    if (USART_Rx_length == 0) 
-    {
-      USB_Tx_State = 0;
-    }
-    else 
+    if (USART_Rx_length != 0)
     {
       USB_Tx_length = USART_Rx_length < VIRTUAL_COM_PORT_DATA_SIZE ?
         USART_Rx_length : VIRTUAL_COM_PORT_DATA_SIZE;
@@ -86,6 +82,10 @@ void EP1_IN_Callback (void)
       UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
       SetEPTxCount(ENDP1, USB_Tx_length);
       SetEPTxValid(ENDP1);
+    }
+    else
+    {
+      USB_Tx_State = 0;
     }
   }
 }
