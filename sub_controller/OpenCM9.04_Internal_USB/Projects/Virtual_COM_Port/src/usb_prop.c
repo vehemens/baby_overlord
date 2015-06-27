@@ -234,7 +234,6 @@ void Virtual_Com_Port_Status_In(void)
 {
   if (Request == SET_LINE_CODING)
   {
-    USART_Config();
     Request = 0;
   }
 }
