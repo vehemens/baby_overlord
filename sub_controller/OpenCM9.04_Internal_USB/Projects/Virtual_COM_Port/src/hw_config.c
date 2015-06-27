@@ -321,7 +321,7 @@ void USART_Config_Default(void)
 extern uint8_t gbpRxInterruptBuffer[];
 extern uint8_t gbRxBufferWritePointer;
 
-void USB_To_USART_Send_Data(uint8_t* data_buffer, uint8_t Nb_bytes)
+void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 {
   uint32_t i;
 
