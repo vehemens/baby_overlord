@@ -87,8 +87,9 @@ void USB_Interrupts_Config(void);
 void USB_Cable_Config (FunctionalState NewState);
 void USART_Config_Default(void);
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
-void USART_To_USB_Send_Data(void);
 void Handle_USBAsynchXfer (void);
+void CNTR_To_USB_Send_Data(uint8_t data);
+void USART_To_USB_Send_Data(void);
 void Get_SerialNum(void);
 
 /* External variables --------------------------------------------------------*/

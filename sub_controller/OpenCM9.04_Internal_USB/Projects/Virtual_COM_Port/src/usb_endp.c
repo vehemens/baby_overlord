@@ -42,7 +42,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint8_t USB_Rx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
 extern  uint8_t USART_Rx_Buffer[];
 extern uint32_t USART_Rx_ptr_in;
 extern uint32_t USART_Rx_ptr_out;
@@ -99,6 +98,7 @@ void EP1_IN_Callback (void)
 *******************************************************************************/
 void EP3_OUT_Callback(void)
 {
+  uint8_t USB_Rx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
   uint32_t USB_Rx_Cnt;
   
   /* Get the received data buffer and update the counter */
