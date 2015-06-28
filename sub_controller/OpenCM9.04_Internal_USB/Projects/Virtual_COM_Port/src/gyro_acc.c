@@ -8,13 +8,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
+#include "hw_config.h"
 #include "gyro_acc.h"
-//#include "stm32f10x_type.h"
-//#include "stm32f10x_lib.h"
-//#include "system_init.h"
-//#include "serial.h"
 #include "CM_DXL_COM.h"
-
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

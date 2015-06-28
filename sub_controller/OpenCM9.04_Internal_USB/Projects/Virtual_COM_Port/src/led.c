@@ -8,11 +8,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
-//#include "stm32f10x_lib.h"
-//#include "stm32f10x_type.h"
 #include "common_type.h"
+#include "hw_config.h"
 #include "led.h"
-//#include "system_init.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
