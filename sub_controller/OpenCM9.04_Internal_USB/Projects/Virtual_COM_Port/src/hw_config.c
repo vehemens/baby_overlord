@@ -41,17 +41,18 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 ErrorStatus HSEStartUpStatus;
-USART_InitTypeDef USART_InitStructure;
-EXTI_InitTypeDef EXTI_InitStructure;
+
 uint8_t  USART_Rx_Buffer [USART_RX_DATA_SIZE]; 
 uint32_t USART_Rx_ptr_in = 0;
 uint32_t USART_Rx_ptr_out = 0;
 uint8_t  USB_Tx_State = 0;
+
 static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
+
 /*******************************************************************************
 * Function Name  : Set_System
 * Description    : Configures Main system clocks & power
@@ -60,8 +61,6 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 *******************************************************************************/
 void Set_System(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-
   /* Peripheral clocks */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
@@ -78,6 +77,13 @@ void Set_System(void)
 #endif
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
+
+  /* IO ports & pins */
+  GPIO_InitTypeDef GPIO_InitStructure;
+  GPIO_StructInit(&GPIO_InitStructure);
+
+  EXTI_InitTypeDef EXTI_InitStructure;
+  EXTI_StructInit(&EXTI_InitStructure);
 
   /* Configure USB pull-up pin */
   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
@@ -279,12 +285,15 @@ void USART_Config_Default(void)
   //XXX needed for buttons
   GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
 
+  USART_InitTypeDef USART_InitStructure;
+  USART_StructInit(&USART_InitStructure);
+
   USART_InitStructure.USART_BaudRate = 1000000;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
   USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_Init(DXL_USART, &USART_InitStructure);
 
   USART_Cmd(DXL_USART, ENABLE);
