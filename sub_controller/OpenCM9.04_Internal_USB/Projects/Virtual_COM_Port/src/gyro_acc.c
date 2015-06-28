@@ -25,7 +25,6 @@ s16 ACC_X_raw;
 s16 ACC_Y_raw;
 s16 ACC_Z_raw;
 
-
 // convert data 0 ~ 1023
 u16 Gyro_X;
 u16 Gyro_Y;
@@ -34,10 +33,9 @@ u16 ACC_X;
 u16 ACC_Y;
 u16 ACC_Z;
 
-
 vu8 SPI_TxBuffer[9]={	0xE8,0xFF,0xFF,
-						0xEA,0xFF,0xFF,
-						0xEC,0xFF,0xFF };
+			0xEA,0xFF,0xFF,
+			0xEC,0xFF,0xFF };
 
 vu8 SPI_RxBuffer[18];
 
@@ -112,9 +110,8 @@ void CovertData(void)
 	ACC_Y_raw = (s16)((SPI_RxBuffer[14] << 8) + SPI_RxBuffer[13]);
 	ACC_Z_raw = (s16)((SPI_RxBuffer[17] << 8) + SPI_RxBuffer[16]);
 
-// 400dps /1023 0.39
+	// 400dps /1023 0.39
 	// 500dps /65535 0.007
-
 
 	// convert data s16 -> u10
 	temp = (Gyro_X_raw /64);
@@ -149,7 +146,6 @@ void CovertData(void)
 	if(temp  < 0 ) temp = 0;
 	GW_ACC_X = ACC_X = temp;
 
-
 	// convert data s16 -> u10
 	temp = (-1)*(ACC_Y_raw /64);
 	//temp = temp * 4 / 3;
@@ -157,7 +153,6 @@ void CovertData(void)
 	if( temp > 1023 ) temp = 1023;
 	if(temp  < 0 ) temp = 0;
 	GW_ACC_Y = ACC_Y = temp;
-
 
 	// convert data s16 -> u10
 	temp = ACC_Z_raw /64;
@@ -170,8 +165,6 @@ void CovertData(void)
 
 void Gyro_Configuration(void)
 {
-
-
 	// write 0x20FF
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 	GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
@@ -205,14 +198,12 @@ void Gyro_Configuration(void)
 
 	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
+
 	Clear_SPI_Data();
-
 }
-
 
 void ACC_Configuration(void)
 {
-
 	// write 0x202F
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 	GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
@@ -228,8 +219,6 @@ void ACC_Configuration(void)
 	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
 	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-
 
 
 	//write 0x2310
@@ -248,20 +237,20 @@ void ACC_Configuration(void)
 
 	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
+
 	Clear_SPI_Data();
 
 
 	GYRO_ACC_ENABLE = 1;
 }
 
-
 void __GYRO_ACC_READ_ISR(void)
 {
-
 	int i;
 
 	if (!GYRO_ACC_ENABLE)
 		return;
+
 
 	//gyro read
 	for(i=0;i<9;i++)
@@ -274,9 +263,9 @@ void __GYRO_ACC_READ_ISR(void)
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-		if( (i+1)%3 == 0 ) GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+		if( (i+1)%3 == 0 )
+			 GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 	}
-	//GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
 
 
 	//acc read
@@ -290,14 +279,14 @@ void __GYRO_ACC_READ_ISR(void)
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-		if( (i+1)%3 == 0 ) GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+		if( (i+1)%3 == 0 )
+			 GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 	}
-	//GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+
 
 	CovertData();
+
 	Clear_SPI_Data();
-
-
 }
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/

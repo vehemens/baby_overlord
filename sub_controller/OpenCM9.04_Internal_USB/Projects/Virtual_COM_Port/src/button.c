@@ -19,8 +19,6 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-
-
 /*******************************************************************************
 * Function Name  : ReadKey
 * Description    : Reads key from demoboard.
@@ -45,13 +43,12 @@ u8 ReadButton(void)
 {
 	u8 retval=0;
 
-	if( GPIO_ReadInputDataBit(SW_START_GPIO_PORT, SW_START_GPIO_PIN) == SET )  retval |= BUTTON_START;
-	if( GPIO_ReadInputDataBit(SW_MODE_GPIO_PORT,  SW_MODE_GPIO_PIN)  == SET )  retval |= BUTTON_MODE;
+	if( GPIO_ReadInputDataBit(SW_START_GPIO_PORT, SW_START_GPIO_PIN) == SET )
+		retval |= BUTTON_START;
+	if( GPIO_ReadInputDataBit(SW_MODE_GPIO_PORT,  SW_MODE_GPIO_PIN)  == SET )
+		retval |= BUTTON_MODE;
 	
 	return retval;
 }
-
-
-
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/

@@ -13,16 +13,12 @@
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-
-#define BUTTON_START				0x1
-#define BUTTON_MODE					0x2
-
+#define BUTTON_START		0x1
+#define BUTTON_MODE		0x2
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-
 u8 ReadButton(void);
-
 
 #endif /* __BUTTON_H */
 
