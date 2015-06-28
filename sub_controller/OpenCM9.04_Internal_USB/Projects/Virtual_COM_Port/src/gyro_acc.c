@@ -57,12 +57,12 @@ void Gyro_Acc_Init(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_SIG_ACC_CS | PIN_SIG_GYRO_CS;
+	GPIO_InitStructure.GPIO_Pin = SIG_ACC_CS_GPIO_PIN | SIG_GYRO_CS_GPIO_PIN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_SIG_SCK  | PIN_SIG_MOSI | PIN_SIG_MISO;
+	GPIO_InitStructure.GPIO_Pin = SIG_SCK_GPIO_PIN | SIG_MOSI_GPIO_PIN | SIG_MISO_GPIO_PIN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
@@ -72,8 +72,8 @@ void Gyro_Acc_Init(void)
 
 	SPI_InitTypeDef SPI_InitStructure;
 
-	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
-	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
@@ -174,7 +174,7 @@ void Gyro_Configuration(void)
 
 	// write 0x20FF
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+	GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
 	SPI_I2S_SendData(SPI1,0x20);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -186,12 +186,12 @@ void Gyro_Configuration(void)
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
 
 	//write 0x2310
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+	GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
 	SPI_I2S_SendData(SPI1,0x23);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -203,7 +203,7 @@ void Gyro_Configuration(void)
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-	GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
 	Clear_SPI_Data();
 
@@ -215,7 +215,7 @@ void ACC_Configuration(void)
 
 	// write 0x202F
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+	GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 	SPI_I2S_SendData(SPI1,0x20);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -227,14 +227,14 @@ void ACC_Configuration(void)
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 
 
 
 	//write 0x2310
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+	GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 	SPI_I2S_SendData(SPI1,0x21);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -246,7 +246,7 @@ void ACC_Configuration(void)
 	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-	GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 	Clear_SPI_Data();
 
@@ -267,14 +267,14 @@ void __GYRO_ACC_READ_ISR(void)
 	for(i=0;i<9;i++)
 	{
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		GPIO_ResetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+		GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
 		SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-		if( (i+1)%3 == 0 ) GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
+		if( (i+1)%3 == 0 ) GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 	}
 	//GPIO_SetBits(PORT_SIG_GYRO_CS,PIN_SIG_GYRO_CS);
 
@@ -283,14 +283,14 @@ void __GYRO_ACC_READ_ISR(void)
 	for(i=0;i<9;i++)
 	{
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		GPIO_ResetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+		GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 		SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
 
-		if( (i+1)%3 == 0 ) GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
+		if( (i+1)%3 == 0 ) GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 	}
 	//GPIO_SetBits(PORT_SIG_ACC_CS,PIN_SIG_ACC_CS);
 

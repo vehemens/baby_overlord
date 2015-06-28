@@ -34,7 +34,7 @@ void InitButton(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = PIN_SW_MODE | PIN_SW_START;
+	GPIO_InitStructure.GPIO_Pin = SW_MODE_GPIO_PIN | SW_START_GPIO_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
@@ -45,8 +45,8 @@ u8 ReadButton(void)
 {
 	u8 retval=0;
 
-	if( GPIO_ReadInputDataBit(PORT_SW_START, 	PIN_SW_START) == SET ) 	retval |= BUTTON_START;
-	if( GPIO_ReadInputDataBit(PORT_SW_MODE, 	PIN_SW_MODE)  == SET ) 	retval |= BUTTON_MODE;
+	if( GPIO_ReadInputDataBit(SW_START_GPIO_PORT, SW_START_GPIO_PIN) == SET )  retval |= BUTTON_START;
+	if( GPIO_ReadInputDataBit(SW_MODE_GPIO_PORT,  SW_MODE_GPIO_PIN)  == SET )  retval |= BUTTON_MODE;
 	
 	return retval;
 }

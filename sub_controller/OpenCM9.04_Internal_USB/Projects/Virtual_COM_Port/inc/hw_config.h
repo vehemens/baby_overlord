@@ -52,13 +52,14 @@
 #define DXL_USART_CLK			RCC_APB2Periph_USART1
 #define DXL_USART_IRQHandler		USART1_IRQHandler
 #define DXL_USART_IRQn			USART1_IRQn
+
 #define DXL_USART_GPIO_CLK		RCC_APB2Periph_GPIOB
-#define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_6
 #define DXL_USART_TXD_GPIO_PORT		GPIOB
-#define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_7
+#define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_6
 #define DXL_USART_RXD_GPIO_PORT		GPIOB
-#define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_5
+#define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_7
 #define DXL_USART_DIR_GPIO_PORT		GPIOB
+#define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_5
 
 #elif defined USE_DXL_USART3
 
@@ -66,54 +67,43 @@
 #define DXL_USART_CLK			RCC_APB1Periph_USART3
 #define DXL_USART_IRQHandler		USART3_IRQHandler
 #define DXL_USART_IRQn			USART3_IRQn
+
 #define DXL_USART_GPIO_CLK		(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC)
-#define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_10
 #define DXL_USART_TXD_GPIO_PORT		GPIOB
-#define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_11
+#define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_10
 #define DXL_USART_RXD_GPIO_PORT		GPIOB
-#define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_14
+#define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_11
 #define DXL_USART_DIR_GPIO_PORT		GPIOC
+#define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_14
 
 #endif
 
 
-#define PORT_SW_MODE			GPIOB
-#define PORT_SW_START			GPIOB
-
-#define PIN_SW_START			GPIO_Pin_3
-#define PIN_SW_MODE			GPIO_Pin_4
-
-
-#define PORT_LED2			GPIOB
-#define PORT_LED3			GPIOB
-#define PORT_LED4			GPIOB
-
-#define PIN_LED2			GPIO_Pin_14
-#define PIN_LED3			GPIO_Pin_13
-#define PIN_LED4			GPIO_Pin_12
-
-#define PIN_LED_MANAGE			PIN_LED2
-#define PIN_LED_EDIT			PIN_LED3
-#define PIN_LED_PLAY			PIN_LED4
-
-#define PORT_LED_MANAGE			PORT_LED2
-#define PORT_LED_EDIT			PORT_LED3
-#define PORT_LED_PLAY			PORT_LED4
+#define SW_MODE_GPIO_PORT		GPIOB
+#define SW_MODE_GPIO_PIN		GPIO_Pin_4
+#define SW_START_GPIO_PORT		GPIOB
+#define SW_START_GPIO_PIN		GPIO_Pin_3
 
 
-#define PORT_SIG_SCK			GPIOA
-#define PORT_SIG_MISO			GPIOA
-#define PORT_SIG_MOSI			GPIOA
+#define LED_MANAGE_GPIO_PORT		GPIOB
+#define LED_MANAGE_GPIO_PIN		GPIO_Pin_14
+#define LED_EDIT_GPIO_PORT		GPIOB
+#define LED_EDIT_GPIO_PIN		GPIO_Pin_13
+#define LED_PLAY_GPIO_PORT		GPIOB
+#define LED_PLAY_GPIO_PIN		GPIO_Pin_12
 
-#define PORT_SIG_ACC_CS			GPIOA
-#define PORT_SIG_GYRO_CS		GPIOA
 
-#define PIN_SIG_SCK			GPIO_Pin_5
-#define PIN_SIG_MISO			GPIO_Pin_6
-#define PIN_SIG_MOSI			GPIO_Pin_7
+#define SIG_SCK_GPIO_PORT		GPIOA
+#define SIG_SCK_GPIO_PIN		GPIO_Pin_5
+#define SIG_MISO_GPIO_PORT		GPIOA
+#define SIG_MISO_GPIO_PIN		GPIO_Pin_6
+#define SIG_MOSI_GPIO_PORT		GPIOA
+#define SIG_MOSI_GPIO_PIN		GPIO_Pin_7
 
-#define PIN_SIG_ACC_CS			GPIO_Pin_1
-#define PIN_SIG_GYRO_CS			GPIO_Pin_0
+#define SIG_ACC_CS_GPIO_PORT		GPIOA
+#define SIG_ACC_CS_GPIO_PIN		GPIO_Pin_1
+#define SIG_GYRO_CS_GPIO_PORT		GPIOA
+#define SIG_GYRO_CS_GPIO_PIN		GPIO_Pin_0
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
