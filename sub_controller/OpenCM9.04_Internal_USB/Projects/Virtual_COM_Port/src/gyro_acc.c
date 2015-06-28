@@ -49,9 +49,6 @@ vu8 GYRO_ACC_ENABLE = 0;
 
 void Gyro_Acc_Init(void)
 {
-	// configure GPIO
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
 
@@ -64,9 +61,6 @@ void Gyro_Acc_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-	// configure SPI
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
 	SPI_InitTypeDef SPI_InitStructure;
 

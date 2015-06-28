@@ -62,8 +62,22 @@ void Set_System(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  /* Enable USB_DISCONNECT GPIO clock */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT, ENABLE);
+  /* Peripheral clocks */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+#if defined USE_DXL_USART1
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+#endif
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
+#if defined USE_DXL_USART3
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+#endif
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
 
   /* Configure USB pull-up pin */
   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
@@ -87,9 +101,6 @@ vu16 CCR4_Val = 12;		// 12us
 
 void Timer_Configuration(void)
 {
-	/* Enable peripheral clock */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-
 	NVIC_InitTypeDef NVIC_InitStructure;
 
 	/* Enable interrupt */
@@ -154,21 +165,6 @@ void Timer_Configuration(void)
 
 	/* TIM2 enable counter */
 	TIM_Cmd(TIM2, ENABLE);
-}
-
-/*******************************************************************************
-* Function Name  : Set_USBClock
-* Description    : Configures USB Clock input (48MHz)
-* Input          : None.
-* Return         : None.
-*******************************************************************************/
-void Set_USBClock(void)
-{
-  /* Select USBCLK source */
-  RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
-  
-  /* Enable the USB clock */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 }
 
 /*******************************************************************************
@@ -263,16 +259,6 @@ void USB_Cable_Config (FunctionalState NewState)
 *******************************************************************************/
 void USART_Config_Default(void)
 {
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-
-#if defined USE_DXL_USART1
-  RCC_APB2PeriphClockCmd(DXL_USART_CLK, ENABLE);
-#elif defined USE_DXL_USART3
-  RCC_APB1PeriphClockCmd(DXL_USART_CLK, ENABLE);
-#endif
-
-  RCC_APB2PeriphClockCmd(DXL_USART_GPIO_CLK, ENABLE);
-
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_StructInit(&GPIO_InitStructure);
 

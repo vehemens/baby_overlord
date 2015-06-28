@@ -40,39 +40,35 @@
 #define         ID2          (0x1FFFF7EC)
 #define         ID3          (0x1FFFF7F0)
 
-
 #define USB_DISCONNECT                      GPIOC
 #define USB_DISCONNECT_PIN                  GPIO_Pin_13
-#define RCC_APB2Periph_GPIO_DISCONNECT      RCC_APB2Periph_GPIOC
 
 
 #if defined USE_DXL_USART1
 
 #define DXL_USART			USART1
-#define DXL_USART_CLK			RCC_APB2Periph_USART1
 #define DXL_USART_IRQHandler		USART1_IRQHandler
 #define DXL_USART_IRQn			USART1_IRQn
 
-#define DXL_USART_GPIO_CLK		RCC_APB2Periph_GPIOB
 #define DXL_USART_TXD_GPIO_PORT		GPIOB
 #define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_6
 #define DXL_USART_RXD_GPIO_PORT		GPIOB
 #define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_7
+
 #define DXL_USART_DIR_GPIO_PORT		GPIOB
 #define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_5
 
 #elif defined USE_DXL_USART3
 
 #define DXL_USART			USART3
-#define DXL_USART_CLK			RCC_APB1Periph_USART3
 #define DXL_USART_IRQHandler		USART3_IRQHandler
 #define DXL_USART_IRQn			USART3_IRQn
 
-#define DXL_USART_GPIO_CLK		(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC)
 #define DXL_USART_TXD_GPIO_PORT		GPIOB
 #define DXL_USART_TXD_GPIO_PIN		GPIO_Pin_10
 #define DXL_USART_RXD_GPIO_PORT		GPIOB
 #define DXL_USART_RXD_GPIO_PIN		GPIO_Pin_11
+
 #define DXL_USART_DIR_GPIO_PORT		GPIOC
 #define DXL_USART_DIR_GPIO_PIN		GPIO_Pin_14
 
@@ -111,7 +107,6 @@
 
 /* Exported functions ------------------------------------------------------- */
 void Set_System(void);
-void Set_USBClock(void);
 void Enter_LowPowerMode(void);
 void Leave_LowPowerMode(void);
 void USB_Interrupts_Config(void);

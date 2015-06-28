@@ -50,7 +50,6 @@
 int main(void)
 {
   Set_System();
-  Set_USBClock();
 
   Timer_Configuration();
 
