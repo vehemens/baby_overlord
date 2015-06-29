@@ -85,9 +85,10 @@ void Clock_Config(void)
 void IO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
+  EXTI_InitTypeDef EXTI_InitStructure;
+
   GPIO_StructInit(&GPIO_InitStructure);
 
-  EXTI_InitTypeDef EXTI_InitStructure;
   EXTI_StructInit(&EXTI_InitStructure);
 
   /* USB */
@@ -222,6 +223,7 @@ void Interrupt_Config(void)
 void USART_Config(void)
 {
   USART_InitTypeDef USART_InitStructure;
+
   USART_StructInit(&USART_InitStructure);
 
   /* DXL USART */
@@ -247,6 +249,7 @@ void USART_Config(void)
 void SPI_Config(void)
 {
   SPI_InitTypeDef SPI_InitStructure;
+
   SPI_StructInit(&SPI_InitStructure);
 
   /* IMU */
@@ -259,16 +262,10 @@ void SPI_Config(void)
   SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
   SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
-
   SPI_Init(SPI1, &SPI_InitStructure);
 
   SPI_Cmd(SPI1, ENABLE);
 }
-
-vu16 CCR1_Val = 100;		// 1ms
-vu16 CCR2_Val = 778;		// 7.81ms
-vu16 CCR3_Val = 12400;		// 125ms
-vu16 CCR4_Val = 12;		// 12us
 
 /*******************************************************************************
 * Function Name  : Timer_Config
@@ -276,56 +273,37 @@ vu16 CCR4_Val = 12;		// 12us
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
+vu16 CCR4_Val = 12; // 12 us
+
 void Timer_Config(void)
 {
-  /* Configure timer */
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
   TIM_OCInitTypeDef TIM_OCInitStructure;
 
   TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+
   TIM_OCStructInit(&TIM_OCInitStructure);
 
   TIM_DeInit(TIM2);
 
-  /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 65535;
   TIM_TimeBaseStructure.TIM_Prescaler = 0;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-
   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 
-  /* Prescaler configuration */
   TIM_PrescalerConfig(TIM2, 722, TIM_PSCReloadMode_Immediate);
 
-  /* Output Compare Timing Mode configuration: Channel1 */
   TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
   TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;
   TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-
-/*
-  TIM_OCInitStructure.TIM_Pulse = CCR1_Val;
-  TIM_OC1Init(TIM2, &TIM_OCInitStructure);
-  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
-*/
-/*
-  TIM_OCInitStructure.TIM_Pulse = CCR2_Val;
-  TIM_OC2Init(TIM2, &TIM_OCInitStructure);
-  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Disable);
-
-  TIM_OCInitStructure.TIM_Pulse = CCR3_Val;
-  TIM_OC3Init(TIM2, &TIM_OCInitStructure);
-  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Disable);
-*/
-
   TIM_OCInitStructure.TIM_Pulse = CCR4_Val;
   TIM_OC4Init(TIM2, &TIM_OCInitStructure);
+
   TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Disable);
 
-  /* TIM IT enable */
-  TIM_ITConfig(TIM2, /*TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 |*/ TIM_IT_CC4, ENABLE);
+  TIM_ITConfig(TIM2, TIM_IT_CC4, ENABLE);
 
-  /* TIM2 enable counter */
   TIM_Cmd(TIM2, ENABLE);
 }
 
@@ -371,7 +349,7 @@ void Leave_LowPowerMode(void)
 * Input          : None.
 * Return         : Status
 *******************************************************************************/
-void USB_Cable_Config (FunctionalState NewState)
+void USB_Cable_Config(FunctionalState NewState)
 {
   if (NewState != DISABLE)
   {
@@ -418,7 +396,7 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 * Input          : None.
 * Return         : none.
 *******************************************************************************/
-void Handle_USBAsynchXfer (void)
+void Handle_USBAsynchXfer(void)
 {
   uint32_t USART_Rx_length;
   uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
@@ -500,7 +478,7 @@ void Get_SerialNum(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len)
+static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len)
 {
   uint8_t idx = 0;
   
