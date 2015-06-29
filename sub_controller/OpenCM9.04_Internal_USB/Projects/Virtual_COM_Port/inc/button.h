@@ -18,7 +18,7 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-u8 ReadButton(void);
+void __Button_ISR(void);
 
 #endif /* __BUTTON_H */
 

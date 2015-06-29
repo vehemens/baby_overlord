@@ -55,6 +55,8 @@ int main(void)
 
   IO_Config();
 
+  Interrupt_Config();
+
   USART_Config();
 
   SPI_Config();
@@ -67,7 +69,6 @@ int main(void)
 
   Timer_Config();
 
-  USB_Interrupts_Config();
   USB_Init();
 
   LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);

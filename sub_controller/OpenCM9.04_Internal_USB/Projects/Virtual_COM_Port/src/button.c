@@ -20,22 +20,22 @@
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : ReadButton
+* Function Name  : __Button_ISR
 * Description    : Reads button state
 * Input          : None.
 * Return         : Button state
 *******************************************************************************/
-u8 ReadButton(void)
+void __Button_ISR(void)
 {
-  u8 retval = 0;
+  u8 val = 0;
 
   if (GPIO_ReadInputDataBit(SW_START_GPIO_PORT, SW_START_GPIO_PIN) == SET)
-    retval |= BUTTON_START;
+    val |= BUTTON_START;
 
   if (GPIO_ReadInputDataBit(SW_MODE_GPIO_PORT, SW_MODE_GPIO_PIN) == SET)
-    retval |= BUTTON_MODE;
-  
-  return retval;
+    val |= BUTTON_MODE;
+
+  GB_BUTTON = val;
 }
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/

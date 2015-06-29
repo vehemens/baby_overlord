@@ -174,6 +174,46 @@ void IO_Config(void)
 }
 
 /*******************************************************************************
+* Function Name  : Interrupt_Config
+* Description    : Configures the interrupts
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
+void Interrupt_Config(void)
+{
+  NVIC_InitTypeDef NVIC_InitStructure; 
+
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+
+  /* Timer */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  /* USB */
+  NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  NVIC_InitStructure.NVIC_IRQChannel = USBWakeUp_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  /* DXL USART */
+  NVIC_InitStructure.NVIC_IRQChannel = DXL_USART_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+}
+
+/*******************************************************************************
 * Function Name  : USART_Config
 * Description    : Configures USART Devices
 * Input          : None.
@@ -238,17 +278,6 @@ vu16 CCR4_Val = 12;		// 12us
 *******************************************************************************/
 void Timer_Config(void)
 {
-  NVIC_InitTypeDef NVIC_InitStructure;
-
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);  
-
-  /* Enable interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
-
   /* Configure timer */
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
   TIM_OCInitTypeDef TIM_OCInitStructure;
@@ -334,36 +363,6 @@ void Leave_LowPowerMode(void)
   }
   /*Enable SystemCoreClock*/
   SystemInit();
-}
-
-/*******************************************************************************
-* Function Name  : USB_Interrupts_Config
-* Description    : Configures the USB interrupts
-* Input          : None.
-* Return         : None.
-*******************************************************************************/
-void USB_Interrupts_Config(void)
-{
-  NVIC_InitTypeDef NVIC_InitStructure; 
-  
-  /* 2 bit for pre-emption priority, 2 bits for subpriority */
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);  
-
-  NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
-
-  /* Enable the USB Wake-up interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USBWakeUp_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_Init(&NVIC_InitStructure);
-
-  /* Enable USART Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = DXL_USART_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_Init(&NVIC_InitStructure);
 }
 
 /*******************************************************************************

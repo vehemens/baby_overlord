@@ -108,12 +108,12 @@
 /* Exported functions ------------------------------------------------------- */
 void Clock_Config(void);
 void IO_Config(void);
+void Interrupt_Config(void);
 void USART_Config(void);
 void SPI_Config(void);
 void Timer_Config(void);
 void Enter_LowPowerMode(void);
 void Leave_LowPowerMode(void);
-void USB_Interrupts_Config(void);
 void USB_Cable_Config (FunctionalState NewState);
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
 void Handle_USBAsynchXfer (void);

@@ -159,7 +159,7 @@ void TIM2_IRQHandler(void)
       __GYRO_ISR();
       __ACC_ISR();
       //__ISR_Buzzer_Manage();
-      GB_BUTTON = ReadButton();
+      __Button_ISR();
     }
 
     if (!(gwCounter1 & 0x3FF)) // 125ms
