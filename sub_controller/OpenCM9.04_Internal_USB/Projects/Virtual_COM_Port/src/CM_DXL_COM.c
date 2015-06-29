@@ -9,6 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define TIMEOUT_CHECK
+#define TIMEOUT_MILISEC 100
+
 #define	BROADCAST_PING_DISABLE
 
 /////////////////////////////////////////////////////////////////////////////
@@ -387,11 +389,10 @@ void InitProcess(void)
 #endif
 }
 
-void Process(void)
+void ProcessPackets(void)
 {
-  byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn,bPrevID;;
+  byte bCount, bLength, bCount0xff, bCheckSum;
 
-  #define TIMEOUT_MILISEC 100
   while(1)
   {
     RX_PACKET_START:
@@ -482,6 +483,18 @@ void Process(void)
       }
       else
       {
+        ProcessInstruction(bLength);
+      }
+    }
+  }
+}
+
+void ProcessInstruction(byte length)
+{
+  byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn, bPrevID;
+
+  bLength = length;
+
     	  	if(gbInstruction == INST_BULK_READ ) //INST_SYNC_WR only 2009.12.11.buche
 			{
     	  	  gbRxD0BufferWritePointer = gbRxD0BufferReadPointer = 0;
@@ -753,9 +766,11 @@ void Process(void)
         {
           ReturnPacket(INSTRUCTION_ERROR_BIT);
         }
-      }
-    }
-  }
+
+RX_PACKET_START:
+RX_PACKET_TIMEOUT:
+
+  return;
 }
 
 

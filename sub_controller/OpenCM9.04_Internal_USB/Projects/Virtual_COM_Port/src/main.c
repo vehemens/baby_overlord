@@ -71,7 +71,7 @@ int main(void)
 
   LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
 
-  Process();
+  ProcessPackets();
 
   while (1)
   {

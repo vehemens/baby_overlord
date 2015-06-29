@@ -261,7 +261,9 @@ extern volatile byte gbLEDEyeG;
 extern volatile byte gbLEDEyeB;
 extern volatile byte gbLEDPwm;
 
-void Process(void);
+void InitProcess(void);
+void ProcessPackets(void);
+void ProcessInstruction(byte length);
 
 
 #endif /* _DYNAMIXEL_CM_DXL_COM_HEADER */
