@@ -106,11 +106,11 @@
 #define USART_RX_DATA_SIZE   2048
 
 /* Exported functions ------------------------------------------------------- */
-void ConfigureClocks(void)
-void ConfigureIO(void)
-void ConfigureUSART(void)
-void ConfigureSPI(void)
-void Timer_Configuration(void)
+void ConfigureClocks(void);
+void ConfigureIO(void);
+void ConfigureUSART(void);
+void ConfigureSPI(void);
+void Timer_Configuration(void);
 void Enter_LowPowerMode(void);
 void Leave_LowPowerMode(void);
 void USB_Interrupts_Config(void);
