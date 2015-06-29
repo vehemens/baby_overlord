@@ -278,24 +278,24 @@ byte ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RAT
 
 volatile byte gbpRxInterruptBuffer[256];
 volatile byte gbpTxInterruptBuffer[256];
-volatile byte gbRxBufferWritePointer = 0;
-volatile byte gbRxBufferReadPointer = 0;
-volatile byte gbTxBufferWritePointer = 0;
-volatile byte gbTxBufferReadPointer = 0;
+volatile byte gbRxBufferWritePointer;
+volatile byte gbRxBufferReadPointer;
+volatile byte gbTxBufferWritePointer;
+volatile byte gbTxBufferReadPointer;
 
 volatile byte gbpRxD0Buffer[256];
 volatile byte gbpTxD0Buffer[256];
-volatile byte gbRxD0BufferWritePointer = 0;
-volatile byte gbRxD0BufferReadPointer = 0;
-volatile byte gbTxD0BufferWritePointer = 0;
-volatile byte gbTxD0BufferReadPointer = 0;
+volatile byte gbRxD0BufferWritePointer;
+volatile byte gbRxD0BufferReadPointer;
+volatile byte gbTxD0BufferWritePointer;
+volatile byte gbTxD0BufferReadPointer;
 
 volatile byte gbpRxD1Buffer[256];
 volatile byte gbpTxD1Buffer[256];
-volatile byte gbRxD1BufferWritePointer = 0;
-volatile byte gbRxD1BufferReadPointer = 0;
-volatile byte gbTxD1BufferWritePointer = 0;
-volatile byte gbTxD1BufferReadPointer = 0;
+volatile byte gbRxD1BufferWritePointer;
+volatile byte gbRxD1BufferReadPointer;
+volatile byte gbTxD1BufferWritePointer;
+volatile byte gbTxD1BufferReadPointer;
 
 volatile byte gbTxD0Transmitting;
 volatile byte gbTxD1Transmitting;
@@ -336,13 +336,36 @@ void ProcessAfterWriting(void);
 u8 gbDxlPwr;
 
 
-void Process(void)
+void InitProcess(void)
 {
-  byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn,bPrevID;;
+  byte bCount;
 #if 0
   word wTemp;
   byte bTemp;
 #endif
+
+  for(bCount=0; bCount < ROM_CONTROL_TABLE_LEN; bCount++)
+  {
+    gbpControlTable[bCount] = ROM_INITIAL_DATA[bCount];
+  }
+
+  gbRxBufferWritePointer = 0;
+  gbRxBufferReadPointer = 0;
+  gbTxBufferWritePointer = 0;
+  gbTxBufferReadPointer = 0;
+
+  gbRxD0BufferWritePointer = 0;
+  gbRxD0BufferReadPointer = 0;
+  gbTxD0BufferWritePointer = 0;
+  gbTxD0BufferReadPointer = 0;
+
+  gbRxD1BufferWritePointer = 0;
+  gbRxD1BufferReadPointer = 0;
+  gbTxD1BufferWritePointer = 0;
+  gbTxD1BufferReadPointer = 0;
+
+  gbTxD0Transmitting = 0;
+  gbTxD1Transmitting = 0;
 
 
   GB_ID = DEFAULT_ID;
@@ -362,16 +385,11 @@ void Process(void)
 #if 0
   GW_ZIGBEE_ID = ScanZigbee();
 #endif
+}
 
-
-
-
-	for(bCount=0; bCount < ROM_CONTROL_TABLE_LEN; bCount++)
-	{
-		gbpControlTable[bCount] = ROM_INITIAL_DATA[bCount];
-	}
-
-
+void Process(void)
+{
+  byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn,bPrevID;;
 
   #define TIMEOUT_MILISEC 100
   while(1)

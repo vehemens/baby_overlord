@@ -27,14 +27,12 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-
 #include "stm32_it.h"
 #include "usb_lib.h"
 #include "usb_prop.h"
 #include "usb_desc.h"
 #include "hw_config.h"
 #include "usb_pwr.h"
-
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -59,7 +57,7 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void Set_System(void)
+void ConfigureClocks(void)
 {
   /* Peripheral clocks */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
@@ -76,8 +74,10 @@ void Set_System(void)
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 #endif
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+}
 
-
+void ConfigureIO(void)
+{
   /* IO ports & pins */
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_StructInit(&GPIO_InitStructure);
@@ -85,21 +85,127 @@ void Set_System(void)
   EXTI_InitTypeDef EXTI_InitStructure;
   EXTI_StructInit(&EXTI_InitStructure);
 
-  /* Configure USB pull-up pin */
+  /* USB */
   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
   GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
 
-  /* Configure the EXTI line 18 connected internally to the USB IP */
   EXTI_ClearITPendingBit(EXTI_Line18);
+
   EXTI_InitStructure.EXTI_Line = EXTI_Line18; 
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
+
+  /* USART */
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_TXD_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(DXL_USART_TXD_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_RXD_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+  GPIO_Init(DXL_USART_RXD_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = DXL_USART_DIR_GPIO_PIN;
+#if defined USE_DXL_USART1
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+#elif defined USE_DXL_USART3
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+#endif
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(DXL_USART_DIR_GPIO_PORT, &GPIO_InitStructure);
+
+  /* LED */
+  GPIO_InitStructure.GPIO_Pin = LED_MANAGE_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(LED_MANAGE_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = LED_EDIT_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(LED_EDIT_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = LED_PLAY_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(LED_PLAY_GPIO_PORT, &GPIO_InitStructure);
+
+  /* Button */
+  GPIO_InitStructure.GPIO_Pin = SW_MODE_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+  GPIO_Init(SW_MODE_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SW_START_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+  GPIO_Init(SW_START_GPIO_PORT, &GPIO_InitStructure);
+
+  /* IMU */
+  GPIO_InitStructure.GPIO_Pin = SIG_ACC_CS_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(SIG_ACC_CS_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SIG_GYRO_CS_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(SIG_GYRO_CS_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SIG_SCK_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(SIG_SCK_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SIG_MOSI_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(SIG_MOSI_GPIO_PORT, &GPIO_InitStructure);
+
+  /* Remap */
+  GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
+  GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
-// CCR unit= 10uS
+void ConfigureUSART(void)
+{
+  USART_InitTypeDef USART_InitStructure;
+  USART_StructInit(&USART_InitStructure);
+
+  USART_InitStructure.USART_BaudRate = 1000000;
+  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+  USART_InitStructure.USART_Parity = USART_Parity_No;
+  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_Init(DXL_USART, &USART_InitStructure);
+
+  USART_Cmd(DXL_USART, ENABLE);
+
+  USART_ITConfig(DXL_USART, USART_IT_RXNE, ENABLE);
+}
+
+void ConfigureSPI(void)
+{
+  SPI_InitTypeDef SPI_InitStructure;
+  SPI_StructInit(&SPI_InitStructure);
+
+  SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+  SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+  SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+  SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
+  SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+  SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
+  SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+  SPI_InitStructure.SPI_CRCPolynomial = 7;
+
+  SPI_Init(SPI1, &SPI_InitStructure);
+
+  SPI_Cmd(SPI1, ENABLE);
+}
+
 vu16 CCR1_Val = 100;		// 1ms
 vu16 CCR2_Val = 778;		// 7.81ms
 vu16 CCR3_Val = 12400;		// 125ms
@@ -255,51 +361,6 @@ void USB_Cable_Config (FunctionalState NewState)
   {
     GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
   }
-}
-
-/*******************************************************************************
-* Function Name  :  USART_Config_Default.
-* Description    :  configure the EVAL_COM1 with default values.
-* Input          :  None.
-* Return         :  None.
-*******************************************************************************/
-void USART_Config_Default(void)
-{
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_StructInit(&GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = DXL_USART_TXD_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-  GPIO_Init(DXL_USART_TXD_GPIO_PORT, &GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = DXL_USART_RXD_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-  GPIO_Init(DXL_USART_RXD_GPIO_PORT, &GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = DXL_USART_DIR_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(DXL_USART_DIR_GPIO_PORT, &GPIO_InitStructure);
-
-  //XXX needed for buttons
-  GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
-
-  USART_InitTypeDef USART_InitStructure;
-  USART_StructInit(&USART_InitStructure);
-
-  USART_InitStructure.USART_BaudRate = 1000000;
-  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_Init(DXL_USART, &USART_InitStructure);
-
-  USART_Cmd(DXL_USART, ENABLE);
-
-  /* Enable the USART Receive interrupt */
-  USART_ITConfig(DXL_USART, USART_IT_RXNE, ENABLE);
 }
 
 /*******************************************************************************

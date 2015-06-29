@@ -106,12 +106,15 @@
 #define USART_RX_DATA_SIZE   2048
 
 /* Exported functions ------------------------------------------------------- */
-void Set_System(void);
+void ConfigureClocks(void)
+void ConfigureIO(void)
+void ConfigureUSART(void)
+void ConfigureSPI(void)
+void Timer_Configuration(void)
 void Enter_LowPowerMode(void);
 void Leave_LowPowerMode(void);
 void USB_Interrupts_Config(void);
 void USB_Cable_Config (FunctionalState NewState);
-void USART_Config_Default(void);
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
 void Handle_USBAsynchXfer (void);
 void CNTR_To_USB_Send_Data(uint8_t data);

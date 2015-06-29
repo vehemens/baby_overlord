@@ -31,6 +31,8 @@
 #include "usb_lib.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
+#include "CM_DXL_COM.h"
+#include "led.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -49,20 +51,25 @@
 *******************************************************************************/
 int main(void)
 {
-  Set_System();
+  ConfigureClocks();
+  
+  ConfigureIO();
+  
+  ConfigureUSART();
+  
+  ConfigureSPI();
+
+  InitProcess();
+
+  Gyro_Configuration();
+  ACC_Configuration();
 
   Timer_Configuration();
 
   USB_Interrupts_Config();
   USB_Init();
-  
-  InitLED();
-  InitButton();
 
-  Gyro_Acc_Init();
-
-  Gyro_Configuration();
-  ACC_Configuration();
+  LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
 
   Process();
 

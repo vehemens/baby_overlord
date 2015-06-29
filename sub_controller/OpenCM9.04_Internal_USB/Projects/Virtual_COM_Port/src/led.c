@@ -19,31 +19,6 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-void InitLED(void)
-{
-	int bCount;
-
-	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_StructInit(&GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = LED_MANAGE_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(LED_MANAGE_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = LED_EDIT_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(LED_EDIT_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = LED_PLAY_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(LED_PLAY_GPIO_PORT, &GPIO_InitStructure);
-
-	LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
-}
-
 void LED_SetState(u8 LED_PORT, PowerState NewState)
 {
 	if( NewState == ON )

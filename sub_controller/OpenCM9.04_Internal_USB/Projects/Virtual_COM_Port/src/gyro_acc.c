@@ -47,57 +47,6 @@ vu8 GYRO_ACC_ENABLE = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-void Gyro_Acc_Init(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_StructInit(&GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = SIG_ACC_CS_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(SIG_ACC_CS_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = SIG_GYRO_CS_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(SIG_GYRO_CS_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = SIG_SCK_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(SIG_SCK_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = SIG_MOSI_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(SIG_MOSI_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = SIG_MISO_GPIO_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(SIG_MISO_GPIO_PORT, &GPIO_InitStructure);
-
-	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
-	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-	SPI_InitTypeDef SPI_InitStructure;
-	SPI_StructInit(&SPI_InitStructure);
-
-	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-	SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
-	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
-	SPI_InitStructure.SPI_CRCPolynomial = 7;
-
-	SPI_Init(SPI1, &SPI_InitStructure);
-
-	SPI_Cmd(SPI1, ENABLE);
-}
-
 void Push_SPI_Data(u16 dat)
 {
 	SPI_RxBuffer[SPI_RxBufferPointer++] = (u8)( dat & 0x00FF );
