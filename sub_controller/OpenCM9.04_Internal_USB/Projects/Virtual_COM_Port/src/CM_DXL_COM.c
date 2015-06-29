@@ -391,15 +391,23 @@ RX_PACKET_TIMEOUT:
       while (gbRxBufferReadPointer == gbRxBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
-        if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+        if (gbMiliSec > TIMEOUT_MILISEC)
+        {
+          goto RX_PACKET_TIMEOUT;
+        }
         #endif
       }
 
-
-      if ((gbRxID = gbpRxInterruptBuffer[gbRxBufferReadPointer++]) == 0xff) bCount0xff++;
+      if ((gbRxID = gbpRxInterruptBuffer[gbRxBufferReadPointer++]) == 0xff)
+      {
+        bCount0xff++;
+      }
       else
       {
-        if (bCount0xff >= 2) break;
+        if (bCount0xff >= 2)
+        {
+          break;
+        }
         bCount0xff = 0;
       }
     }
@@ -412,13 +420,19 @@ RX_PACKET_TIMEOUT:
       while (gbRxBufferReadPointer == gbRxBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
-        if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+        if (gbMiliSec > TIMEOUT_MILISEC)
+        {
+          goto RX_PACKET_TIMEOUT;
+        }
         #endif
       }
       bLength = gbpRxInterruptBuffer[gbRxBufferReadPointer++];
 
       gbParameterLength = bLength-2;
-      if (gbParameterLength > MAX_PACKET_LENGTH) goto RX_PACKET_START; //Ver8
+      if (gbParameterLength > MAX_PACKET_LENGTH)
+      {
+        goto RX_PACKET_START; //Ver8
+      }
 
       //from this state, status packet will be returned
 
@@ -428,7 +442,10 @@ RX_PACKET_TIMEOUT:
       while (gbRxBufferReadPointer == gbRxBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
-        if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+        if (gbMiliSec > TIMEOUT_MILISEC)
+        {
+          goto RX_PACKET_TIMEOUT;
+        }
         #endif
       }
       gbInstruction = gbpRxInterruptBuffer[gbRxBufferReadPointer++];
@@ -442,7 +459,10 @@ RX_PACKET_TIMEOUT:
         while (gbRxBufferReadPointer == gbRxBufferWritePointer)
         {
           #ifdef TIMEOUT_CHECK
-          if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+          if (gbMiliSec > TIMEOUT_MILISEC)
+          {
+            goto RX_PACKET_TIMEOUT;
+          }
           #endif
         }
         bCheckSum += (gbpParameter[bCount] = gbpRxInterruptBuffer[gbRxBufferReadPointer++]);
@@ -495,9 +515,12 @@ void ProcessInstruction(byte length)
         gbpParameter[1] = gbpParameter[bCount-1];
 
         // waiting
-        if (bPrevID == 0xFF) break;
-        else {
-
+        if (bPrevID == 0xFF)
+        {
+          break;
+        }
+        else
+        {
           while (1)
           {
             //RX_PACKET_START:
@@ -512,13 +535,22 @@ void ProcessInstruction(byte length)
               gbMiliSec = 0;
               while (gbRxD0BufferWritePointer == gbRxD0BufferReadPointer)
               {
-                if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+                if (gbMiliSec > TIMEOUT_MILISEC)
+                {
+                  goto RX_PACKET_TIMEOUT;
+                }
               }
 
-              if ((bWaitRxID = gbpRxD0Buffer[gbRxD0BufferReadPointer++]) == 0xff) bCount0xff++;
+              if ((bWaitRxID = gbpRxD0Buffer[gbRxD0BufferReadPointer++]) == 0xff)
+              {
+                bCount0xff++;
+              }
               else
               {
-                if (bCount0xff >= 2)  break;
+                if (bCount0xff >= 2)
+                {
+                  break;
+                }
                 bCount0xff = 0;
               }
             }
@@ -528,20 +560,29 @@ void ProcessInstruction(byte length)
               gbMiliSec = 0;
               while (gbRxD0BufferWritePointer == gbRxD0BufferReadPointer)
               {
-                if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+                if (gbMiliSec > TIMEOUT_MILISEC)
+                {
+                  goto RX_PACKET_TIMEOUT;
+                }
               }
 
               bWaitLength = gbpRxD0Buffer[gbRxD0BufferReadPointer++];
 
               bWaitParameterLength = bWaitLength-2;
-              if (bWaitParameterLength > MAX_PACKET_LENGTH) goto RX_PACKET_START; //Ver8
+              if (bWaitParameterLength > MAX_PACKET_LENGTH)
+              {
+                goto RX_PACKET_START; //Ver8
+              }
 
               //from this state, status packet will be returned
 
               gbMiliSec = 0;
               while (gbRxD0BufferWritePointer == gbRxD0BufferReadPointer)
               {
-                if(gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+                if (gbMiliSec > TIMEOUT_MILISEC)
+                {
+                  goto RX_PACKET_TIMEOUT;
+                }
               }
 
               bWaitInstruction = gbpRxD0Buffer[gbRxD0BufferReadPointer++];
@@ -552,7 +593,10 @@ void ProcessInstruction(byte length)
                 gbMiliSec = 0;
                 while (gbRxD0BufferWritePointer == gbRxD0BufferReadPointer)
                 {
-                  if (gbMiliSec > TIMEOUT_MILISEC) goto RX_PACKET_TIMEOUT;
+                  if (gbMiliSec > TIMEOUT_MILISEC)
+                  {
+                    goto RX_PACKET_TIMEOUT;
+                  }
                 }
                 bWaitCheckSum += (gbpRxD0Buffer[gbRxD0BufferReadPointer++]);
               }
@@ -757,13 +801,19 @@ void WriteControlTable(void)
     if (gbpDataSize[bPointer] == 2) //&& bCount < gbParameterLength-2) //length was already checked.
     {
       WORD_CAST(gbpControlTable[bPointer]) = WORD_CAST(gbpParameter[bCount]);
-      if (bPointer < ROM_CONTROL_TABLE_LEN) BKP_WriteBackupRegister((bPointer+1)<<2, WORD_CAST(gbpParameter[bCount]));
+      if (bPointer < ROM_CONTROL_TABLE_LEN)
+      {
+        BKP_WriteBackupRegister((bPointer+1)<<2, WORD_CAST(gbpParameter[bCount]));
+      }
       bCount++;
     }
     else //if (gbpDataSize[bPointer] == 1)//length was already checked.
     {
       gbpControlTable[bPointer] = gbpParameter[bCount];
-      if (bPointer < ROM_CONTROL_TABLE_LEN) BKP_WriteBackupRegister((bPointer+1)<<2, WORD_CAST(gbpParameter[bCount]));
+      if (bPointer < ROM_CONTROL_TABLE_LEN)
+      {
+        BKP_WriteBackupRegister((bPointer+1)<<2, WORD_CAST(gbpParameter[bCount]));
+      }
     }
   }
 }
@@ -772,7 +822,10 @@ byte WriteControlTableRangeCheck(void)
 {
   byte bCount, bPointer;
 
-  if (gbpDataSize[gbStartAddress] == 0 || gbpDataSize[gbStartAddress+gbParameterLength-2] == 2) return RANGE_ERROR_BIT;
+  if (gbpDataSize[gbStartAddress] == 0 || gbpDataSize[gbStartAddress+gbParameterLength-2] == 2)
+  {
+    return RANGE_ERROR_BIT;
+  }
 
   for (bCount = 1; bCount < gbParameterLength; bCount++) //Range Check
   {
