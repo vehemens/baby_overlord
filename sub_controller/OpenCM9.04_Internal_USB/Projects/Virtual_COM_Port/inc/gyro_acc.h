@@ -15,20 +15,20 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void GYRO_Clear_Data(void);
-void ACC_Clear_Data(void);
+void GYRO_ClearData(void);
+void ACC_ClearData(void);
 
-void GYRO_Push_Data(u16 dat);
-void ACC_Push_Data(u16 dat);
+void GYRO_PushData(u16 dat);
+void ACC_PushData(u16 dat);
 
-void GYRO_Convert_Data(void);
-void ACC_Convert_Data(void);
+void GYRO_ConvertData(void);
+void ACC_ConvertData(void);
 
-void GYRO_Configure(void);
-void ACC_Configure(void);
+void GYRO_Config(void);
+void ACC_Config(void);
 
-void __GYRO_READ_ISR(void);
-void __ACC_READ_ISR(void);
+void __GYRO_ISR(void);
+void __ACC_ISR(void);
 
 #endif /* __GYRO_SPI_H */
 

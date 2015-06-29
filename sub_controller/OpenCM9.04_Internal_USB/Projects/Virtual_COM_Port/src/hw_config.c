@@ -52,12 +52,12 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : ConfigureClocks
+* Function Name  : Clock_Config
 * Description    : Configures system clocks & power
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void ConfigureClocks(void)
+void Clock_Config(void)
 {
   /* Peripheral clocks */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
@@ -77,12 +77,12 @@ void ConfigureClocks(void)
 }
 
 /*******************************************************************************
-* Function Name  : ConfigureIO
+* Function Name  : IO_Config
 * Description    : Configures GPIO and EXTI interfaces
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void ConfigureIO(void)
+void IO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_StructInit(&GPIO_InitStructure);
@@ -174,12 +174,12 @@ void ConfigureIO(void)
 }
 
 /*******************************************************************************
-* Function Name  : ConfigureUSART
+* Function Name  : USART_Config
 * Description    : Configures USART Devices
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void ConfigureUSART(void)
+void USART_Config(void)
 {
   USART_InitTypeDef USART_InitStructure;
   USART_StructInit(&USART_InitStructure);
@@ -199,12 +199,12 @@ void ConfigureUSART(void)
 }
 
 /*******************************************************************************
-* Function Name  : ConfigureSPI
+* Function Name  : SPI_Config
 * Description    : Configures SPI Devices
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void ConfigureSPI(void)
+void SPI_Config(void)
 {
   SPI_InitTypeDef SPI_InitStructure;
   SPI_StructInit(&SPI_InitStructure);
@@ -231,12 +231,12 @@ vu16 CCR3_Val = 12400;		// 125ms
 vu16 CCR4_Val = 12;		// 12us
 
 /*******************************************************************************
-* Function Name  : Timer_Configuration
+* Function Name  : Timer_Config
 * Description    : Configures Timer Devices
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void Timer_Configuration(void)
+void Timer_Config(void)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
 

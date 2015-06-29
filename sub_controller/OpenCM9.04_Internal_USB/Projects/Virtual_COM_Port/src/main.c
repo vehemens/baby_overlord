@@ -51,21 +51,21 @@
 *******************************************************************************/
 int main(void)
 {
-  ConfigureClocks();
+  Clock_Config();
 
-  ConfigureIO();
+  IO_Config();
 
-  ConfigureUSART();
+  USART_Config();
 
-  ConfigureSPI();
+  SPI_Config();
 
-  InitProcess();
+  ProcessInit();
 
-  GYRO_Configure();
+  GYRO_Config();
 
-  ACC_Configure();
+  ACC_Config();
 
-  Timer_Configuration();
+  Timer_Config();
 
   USB_Interrupts_Config();
   USB_Init();
@@ -78,6 +78,7 @@ int main(void)
   {
   }
 }
+
 #ifdef USE_FULL_ASSERT
 /*******************************************************************************
 * Function Name  : assert_failed

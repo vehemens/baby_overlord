@@ -49,33 +49,33 @@ u16 ACC_Z;
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : X_Clear_Data
+* Function Name  : X_ClearData
 * Description    : Resets buffer pointer
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_Clear_Data(void)
+void GYRO_ClearData(void)
 {
   GYRO_RxBufferPointer = 0;
 }
 
-void ACC_Clear_Data(void)
+void ACC_ClearData(void)
 {
   ACC_RxBufferPointer = 0;
 }
 
 /*******************************************************************************
-* Function Name  : X_Push_Data
+* Function Name  : X_PushData
 * Description    : Reads register and places data into a buffer
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_Push_Data(u16 dat)
+void GYRO_PushData(u16 dat)
 {
   GYRO_RxBuffer[(GYRO_RxBufferPointer++)%RX_BUFFER_SIZE] = (u8)(dat & 0x00FF);
 }
 
-void ACC_Push_Data(u16 dat)
+void ACC_PushData(u16 dat)
 {
   ACC_RxBuffer[(ACC_RxBufferPointer++)%RX_BUFFER_SIZE] = (u8)(dat & 0x00FF);
 }
@@ -173,14 +173,14 @@ void ACC_ConvertData(void)
 }
 
 /*******************************************************************************
-* Function Name  : Gyro_Configuration
-* Description    : Configures GYRO
+* Function Name  : Gyro_Config
+* Description    : Configures GYRO device
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_Configure(void)
+void GYRO_Config(void)
 {
-  GYRO_Clear_Data();
+  GYRO_ClearData();
 
   // write 0x20FF
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -191,14 +191,14 @@ void GYRO_Configure(void)
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   SPI_I2S_SendData(SPI1, 0xFF);
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
@@ -213,14 +213,14 @@ void GYRO_Configure(void)
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   SPI_I2S_SendData(SPI1, 0x20);
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
@@ -229,14 +229,14 @@ void GYRO_Configure(void)
 }
 
 /*******************************************************************************
-* Function Name  : ACC_Configuration
-* Description    : Configures accelerometer
+* Function Name  : ACC_Config
+* Description    : Configures accelerometer device
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void ACC_Configure(void)
+void ACC_Config(void)
 {
-  ACC_Clear_Data();
+  ACC_ClearData();
 
   // write 0x20A7
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
@@ -247,14 +247,14 @@ void ACC_Configure(void)
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   SPI_I2S_SendData(SPI1, 0xA7);
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
@@ -269,14 +269,14 @@ void ACC_Configure(void)
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   SPI_I2S_SendData(SPI1, 0x08);
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_Push_Data(SPI_I2S_ReceiveData(SPI1));
+  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
 
 
   GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
@@ -285,19 +285,19 @@ void ACC_Configure(void)
 }
 
 /*******************************************************************************
-* Function Name  : __GYRO_READ_ISR
+* Function Name  : __GYRO_ISR
 * Description    : Reads GYRO rates
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void __GYRO_READ_ISR(void)
+void __GYRO_ISR(void)
 {
   int i;
 
   if (!GYRO_Enable || !ACC_Enable)
     return;
 
-  GYRO_Clear_Data();
+  GYRO_ClearData();
 
   for (i = 0; i < 9; i++)
   {
@@ -308,7 +308,7 @@ void __GYRO_READ_ISR(void)
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-    GYRO_Push_Data(SPI_I2S_ReceiveData(SPI1));
+    GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
     if ((i + 1) % 3 == 0)
       GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
@@ -318,19 +318,19 @@ void __GYRO_READ_ISR(void)
 }
 
 /*******************************************************************************
-* Function Name  : __ACC_READ_ISR
+* Function Name  : __ACC_ISR
 * Description    : Reads accelerometer rates
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void __ACC_READ_ISR(void)
+void __ACC_ISR(void)
 {
   int i;
 
   if (!GYRO_Enable || !ACC_Enable)
     return;
 
-  ACC_Clear_Data();
+  ACC_ClearData();
 
   for (i = 0; i < 9; i++)
   {
@@ -341,7 +341,7 @@ void __ACC_READ_ISR(void)
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-    ACC_Push_Data(SPI_I2S_ReceiveData(SPI1));
+    ACC_PushData(SPI_I2S_ReceiveData(SPI1));
 
     if ((i + 1) % 3 == 0)
       GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);

@@ -322,7 +322,7 @@ void ProcessAfterWriting(void);
 
 u8 gbDxlPwr;
 
-void InitProcess(void)
+void ProcessInit(void)
 {
   byte bCount;
 #if 0

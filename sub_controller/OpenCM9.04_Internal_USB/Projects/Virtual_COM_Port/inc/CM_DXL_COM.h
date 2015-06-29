@@ -261,7 +261,7 @@ extern volatile byte gbLEDEyeG;
 extern volatile byte gbLEDEyeB;
 extern volatile byte gbLEDPwm;
 
-void InitProcess(void);
+void ProcessInit(void);
 void ProcessPackets(void);
 void ProcessInstruction(byte length);
 
