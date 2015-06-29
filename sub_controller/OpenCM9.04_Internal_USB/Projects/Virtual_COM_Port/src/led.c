@@ -19,6 +19,12 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+/*******************************************************************************
+* Function Name  : LED_SetState
+* Description    : Sets the LEDs to the specified state
+* Input          : LEDs, State
+* Return         : None.
+*******************************************************************************/
 void LED_SetState(u8 LED_PORT, PowerState NewState)
 {
   if (NewState == ON)
@@ -41,6 +47,12 @@ void LED_SetState(u8 LED_PORT, PowerState NewState)
   }
 }
 
+/*******************************************************************************
+* Function Name  : LED_GetState
+* Description    : Gets the state of the specified LED
+* Input          : LEDs
+* Return         : State
+*******************************************************************************/
 PowerState LED_GetState(u8 LED_PORT)
 {
   if (LED_PORT == LED_MANAGE)

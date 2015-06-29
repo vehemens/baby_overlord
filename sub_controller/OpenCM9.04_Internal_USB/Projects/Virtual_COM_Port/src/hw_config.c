@@ -52,8 +52,8 @@ static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : Set_System
-* Description    : Configures Main system clocks & power
+* Function Name  : ConfigureClocks
+* Description    : Configures system clocks & power
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
@@ -76,9 +76,14 @@ void ConfigureClocks(void)
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 }
 
+/*******************************************************************************
+* Function Name  : ConfigureIO
+* Description    : Configures GPIO and EXTI interfaces
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ConfigureIO(void)
 {
-  /* IO ports & pins */
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_StructInit(&GPIO_InitStructure);
 
@@ -98,7 +103,7 @@ void ConfigureIO(void)
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
 
-  /* USART */
+  /* DXL USART */
   GPIO_InitStructure.GPIO_Pin = DXL_USART_TXD_GPIO_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
@@ -117,7 +122,7 @@ void ConfigureIO(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(DXL_USART_DIR_GPIO_PORT, &GPIO_InitStructure);
 
-  /* LED */
+  /* LEDs */
   GPIO_InitStructure.GPIO_Pin = LED_MANAGE_GPIO_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -133,7 +138,7 @@ void ConfigureIO(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(LED_PLAY_GPIO_PORT, &GPIO_InitStructure);
 
-  /* Button */
+  /* Buttons */
   GPIO_InitStructure.GPIO_Pin = SW_MODE_GPIO_PIN;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
   GPIO_Init(SW_MODE_GPIO_PORT, &GPIO_InitStructure);
@@ -168,11 +173,18 @@ void ConfigureIO(void)
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
+/*******************************************************************************
+* Function Name  : ConfigureUSART
+* Description    : Configures USART Devices
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ConfigureUSART(void)
 {
   USART_InitTypeDef USART_InitStructure;
   USART_StructInit(&USART_InitStructure);
 
+  /* DXL USART */
   USART_InitStructure.USART_BaudRate = 1000000;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
@@ -186,11 +198,18 @@ void ConfigureUSART(void)
   USART_ITConfig(DXL_USART, USART_IT_RXNE, ENABLE);
 }
 
+/*******************************************************************************
+* Function Name  : ConfigureSPI
+* Description    : Configures SPI Devices
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ConfigureSPI(void)
 {
   SPI_InitTypeDef SPI_InitStructure;
   SPI_StructInit(&SPI_InitStructure);
 
+  /* IMU */
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
   SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
   SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
@@ -211,6 +230,12 @@ vu16 CCR2_Val = 778;		// 7.81ms
 vu16 CCR3_Val = 12400;		// 125ms
 vu16 CCR4_Val = 12;		// 12us
 
+/*******************************************************************************
+* Function Name  : Timer_Configuration
+* Description    : Configures Timer Devices
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void Timer_Configuration(void)
 {
   NVIC_InitTypeDef NVIC_InitStructure;

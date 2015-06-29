@@ -20,11 +20,10 @@
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : ReadKey
-* Description    : Reads key from demoboard.
-* Input          : None
-* Output         : None
-* Return         : Return RIGHT, LEFT, SEL, UP, DOWN or NOKEY
+* Function Name  : ReadButton
+* Description    : Reads button state
+* Input          : None.
+* Return         : Button state
 *******************************************************************************/
 u8 ReadButton(void)
 {
