@@ -61,8 +61,9 @@ int main(void)
 
   InitProcess();
 
-  Gyro_Configuration();
-  ACC_Configuration();
+  GYRO_Configure();
+
+  ACC_Configure();
 
   Timer_Configuration();
 
