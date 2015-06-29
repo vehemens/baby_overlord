@@ -52,11 +52,11 @@
 int main(void)
 {
   ConfigureClocks();
-  
+
   ConfigureIO();
-  
+
   ConfigureUSART();
-  
+
   ConfigureSPI();
 
   InitProcess();

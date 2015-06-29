@@ -21,51 +21,51 @@
 
 void LED_SetState(u8 LED_PORT, PowerState NewState)
 {
-	if( NewState == ON )
-	{ 
-		if( LED_PORT & LED_MANAGE )
-			GPIO_ResetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
-		if( LED_PORT & LED_EDIT )
-		 	GPIO_ResetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
-		if( LED_PORT & LED_PLAY )
-		 	GPIO_ResetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
-	}
-	else
-	{
-		if( LED_PORT & LED_MANAGE )
-			GPIO_SetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
-		if( LED_PORT & LED_EDIT )
-		 	GPIO_SetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
-		if( LED_PORT & LED_PLAY )
-		 	GPIO_SetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
-	}
+  if (NewState == ON)
+  { 
+    if (LED_PORT & LED_MANAGE)
+      GPIO_ResetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
+    if (LED_PORT & LED_EDIT)
+      GPIO_ResetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
+    if (LED_PORT & LED_PLAY)
+      GPIO_ResetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
+  }
+  else
+  {
+    if (LED_PORT & LED_MANAGE)
+      GPIO_SetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
+    if (LED_PORT & LED_EDIT)
+      GPIO_SetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
+    if (LED_PORT & LED_PLAY)
+      GPIO_SetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
+  }
 }
 
 PowerState LED_GetState(u8 LED_PORT)
 {
-	if( LED_PORT == LED_MANAGE )
-	{
-		if( GPIO_ReadOutputDataBit(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN) != SET )
-			return ON;
-		else
-			return OFF;
-	}
-	else if( LED_PORT == LED_EDIT )
-	{
-		if( GPIO_ReadOutputDataBit(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN) != SET )
-			return ON;
-		else
-			return OFF;
-	}
-	else if( LED_PORT == LED_PLAY )
-	{
-		if( GPIO_ReadOutputDataBit(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN) != SET )
-			return ON;
-		else
-			return OFF;
-	}
+  if (LED_PORT == LED_MANAGE)
+  {
+    if (GPIO_ReadOutputDataBit(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN) != SET)
+      return ON;
+    else
+      return OFF;
+  }
+  else if (LED_PORT == LED_EDIT)
+  {
+    if (GPIO_ReadOutputDataBit(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN) != SET)
+      return ON;
+    else
+      return OFF;
+  }
+  else if (LED_PORT == LED_PLAY)
+  {
+    if (GPIO_ReadOutputDataBit(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN) != SET)
+      return ON;
+    else
+      return OFF;
+  }
 
-	return OFF;
+  return OFF;
 }
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/

@@ -33,14 +33,14 @@ u16 ACC_X;
 u16 ACC_Y;
 u16 ACC_Z;
 
-vu8 SPI_TxBuffer[9]={	0xE8,0xFF,0xFF,
-			0xEA,0xFF,0xFF,
-			0xEC,0xFF,0xFF };
+vu8 SPI_TxBuffer[9] = {0xE8,0xFF,0xFF,
+  0xEA,0xFF,0xFF,
+  0xEC,0xFF,0xFF };
 
 vu8 SPI_RxBuffer[18];
 
-vu8 SPI_RxBufferPointer=0;
-vu8 SPI_TxBufferPointer=0;
+vu8 SPI_RxBufferPointer = 0;
+vu8 SPI_TxBufferPointer = 0;
 
 vu8 GYRO_ACC_ENABLE = 0;
 
@@ -49,203 +49,206 @@ vu8 GYRO_ACC_ENABLE = 0;
 
 void Push_SPI_Data(u16 dat)
 {
-	SPI_RxBuffer[SPI_RxBufferPointer++] = (u8)( dat & 0x00FF );
+  SPI_RxBuffer[SPI_RxBufferPointer++] = (u8)(dat & 0x00FF);
 }
 
 void Clear_SPI_Data(void)
 {
-	SPI_RxBufferPointer = 0;
+  SPI_RxBufferPointer = 0;
 }
 
 void CovertData(void)
 {
-	s32 temp;
+  s32 temp;
 
-	Gyro_X_raw = (s16)((SPI_RxBuffer[2] << 8) + SPI_RxBuffer[1]);
-	Gyro_Y_raw = (s16)((SPI_RxBuffer[5] << 8) + SPI_RxBuffer[4]);
-	Gyro_Z_raw = (s16)((SPI_RxBuffer[8] << 8) + SPI_RxBuffer[7]);
+  Gyro_X_raw = (s16)((SPI_RxBuffer[2] << 8) + SPI_RxBuffer[1]);
+  Gyro_Y_raw = (s16)((SPI_RxBuffer[5] << 8) + SPI_RxBuffer[4]);
+  Gyro_Z_raw = (s16)((SPI_RxBuffer[8] << 8) + SPI_RxBuffer[7]);
 
-	ACC_X_raw = (s16)((SPI_RxBuffer[11] << 8) + SPI_RxBuffer[10]);
-	ACC_Y_raw = (s16)((SPI_RxBuffer[14] << 8) + SPI_RxBuffer[13]);
-	ACC_Z_raw = (s16)((SPI_RxBuffer[17] << 8) + SPI_RxBuffer[16]);
+  ACC_X_raw = (s16)((SPI_RxBuffer[11] << 8) + SPI_RxBuffer[10]);
+  ACC_Y_raw = (s16)((SPI_RxBuffer[14] << 8) + SPI_RxBuffer[13]);
+  ACC_Z_raw = (s16)((SPI_RxBuffer[17] << 8) + SPI_RxBuffer[16]);
 
-	// 400dps /1023 0.39
-	// 500dps /65535 0.007
+  // 400dps /1023 0.39
+  // 500dps /65535 0.007
 
-	// convert data s16 -> u10
-	temp = (Gyro_X_raw /64);
-	temp = temp * 5 / 4;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_GYRO_X = Gyro_X = temp;
+  // convert data s16 -> u10
+  temp = (Gyro_X_raw /64);
+  temp = temp * 5 / 4;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_GYRO_X = Gyro_X = temp;
 
-	// convert data s16 -> u10
-	temp = Gyro_Y_raw /64;
-	temp = temp * 5 / 4;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_GYRO_Y = Gyro_Y = temp;
+  // convert data s16 -> u10
+  temp = Gyro_Y_raw /64;
+  temp = temp * 5 / 4;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_GYRO_Y = Gyro_Y = temp;
 
-	// convert data s16 -> u10
-	temp = Gyro_Z_raw /64;
-	temp = temp * 5 / 4;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_GYRO_Z = Gyro_Z = temp;
+  // convert data s16 -> u10
+  temp = Gyro_Z_raw /64;
+  temp = temp * 5 / 4;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_GYRO_Z = Gyro_Z = temp;
 
 
-	// convert data s16 -> u10
-	temp = (-1)*(ACC_X_raw /64);
-	//temp = temp * 4 / 3;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_ACC_X = ACC_X = temp;
+  // convert data s16 -> u10
+  temp = (-1)*(ACC_X_raw /64);
+  //temp = temp * 4 / 3;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_ACC_X = ACC_X = temp;
 
-	// convert data s16 -> u10
-	temp = (-1)*(ACC_Y_raw /64);
-	//temp = temp * 4 / 3;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_ACC_Y = ACC_Y = temp;
+  // convert data s16 -> u10
+  temp = (-1)*(ACC_Y_raw /64);
+  //temp = temp * 4 / 3;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_ACC_Y = ACC_Y = temp;
 
-	// convert data s16 -> u10
-	temp = ACC_Z_raw /64;
-	//temp = temp * 4 / 3;
-	temp = 512 + temp;
-	if( temp > 1023 ) temp = 1023;
-	if(temp  < 0 ) temp = 0;
-	GW_ACC_Z  = ACC_Z = temp;
+  // convert data s16 -> u10
+  temp = ACC_Z_raw /64;
+  //temp = temp * 4 / 3;
+  temp = 512 + temp;
+  if (temp > 1023) temp = 1023;
+  if (temp < 0) temp = 0;
+  GW_ACC_Z = ACC_Z = temp;
 }
 
 void Gyro_Configuration(void)
 {
-	// write 0x20FF
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  // write 0x20FF
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
-	SPI_I2S_SendData(SPI1,0x20);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  SPI_I2S_SendData(SPI1,0x20);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-	SPI_I2S_SendData(SPI1,0xFF);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  SPI_I2S_SendData(SPI1,0xFF);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-	//write 0x2310
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
-	SPI_I2S_SendData(SPI1,0x23);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  //write 0x2310
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
-	SPI_I2S_SendData(SPI1,0x20);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  SPI_I2S_SendData(SPI1,0x23);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-	GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
+  SPI_I2S_SendData(SPI1,0x20);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-	Clear_SPI_Data();
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
+
+  GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+
+  Clear_SPI_Data();
 }
 
 void ACC_Configuration(void)
 {
-	// write 0x202F
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+  // write 0x202F
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
-	SPI_I2S_SendData(SPI1,0x20);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  SPI_I2S_SendData(SPI1,0x20);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-	SPI_I2S_SendData(SPI1,0xA7);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+  SPI_I2S_SendData(SPI1,0xA7);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-	//write 0x2310
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-	SPI_I2S_SendData(SPI1,0x21);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
-
-	SPI_I2S_SendData(SPI1,0x08);	// WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-	Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
-
-	GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+  GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
 
-	Clear_SPI_Data();
+  //write 0x2310
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
+  SPI_I2S_SendData(SPI1,0x21);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-	GYRO_ACC_ENABLE = 1;
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
+
+  SPI_I2S_SendData(SPI1,0x08);  // WRITE 0XFF TO CTRL_REG1(0X20). OUTPUT DATA RATE 800HZ, POWER : NORMAL, XYZ ENABLE.
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
+
+  GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+
+  Clear_SPI_Data();
+
+  GYRO_ACC_ENABLE = 1;
 }
 
 void __GYRO_ACC_READ_ISR(void)
 {
-	int i;
+  int i;
 
-	if (!GYRO_ACC_ENABLE)
-		return;
+  if (!GYRO_ACC_ENABLE)
+    return;
 
+  //gyro read
+  for (i=0;i<9;i++)
+  {
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+    GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
-	//gyro read
-	for(i=0;i<9;i++)
-	{
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+    SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-		SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+    Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-		if( (i+1)%3 == 0 )
-			 GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
-	}
+    if ((i+1)%3 == 0)
+      GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  }
 
+  //acc read
+  for (i=0;i<9;i++)
+  {
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+    GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
-	//acc read
-	for(i=0;i<9;i++)
-	{
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+    SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
-		SPI_I2S_SendData(SPI1,SPI_TxBuffer[i]);
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-		Push_SPI_Data( SPI_I2S_ReceiveData(SPI1) );
+    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+    Push_SPI_Data(SPI_I2S_ReceiveData(SPI1));
 
-		if( (i+1)%3 == 0 )
-			 GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-	}
+    if ((i+1)%3 == 0)
+      GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
+  }
 
+  CovertData();
 
-	CovertData();
-
-	Clear_SPI_Data();
+  Clear_SPI_Data();
 }
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/
