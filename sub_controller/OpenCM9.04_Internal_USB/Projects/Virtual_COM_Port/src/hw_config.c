@@ -240,6 +240,8 @@ void Timer_Configuration(void)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
 
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);  
+
   /* Enable interrupt */
   NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
