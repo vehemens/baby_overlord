@@ -71,8 +71,6 @@ int main(void)
 
   USB_Init();
 
-  LED_SetState(LED_MANAGE|LED_EDIT|LED_PLAY, OFF);
-
   ProcessPackets();
 
   while (1)

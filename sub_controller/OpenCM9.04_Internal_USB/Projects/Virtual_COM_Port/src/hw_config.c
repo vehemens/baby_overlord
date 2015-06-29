@@ -149,16 +149,6 @@ void IO_Config(void)
   GPIO_Init(SW_START_GPIO_PORT, &GPIO_InitStructure);
 
   /* IMU */
-  GPIO_InitStructure.GPIO_Pin = SIG_ACC_CS_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(SIG_ACC_CS_GPIO_PORT, &GPIO_InitStructure);
-
-  GPIO_InitStructure.GPIO_Pin = SIG_GYRO_CS_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(SIG_GYRO_CS_GPIO_PORT, &GPIO_InitStructure);
-
   GPIO_InitStructure.GPIO_Pin = SIG_SCK_GPIO_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
@@ -169,9 +159,36 @@ void IO_Config(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
   GPIO_Init(SIG_MOSI_GPIO_PORT, &GPIO_InitStructure);
 
+  GPIO_InitStructure.GPIO_Pin = SIG_MISO_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_Init(SIG_MISO_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SIG_GYRO_CS_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(SIG_GYRO_CS_GPIO_PORT, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = SIG_ACC_CS_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(SIG_ACC_CS_GPIO_PORT, &GPIO_InitStructure);
+
   /* Remap */
   GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+
+  /* DXL USART */
+  GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
+
+  /* LEDs */
+  GPIO_SetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
+  GPIO_SetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
+  GPIO_SetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
+
+  /* IMU */
+  GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+  GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 }
 
 /*******************************************************************************
