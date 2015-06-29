@@ -1,19 +1,8 @@
 
 #include "stm32f10x.h"
-
-#include "common_type.h"
-#include "dynamixel.h"
-//#include "stm32f10x_lib.h"
-//#include "system_func.h"
-//#include "adc.h"
-//#include "led.h"
-//#include "system_init.h"
+#include "hw_config.h"
 #include "CM_DXL_COM.h"
-//#include "gyro_acc.h"
-//#include "button.h"
-//#include "sound.h"
-//#include "zigbee.h"
-//#include "usart.h"
+#include "dynamixel.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //	<Compile Option>

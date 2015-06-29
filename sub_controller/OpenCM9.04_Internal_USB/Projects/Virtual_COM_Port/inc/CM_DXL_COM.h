@@ -13,8 +13,11 @@
 #define _DYNAMIXEL_CM_DXL_COM_HEADER
 
 /* Includes ------------------------------------------------------------------*/
-#include "common_type.h"
 /* Exported types ------------------------------------------------------------*/
+#define byte u8
+#define word u16
+
+typedef enum {OFF = 0, ON = !OFF} PowerState;
 
 /* Exported constants --------------------------------------------------------*/
 //EEPROM AREA
@@ -153,6 +156,8 @@
 #define P_ZIGBEE_ID_H         		89
 
 ////////////////////////////////////////////////////////////////////////
+#define WORD_CAST(AA)           (*(u16 *)(&(AA)))
+
 #define GW_MODEL_NUMBER           WORD_CAST(gbpControlTable[P_MODEL_NUMBER_L])
 #define GB_GB_VERSION             gbpControlTable[P_VERSION]
 #define GB_ID                     gbpControlTable[P_ID]
