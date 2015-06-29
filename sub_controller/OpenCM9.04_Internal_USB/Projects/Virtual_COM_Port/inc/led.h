@@ -21,8 +21,6 @@
 /* Exported functions ------------------------------------------------------- */
 void LED_SetState(u8 LED_PORT, PowerState NewState);
 PowerState LED_GetState(u8 LED_PORT);
-void LED_RGB_SetState(u8 RGB);
-u8 LED_RGB_GetState();
 
 #endif /* __LED_H */
 
