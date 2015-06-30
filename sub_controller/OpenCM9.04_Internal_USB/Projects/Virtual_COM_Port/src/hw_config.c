@@ -40,12 +40,12 @@
 /* Private variables ---------------------------------------------------------*/
 ErrorStatus HSEStartUpStatus;
 
-uint8_t  USART_Rx_Buffer [USART_RX_DATA_SIZE]; 
+uint8_t USART_Rx_Buffer[USART_RX_DATA_SIZE]; 
 uint32_t USART_Rx_ptr_in = 0;
 uint32_t USART_Rx_ptr_out = 0;
-uint8_t  USB_Tx_State = 0;
+uint8_t USB_Tx_State = 0;
 
-static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
+static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/

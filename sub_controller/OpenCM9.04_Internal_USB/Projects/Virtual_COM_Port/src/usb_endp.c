@@ -42,10 +42,10 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-extern  uint8_t USART_Rx_Buffer[];
+extern uint8_t USART_Rx_Buffer[];
 extern uint32_t USART_Rx_ptr_in;
 extern uint32_t USART_Rx_ptr_out;
-extern uint8_t  USB_Tx_State;
+extern uint8_t USB_Tx_State;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
