@@ -93,8 +93,8 @@ void IO_Config(void)
 
   /* USB */
   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(USB_DISCONNECT_GPIO_PORT, &GPIO_InitStructure);
 
   EXTI_ClearITPendingBit(EXTI_Line18);
@@ -212,20 +212,20 @@ void Interrupt_Config(void)
 
   /* USB */
   NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
   NVIC_InitStructure.NVIC_IRQChannel = USBWakeUp_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
   /* DXL USART */
   NVIC_InitStructure.NVIC_IRQChannel = DXL_USART_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
