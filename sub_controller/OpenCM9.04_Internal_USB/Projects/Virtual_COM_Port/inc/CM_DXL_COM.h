@@ -1,4 +1,3 @@
-
 /************************* (C) COPYRIGHT 2010 ROBOTIS *************************
 * File Name          : CM_DXL_COM.h
 * Author             : dudung
@@ -18,139 +17,98 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 
 /* Exported constants --------------------------------------------------------*/
 //EEPROM AREA
-#define P_MODEL_NUMBER_L      0
-#define P_MODOEL_NUMBER_H     1
-#define P_VERSION             2
-#define P_ID                  3
-#define P_BAUD_RATE           4
-#define P_RETURN_DELAY_TIME   5
-#define P_CW_ANGLE_LIMIT_L    6
-#define P_CW_ANGLE_LIMIT_H    7
-#define P_CCW_ANGLE_LIMIT_L   8
-#define P_CCW_ANGLE_LIMIT_H   9
-#define P_SYSTEM_DATA2        10
-#define P_LIMIT_TEMPERATURE   11
-#define P_DOWN_LIMIT_VOLTAGE  12
-#define P_UP_LIMIT_VOLTAGE    13
-#define P_MAX_TORQUE_L        14
-#define P_MAX_TORQUE_H        15
-#define P_RETURN_LEVEL        16
-#define P_ALARM_LED           17
-#define P_ALARM_SHUTDOWN      18
-#define P_OPERATING_MODE      19
-#define P_DOWN_CALIBRATION_L  20
-#define P_DOWN_CALIBRATION_H  21
-#define P_UP_CALIBRATION_L    22
-#define P_UP_CALIBRATION_H    23
-/*
-#define P_TORQUE_ENABLE         (24)
-#define P_LED                   (25)
-#define P_CW_COMPLIANCE_MARGIN  (26)
-#define P_CCW_COMPLIANCE_MARGIN (27)
-#define P_CW_COMPLIANCE_SLOPE   (28)
-#define P_CCW_COMPLIANCE_SLOPE  (29)
-#define P_GOAL_POSITION_L       (30)
-#define P_GOAL_POSITION_H       (31)
-#define P_GOAL_SPEED_L          (32)
-#define P_GOAL_SPEED_H          (33)
-#define P_TORQUE_LIMIT_L        (34)
-#define P_TORQUE_LIMIT_H        (35)
-#define P_PRESENT_POSITION_L    (36)
-#define P_PRESENT_POSITION_H    (37)
-#define P_PRESENT_SPEED_L       (38)
-#define P_PRESENT_SPEED_H       (39)
-#define P_PRESENT_LOAD_L        (40)
-#define P_PRESENT_LOAD_H        (41)
-#define P_PRESENT_VOLTAGE       (42)
-#define P_PRESENT_TEMPERATURE   (43)
-#define P_REGISTERED_INSTRUCTION (44)
-#define P_PAUSE_TIME            (45)
-#define P_MOVING (46)
-#define P_LOCK                  (47)
-#define P_PUNCH_L               (48)
-#define P_PUNCH_H               (49)
-#define P_RESERVED4             (50)
-#define P_RESERVED5             (51)
-#define P_POT_L                 (52)
-#define P_POT_H                 (53)
-#define P_PWM_OUT_L             (54)
-#define P_PWM_OUT_H             (55)
-*/
+#define P_MODEL_NUMBER_L	0
+#define P_MODOEL_NUMBER_H	1
+#define P_VERSION		2
+#define P_ID			3
+#define P_BAUD_RATE		4
+#define P_RETURN_DELAY_TIME	5
+#define P_CW_ANGLE_LIMIT_L	6
+#define P_CW_ANGLE_LIMIT_H	7
+#define P_CCW_ANGLE_LIMIT_L	8
+#define P_CCW_ANGLE_LIMIT_H	9
+#define P_SYSTEM_DATA2		10
+#define P_LIMIT_TEMPERATURE	11
+#define P_DOWN_LIMIT_VOLTAGE	12
+#define P_UP_LIMIT_VOLTAGE	13
+#define P_MAX_TORQUE_L		14
+#define P_MAX_TORQUE_H		15
+#define P_RETURN_LEVEL		16
+#define P_ALARM_LED		17
+#define P_ALARM_SHUTDOWN	18
+#define P_OPERATING_MODE	19
+#define P_DOWN_CALIBRATION_L	20
+#define P_DOWN_CALIBRATION_H	21
+#define P_UP_CALIBRATION_L	22
+#define P_UP_CALIBRATION_H	23
 
-#define	P_DYNAMIXEL_POWER	24
-#define	P_LED_PANNEL	25
-#define	P_LED_HEAD	26
-//#define	-	27
-#define	P_LED_EYE	28
-//#define	-	29
-#define	P_BUTTON	30
-//#define     -		31
-//#define     -		32
-//#define     -		33
-//#define     -		34
-//#define     -		35
-//#define     -		36
-//#define     -		37
-
-//#define	P_GPIO_MODE	31
-//#define	P_GPIO_OUT	32
-//#define	P_GPIO_IN	33
-//#define	P_ADC0_VOLTAGE	34
-//#define	-	35
-//#define	P_ADC1_RESERVED	36
-//#define	-	37
-#define	P_GYRO_Z	38
-//#define	-	39
-#define	P_GYRO_Y	40
-//#define	-	41
-#define	P_GYRO_X	42
-//#define	-	43
-#define	P_ACC_X	44
-//#define	-	45
-#define	P_ACC_Y	46
-//#define	-	47
-#define	P_ACC_Z	48
-//#define	-	49
-#define	P_ADC0_VOLTAGE	50
-#define	P_ADC1_MIC1		51
-//#define	-			52
-#define	P_ADC9_MIC2		53
-//#define	-			54
-#define	P_ADC2			55
-//#define	-			56
-#define	P_ADC3			57
-//#define	-			58
-#define	P_ADC4			59
-//#define	-			60
-#define	P_ADC5			61
-//#define	-			62
-#define	P_ADC6			63
-//#define	-			64
-#define	P_ADC7			65
-//#define	-			66
-#define	P_ADC8			67
-//#define	-			68
-#define	P_ADC10			69
-//#define	-			70
-#define	P_ADC11			71
-//#define	-			72
-#define	P_ADC12			73
-//#define	-			74
-#define	P_ADC13			75
-//#define	-			76
-#define	P_ADC14			77
-//#define	-			78
-#define	P_ADC15			79
-//#define	-			80
-#define P_BUZZER_DATA0	81
-#define P_BUZZER_DATA1	82
-#define P_TX_REMOCON_DATA_L   		83
-//#define P_TX_REMOCON_DATA_H   		84
-#define P_RX_REMOCON_DATA_L   		85
-//#define P_RX_REMOCON_DATA_H   		86
-#define P_RX_REMOCON_DATA_ARRIVED 	87
-#define P_ZIGBEE_ID_L         		88
-#define P_ZIGBEE_ID_H         		89
+//RAM AREA
+#define P_DYNAMIXEL_POWER	24
+#define P_LED_PANNEL		25
+#define P_LED_HEAD		26
+//#define			27
+#define P_LED_EYE		28
+//#define			29
+#define P_BUTTON		30
+//#define			31
+//#define			32
+//#define			33
+//#define			34
+//#define			35
+//#define			36
+//#define			37
+#define P_GYRO_Z		38
+//#define			39
+#define P_GYRO_Y		40
+//#define			41
+#define P_GYRO_X		42
+//#define			43
+#define P_ACC_X			44
+//#define			45
+#define P_ACC_Y			46
+//#define			47
+#define P_ACC_Z			48
+//#define			49
+#define P_ADC0_VOLTAGE		50
+#define P_ADC1_MIC1		51
+//#define			52
+#define P_ADC9_MIC2		53
+//#define			54
+#define P_ADC2			55
+//#define			56
+#define P_ADC3			57
+//#define			58
+#define P_ADC4			59
+//#define			60
+#define P_ADC5			61
+//#define			62
+#define P_ADC6			63
+//#define			64
+#define P_ADC7			65
+//#define			66
+#define P_ADC8			67
+//#define			68
+#define P_ADC10			69
+//#define			70
+#define P_ADC11			71
+//#define			72
+#define P_ADC12			73
+//#define			74
+#define P_ADC13			75
+//#define			76
+#define P_ADC14			77
+//#define			78
+#define P_ADC15			79
+//#define			80
+#define P_BUZZER_DATA0		81
+#define P_BUZZER_DATA1		82
+#define P_TX_REMOCON_DATA_L	83
+//#define P_TX_REMOCON_DATA_H	84
+#define P_RX_REMOCON_DATA_L	85
+//#define P_RX_REMOCON_DATA_H	86
+#define P_RX_REMOCON_DATA_ARRIVED	87
+#define P_ZIGBEE_ID_L		88
+#define P_ZIGBEE_ID_H		89
 
 ////////////////////////////////////////////////////////////////////////
 #define WORD_CAST(AA)           (*(uint16_t *)(&(AA)))
@@ -173,13 +131,12 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 #define GB_OPERATING_MODE         gbpControlTable[P_OPERATING_MODE]
 #define GW_DOWN_CALIBRATION       WORD_CAST(gbpControlTable[P_DOWN_CALIBRATION_L])
 #define GW_UP_CALIBRATION         WORD_CAST(gbpControlTable[P_UP_CALIBRATION_L])
-////////////////////////////////////////////////////////////////////////
+
 #define	GB_DYNAMIXEL_POWER	gbpControlTable[P_DYNAMIXEL_POWER]
 #define	GB_LED_MODE	gbpControlTable[P_LED_PANNEL]
 #define	GW_LED_HEAD	WORD_CAST(gbpControlTable[P_LED_HEAD])
 #define	GW_LED_EYE	WORD_CAST(gbpControlTable[P_LED_EYE])
 #define	GB_BUTTON	gbpControlTable[P_BUTTON]
-
 
 #define	GW_GYRO_Z	WORD_CAST(gbpControlTable[P_GYRO_Z])
 #define	GW_GYRO_Y	WORD_CAST(gbpControlTable[P_GYRO_Y])
@@ -213,17 +170,18 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 #define	GB_RX_REMOCON_DATA_ARRIVED		gbpControlTable[P_RX_REMOCON_DATA_ARRIVED]
 #define	GW_ZIGBEE_ID					WORD_CAST(gbpControlTable[P_ZIGBEE_ID_L])
 
-
 #define HIGH_LIMIT 1
 #define LOW_LIMIT 0
-
 
 #define MAX_PACKET_LENGTH (256)
 
 #define ROM_CONTROL_TABLE_LEN 24
 #define RAM_CONTROL_TABLE_LEN 66
-#define CONTROL_TABLE_LEN (ROM_CONTROL_TABLE_LEN+RAM_CONTROL_TABLE_LEN)
+
+#define CONTROL_TABLE_LEN (ROM_CONTROL_TABLE_LEN + RAM_CONTROL_TABLE_LEN)
+
 #define BROADCASTING_ID 0xfe
+
 #define DEFAULT_ID	200
 
 extern volatile uint8_t gbpRxInterruptBuffer[];
@@ -232,36 +190,45 @@ extern volatile uint8_t gbRxBufferWritePointer;
 extern volatile uint8_t gbRxBufferReadPointer;
 extern volatile uint8_t gbTxBufferWritePointer;
 extern volatile uint8_t gbTxBufferReadPointer;
+
 extern volatile uint8_t gbpRxD0Buffer[];
 extern volatile uint8_t gbpTxD0Buffer[];
 extern volatile uint8_t gbRxD0BufferWritePointer;
 extern volatile uint8_t gbRxD0BufferReadPointer;
 extern volatile uint8_t gbTxD0BufferWritePointer;
 extern volatile uint8_t gbTxD0BufferReadPointer;
+
 extern volatile uint8_t gbpRxD1Buffer[];
 extern volatile uint8_t gbpTxD1Buffer[];
 extern volatile uint8_t gbRxD1BufferWritePointer;
 extern volatile uint8_t gbRxD1BufferReadPointer;
 extern volatile uint8_t gbTxD1BufferWritePointer;
 extern volatile uint8_t gbTxD1BufferReadPointer;
+
 extern volatile uint8_t gbTxD0Transmitting;
 extern volatile uint8_t gbTxD1Transmitting;
+
 extern volatile uint8_t gbMiliSec;
+
 extern uint8_t ROM_INITIAL_DATA[];
+
 extern volatile uint8_t gbpControlTable[];
+
 extern uint8_t gbLEDBlinkCounter;
+
 extern volatile uint8_t gbLEDHeadR;
 extern volatile uint8_t gbLEDHeadG;
 extern volatile uint8_t gbLEDHeadB;
+
 extern volatile uint8_t gbLEDEyeR;
 extern volatile uint8_t gbLEDEyeG;
 extern volatile uint8_t gbLEDEyeB;
+
 extern volatile uint8_t gbLEDPwm;
 
 void ProcessInit(void);
 void ProcessPackets(void);
 void ProcessInstruction(uint8_t length);
-
 
 #endif /* _DYNAMIXEL_CM_DXL_COM_HEADER */
 
