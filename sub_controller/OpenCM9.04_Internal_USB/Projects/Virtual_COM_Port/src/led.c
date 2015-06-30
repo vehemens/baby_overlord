@@ -25,7 +25,7 @@
 * Input          : LEDs, State
 * Return         : None.
 *******************************************************************************/
-void LED_SetState(u8 LED_PORT, PowerState NewState)
+void LED_SetState(uint8_t LED_PORT, PowerState NewState)
 {
   if (NewState == ON)
   { 
@@ -53,7 +53,7 @@ void LED_SetState(u8 LED_PORT, PowerState NewState)
 * Input          : LEDs
 * Return         : State
 *******************************************************************************/
-PowerState LED_GetState(u8 LED_PORT)
+PowerState LED_GetState(uint8_t LED_PORT)
 {
   if (LED_PORT == LED_MANAGE)
   {

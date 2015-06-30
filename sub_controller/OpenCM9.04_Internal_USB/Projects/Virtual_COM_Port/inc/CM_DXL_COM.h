@@ -14,9 +14,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-#define byte u8
-#define word u16
-
 typedef enum {OFF = 0, ON = !OFF} PowerState;
 
 /* Exported constants --------------------------------------------------------*/
@@ -156,7 +153,7 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 #define P_ZIGBEE_ID_H         		89
 
 ////////////////////////////////////////////////////////////////////////
-#define WORD_CAST(AA)           (*(u16 *)(&(AA)))
+#define WORD_CAST(AA)           (*(uint16_t *)(&(AA)))
 
 #define GW_MODEL_NUMBER           WORD_CAST(gbpControlTable[P_MODEL_NUMBER_L])
 #define GB_GB_VERSION             gbpControlTable[P_VERSION]
@@ -229,41 +226,41 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 #define BROADCASTING_ID 0xfe
 #define DEFAULT_ID	200
 
-extern volatile byte gbpRxInterruptBuffer[];
-extern volatile byte gbpTxInterruptBuffer[];
-extern volatile byte gbRxBufferWritePointer;
-extern volatile byte gbRxBufferReadPointer;
-extern volatile byte gbTxBufferWritePointer;
-extern volatile byte gbTxBufferReadPointer;
-extern volatile byte gbpRxD0Buffer[];
-extern volatile byte gbpTxD0Buffer[];
-extern volatile byte gbRxD0BufferWritePointer;
-extern volatile byte gbRxD0BufferReadPointer;
-extern volatile byte gbTxD0BufferWritePointer;
-extern volatile byte gbTxD0BufferReadPointer;
-extern volatile byte gbpRxD1Buffer[];
-extern volatile byte gbpTxD1Buffer[];
-extern volatile byte gbRxD1BufferWritePointer;
-extern volatile byte gbRxD1BufferReadPointer;
-extern volatile byte gbTxD1BufferWritePointer;
-extern volatile byte gbTxD1BufferReadPointer;
-extern volatile byte gbTxD0Transmitting;
-extern volatile byte gbTxD1Transmitting;
-extern volatile byte gbMiliSec;
-extern byte ROM_INITIAL_DATA[];
-extern volatile byte gbpControlTable[];
-extern byte gbLEDBlinkCounter;
-extern volatile byte gbLEDHeadR;
-extern volatile byte gbLEDHeadG;
-extern volatile byte gbLEDHeadB;
-extern volatile byte gbLEDEyeR;
-extern volatile byte gbLEDEyeG;
-extern volatile byte gbLEDEyeB;
-extern volatile byte gbLEDPwm;
+extern volatile uint8_t gbpRxInterruptBuffer[];
+extern volatile uint8_t gbpTxInterruptBuffer[];
+extern volatile uint8_t gbRxBufferWritePointer;
+extern volatile uint8_t gbRxBufferReadPointer;
+extern volatile uint8_t gbTxBufferWritePointer;
+extern volatile uint8_t gbTxBufferReadPointer;
+extern volatile uint8_t gbpRxD0Buffer[];
+extern volatile uint8_t gbpTxD0Buffer[];
+extern volatile uint8_t gbRxD0BufferWritePointer;
+extern volatile uint8_t gbRxD0BufferReadPointer;
+extern volatile uint8_t gbTxD0BufferWritePointer;
+extern volatile uint8_t gbTxD0BufferReadPointer;
+extern volatile uint8_t gbpRxD1Buffer[];
+extern volatile uint8_t gbpTxD1Buffer[];
+extern volatile uint8_t gbRxD1BufferWritePointer;
+extern volatile uint8_t gbRxD1BufferReadPointer;
+extern volatile uint8_t gbTxD1BufferWritePointer;
+extern volatile uint8_t gbTxD1BufferReadPointer;
+extern volatile uint8_t gbTxD0Transmitting;
+extern volatile uint8_t gbTxD1Transmitting;
+extern volatile uint8_t gbMiliSec;
+extern uint8_t ROM_INITIAL_DATA[];
+extern volatile uint8_t gbpControlTable[];
+extern uint8_t gbLEDBlinkCounter;
+extern volatile uint8_t gbLEDHeadR;
+extern volatile uint8_t gbLEDHeadG;
+extern volatile uint8_t gbLEDHeadB;
+extern volatile uint8_t gbLEDEyeR;
+extern volatile uint8_t gbLEDEyeG;
+extern volatile uint8_t gbLEDEyeB;
+extern volatile uint8_t gbLEDPwm;
 
 void ProcessInit(void);
 void ProcessPackets(void);
-void ProcessInstruction(byte length);
+void ProcessInstruction(uint8_t length);
 
 
 #endif /* _DYNAMIXEL_CM_DXL_COM_HEADER */

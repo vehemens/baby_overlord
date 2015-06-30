@@ -33,7 +33,7 @@
 #define RETURN_READ_PACKET 1
 #define RETURN_ALL_PACKET 2
 
-/*__flash*/ byte gbpParameterRange[][2] =
+/*__flash*/ uint8_t gbpParameterRange[][2] =
 {
   {1,0},//MODEL_NUMBER_L      0
   {1,0},//MODEL_NUMBER_H      1
@@ -130,7 +130,7 @@
   {1,0},//    P_ZIGBEE_ID_H        89
 };
 
-/*__flash*/ byte gbpDataSize[] =
+/*__flash*/ uint8_t gbpDataSize[] =
 {
   2,//MODEL_NUMBER_L      0
   0,//MODEL_NUMBER_H      1
@@ -231,9 +231,9 @@
 #define CW_ANGLE_FIXED_LIMIT 0 // 0+30 dudung031002
 #define CCW_ANGLE_FIXED_LIMIT (1023) // 300-30 dudung031002
 
-//byte ROM_INITIAL_DATA[]={ 28, 0 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
+//uint8_t ROM_INITIAL_DATA[]={ 28, 0 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
 //MODEL NUMBER 0X7300
-byte ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
+uint8_t ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
 
 /////////////////////////////////////////////////////////////////////////////
 //  </Constant Definition>
@@ -264,70 +264,70 @@ byte ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RAT
 //  </Include Header Files>
 /////////////////////////////////////////////////////////////////////////////
 
-volatile byte gbpRxInterruptBuffer[256];
-volatile byte gbpTxInterruptBuffer[256];
-volatile byte gbRxBufferWritePointer;
-volatile byte gbRxBufferReadPointer;
-volatile byte gbTxBufferWritePointer;
-volatile byte gbTxBufferReadPointer;
+volatile uint8_t gbpRxInterruptBuffer[256];
+volatile uint8_t gbpTxInterruptBuffer[256];
+volatile uint8_t gbRxBufferWritePointer;
+volatile uint8_t gbRxBufferReadPointer;
+volatile uint8_t gbTxBufferWritePointer;
+volatile uint8_t gbTxBufferReadPointer;
 
-volatile byte gbpRxD0Buffer[256];
-volatile byte gbpTxD0Buffer[256];
-volatile byte gbRxD0BufferWritePointer;
-volatile byte gbRxD0BufferReadPointer;
-volatile byte gbTxD0BufferWritePointer;
-volatile byte gbTxD0BufferReadPointer;
+volatile uint8_t gbpRxD0Buffer[256];
+volatile uint8_t gbpTxD0Buffer[256];
+volatile uint8_t gbRxD0BufferWritePointer;
+volatile uint8_t gbRxD0BufferReadPointer;
+volatile uint8_t gbTxD0BufferWritePointer;
+volatile uint8_t gbTxD0BufferReadPointer;
 
-volatile byte gbpRxD1Buffer[256];
-volatile byte gbpTxD1Buffer[256];
-volatile byte gbRxD1BufferWritePointer;
-volatile byte gbRxD1BufferReadPointer;
-volatile byte gbTxD1BufferWritePointer;
-volatile byte gbTxD1BufferReadPointer;
+volatile uint8_t gbpRxD1Buffer[256];
+volatile uint8_t gbpTxD1Buffer[256];
+volatile uint8_t gbRxD1BufferWritePointer;
+volatile uint8_t gbRxD1BufferReadPointer;
+volatile uint8_t gbTxD1BufferWritePointer;
+volatile uint8_t gbTxD1BufferReadPointer;
 
-volatile byte gbTxD0Transmitting;
-volatile byte gbTxD1Transmitting;
+volatile uint8_t gbTxD0Transmitting;
+volatile uint8_t gbTxD1Transmitting;
 
-volatile byte gbMiliSec;
+volatile uint8_t gbMiliSec;
 
-byte gbRxID;
+uint8_t gbRxID;
 
-byte gbParameterLength;
+uint8_t gbParameterLength;
 
-byte gbInstruction;
+uint8_t gbInstruction;
 
-volatile byte gbpParameter[256];
+volatile uint8_t gbpParameter[256];
 
-byte gbStartAddress;
+uint8_t gbStartAddress;
 
-byte gbInterruptCheckError;
-byte gbRegAddress, gbRegParameterLength;
-byte gbpRegParameter[MAX_PACKET_LENGTH];
+uint8_t gbInterruptCheckError;
+uint8_t gbRegAddress, gbRegParameterLength;
+uint8_t gbpRegParameter[MAX_PACKET_LENGTH];
 
-volatile byte gbpControlTable[CONTROL_TABLE_LEN+1];
+volatile uint8_t gbpControlTable[CONTROL_TABLE_LEN+1];
 
-byte gbLEDBlinkCounter;
-volatile byte gbLEDHeadR;
-volatile byte gbLEDHeadG;
-volatile byte gbLEDHeadB;
-volatile byte gbLEDEyeR;
-volatile byte gbLEDEyeG;
-volatile byte gbLEDEyeB;
-volatile byte gbLEDPwm;
+uint8_t gbLEDBlinkCounter;
+volatile uint8_t gbLEDHeadR;
+volatile uint8_t gbLEDHeadG;
+volatile uint8_t gbLEDHeadB;
+volatile uint8_t gbLEDEyeR;
+volatile uint8_t gbLEDEyeG;
+volatile uint8_t gbLEDEyeB;
+volatile uint8_t gbLEDPwm;
 
 void WriteControlTable(void);
-byte WriteControlTableRangeCheck(void);
-void ReturnPacket(byte bError);
+uint8_t WriteControlTableRangeCheck(void);
+void ReturnPacket(uint8_t bError);
 void ProcessAfterWriting(void);
 
-u8 gbDxlPwr;
+uint8_t gbDxlPwr;
 
 void ProcessInit(void)
 {
-  byte bCount;
+  uint8_t bCount;
 #if 0
-  word wTemp;
-  byte bTemp;
+  uint16_t wTemp;
+  uint8_t bTemp;
 #endif
 
   for (bCount = 0; bCount < ROM_CONTROL_TABLE_LEN; bCount++)
@@ -375,7 +375,7 @@ void ProcessInit(void)
 
 void ProcessPackets(void)
 {
-  byte bCount, bLength, bCount0xff, bCheckSum;
+  uint8_t bCount, bLength, bCount0xff, bCheckSum;
 
   while (1)
   {
@@ -493,9 +493,9 @@ RX_PACKET_TIMEOUT:
   }
 }
 
-void ProcessInstruction(byte length)
+void ProcessInstruction(uint8_t length)
 {
-  byte bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn, bPrevID;
+  uint8_t bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn, bPrevID;
 
   bLength = length;
 
@@ -526,7 +526,7 @@ void ProcessInstruction(byte length)
             //RX_PACKET_START:
             //RX_PACKET_TIMEOUT:
 
-            u8 bWaitRxID, bWaitLength, bWaitParameterLength, bWaitInstruction, bWaitCheckSum;
+            uint8_t bWaitRxID, bWaitLength, bWaitParameterLength, bWaitInstruction, bWaitCheckSum;
 
             bCount0xff = 0;
 
@@ -624,7 +624,7 @@ void ProcessInstruction(byte length)
 
   if (gbInstruction == INST_SYNC_WRITE || gbInstruction == INST_SYNC_REG_WRITE) //INST_SYNC_WR or INST_SYNC_REG_WR
   {
-    byte bTmpLength, bCount0;
+    uint8_t bTmpLength, bCount0;
     bTmpLength = gbpParameter[1];
     for (bCount = 2; bCount < bLength-3; bCount += (bTmpLength+1))
     {
@@ -677,8 +677,8 @@ void ProcessInstruction(byte length)
 
       for (bCount=gbStartAddress; bCount <= bEndAddress; bCount++)   // ;;;;;;;;;;;DEBUG after 1.15!!!
       {
-        byte bFixedData;
-        word wFixedData;
+        uint8_t bFixedData;
+        uint16_t wFixedData;
 
 #if 0
         if (bCount == P_RX_REMOCON_DATA_ARRIVED)
@@ -694,11 +694,11 @@ void ProcessInstruction(byte length)
         if (gbpDataSize[bCount] == 2 && bCount < bEndAddress)
         {
           wFixedData = WORD_CAST(gbpControlTable[bCount]);
-          bFixedData = (byte)(wFixedData&0xff);
+          bFixedData = (uint8_t)(wFixedData&0xff);
           gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++]= bFixedData;
           bCheckSum += bFixedData;
-          bFixedData = (byte)((wFixedData>>8)&0xff);
+          bFixedData = (uint8_t)((wFixedData>>8)&0xff);
           gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++]= bFixedData;
           bCheckSum += bFixedData;
@@ -763,7 +763,7 @@ void ProcessInstruction(byte length)
   {
     if (gbRxID == BROADCASTING_ID) //for avoiding data crush
     {
-      //mDelay((word)(GB_ID<<0)); //Ver0x14
+      //mDelay((uint16_t)(GB_ID<<0)); //Ver0x14
     }
     ReturnPacket(0);
   }
@@ -793,7 +793,7 @@ RX_PACKET_TIMEOUT:
 
 void WriteControlTable(void)
 {
-  byte bCount, bPointer;
+  uint8_t bCount, bPointer;
 
   for (bCount = 1; bCount < gbParameterLength; bCount++) //Writing
   {
@@ -818,9 +818,9 @@ void WriteControlTable(void)
   }
 }
 
-byte WriteControlTableRangeCheck(void)
+uint8_t WriteControlTableRangeCheck(void)
 {
-  byte bCount, bPointer;
+  uint8_t bCount, bPointer;
 
   if (gbpDataSize[gbStartAddress] == 0 || gbpDataSize[gbStartAddress+gbParameterLength-2] == 2)
   {
@@ -843,9 +843,9 @@ byte WriteControlTableRangeCheck(void)
   return 0;
 }
 
-void ReturnPacket(byte bError)
+void ReturnPacket(uint8_t bError)
 {
-  byte bCheckSum;
+  uint8_t bCheckSum;
   if (gbInstruction == INST_PING || (gbRxID != BROADCASTING_ID && GB_RETURN_LEVEL >= RETURN_ALL_PACKET))
   {
     bError |= gbInterruptCheckError;
@@ -874,11 +874,11 @@ void ReturnPacket(byte bError)
 void ProcessAfterWriting(void)
 {
 #if 0
-  byte bCount, bComplianceFlag;
-  word wTemp;
+  uint8_t bCount, bComplianceFlag;
+  uint16_t wTemp;
 #endif
-  byte bCount;
-  u32 lTemp;
+  uint8_t bCount;
+  uint32_t lTemp;
 
 #if 0
   bComplianceFlag = 0;

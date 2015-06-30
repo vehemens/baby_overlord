@@ -19,8 +19,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void LED_SetState(u8 LED_PORT, PowerState NewState);
-PowerState LED_GetState(u8 LED_PORT);
+void LED_SetState(uint8_t LED_PORT, PowerState NewState);
+PowerState LED_GetState(uint8_t LED_PORT);
 
 #endif /* __LED_H */
 

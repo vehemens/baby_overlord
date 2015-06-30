@@ -290,7 +290,7 @@ void SPI_Config(void)
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-vu16 CCR4_Val = 12; // 12 us
+volatile uint16_t CCR4_Val = 12; // 12 us
 
 void Timer_Config(void)
 {

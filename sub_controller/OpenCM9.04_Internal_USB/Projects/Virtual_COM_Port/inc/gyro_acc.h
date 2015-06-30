@@ -18,8 +18,8 @@
 void GYRO_ClearData(void);
 void ACC_ClearData(void);
 
-void GYRO_PushData(u16 dat);
-void ACC_PushData(u16 dat);
+void GYRO_PushData(uint16_t dat);
+void ACC_PushData(uint16_t dat);
 
 void GYRO_ConvertData(void);
 void ACC_ConvertData(void);

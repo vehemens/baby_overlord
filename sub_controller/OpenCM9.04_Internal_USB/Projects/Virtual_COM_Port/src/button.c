@@ -27,7 +27,7 @@
 *******************************************************************************/
 void __Button_ISR(void)
 {
-  u8 val = 0;
+  uint8_t val = 0;
 
   if (GPIO_ReadInputDataBit(SW_START_GPIO_PORT, SW_START_GPIO_PIN) == SET)
     val |= BUTTON_START;

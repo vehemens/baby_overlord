@@ -120,16 +120,16 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 
 #include "CM_DXL_COM.h"
 
-extern vu16 CCR1_Val;       // from system_init.c
-extern vu16 CCR2_Val;       // from system_init.c
-extern vu16 CCR3_Val;       // from system_init.c
-extern vu16 CCR4_Val;       // from system_init.c
+extern volatile uint16_t CCR1_Val;       // from system_init.c
+extern volatile uint16_t CCR2_Val;       // from system_init.c
+extern volatile uint16_t CCR3_Val;       // from system_init.c
+extern volatile uint16_t CCR4_Val;       // from system_init.c
 
-vu32 capture = 0;
-vu8 Counter = 0;
-vu16 gwCounter1 = 0;
+volatile uint32_t capture = 0;
+volatile uint8_t Counter = 0;
+volatile uint16_t gwCounter1 = 0;
 
-extern vu8 gbMiliSec;
+extern volatile uint8_t gbMiliSec;
 
 void TIM2_IRQHandler(void)
 {

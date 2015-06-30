@@ -18,32 +18,32 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-vu8 GYRO_TxBuffer[9] = {
+volatile uint8_t GYRO_TxBuffer[9] = {
   0xE8,0xFF,0xFF,
   0xEA,0xFF,0xFF,
   0xEC,0xFF,0xFF};
 
-vu8 ACC_TxBuffer[9] = {
+volatile uint8_t ACC_TxBuffer[9] = {
   0xE8,0xFF,0xFF,
   0xEA,0xFF,0xFF,
   0xEC,0xFF,0xFF};
 
-vu8 GYRO_RxBuffer[RX_BUFFER_SIZE];
-vu8 ACC_RxBuffer[RX_BUFFER_SIZE];
+volatile uint8_t GYRO_RxBuffer[RX_BUFFER_SIZE];
+volatile uint8_t ACC_RxBuffer[RX_BUFFER_SIZE];
 
-vu8 GYRO_RxBufferPointer = 0;
-vu8 ACC_RxBufferPointer = 0;
+volatile uint8_t GYRO_RxBufferPointer = 0;
+volatile uint8_t ACC_RxBufferPointer = 0;
 
-vu8 GYRO_Enable = 0;
-vu8 ACC_Enable = 0;
+volatile uint8_t GYRO_Enable = 0;
+volatile uint8_t ACC_Enable = 0;
 
-u16 GYRO_X;
-u16 GYRO_Y;
-u16 GYRO_Z;
+uint16_t GYRO_X;
+uint16_t GYRO_Y;
+uint16_t GYRO_Z;
 
-u16 ACC_X;
-u16 ACC_Y;
-u16 ACC_Z;
+uint16_t ACC_X;
+uint16_t ACC_Y;
+uint16_t ACC_Z;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -70,33 +70,33 @@ void ACC_ClearData(void)
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_PushData(u16 dat)
+void GYRO_PushData(uint16_t dat)
 {
-  GYRO_RxBuffer[(GYRO_RxBufferPointer++)%RX_BUFFER_SIZE] = (u8)(dat & 0x00FF);
+  GYRO_RxBuffer[(GYRO_RxBufferPointer++)%RX_BUFFER_SIZE] = (uint8_t)(dat & 0x00FF);
 }
 
-void ACC_PushData(u16 dat)
+void ACC_PushData(uint16_t dat)
 {
-  ACC_RxBuffer[(ACC_RxBufferPointer++)%RX_BUFFER_SIZE] = (u8)(dat & 0x00FF);
+  ACC_RxBuffer[(ACC_RxBufferPointer++)%RX_BUFFER_SIZE] = (uint8_t)(dat & 0x00FF);
 }
 
 /*******************************************************************************
 * Function Name  : GYRO_ConvertData
-* Description    : Converts s16 data to u10
+* Description    : Converts int16_t data to u10
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
 void GYRO_ConvertData(void)
 {
-  s16 GYRO_X_raw;
-  s16 GYRO_Y_raw;
-  s16 GYRO_Z_raw;
+  int16_t GYRO_X_raw;
+  int16_t GYRO_Y_raw;
+  int16_t GYRO_Z_raw;
 
-  s32 temp;
+  int32_t temp;
 
-  GYRO_X_raw = (s16)((GYRO_RxBuffer[2] << 8) + GYRO_RxBuffer[1]);
-  GYRO_Y_raw = (s16)((GYRO_RxBuffer[5] << 8) + GYRO_RxBuffer[4]);
-  GYRO_Z_raw = (s16)((GYRO_RxBuffer[8] << 8) + GYRO_RxBuffer[7]);
+  GYRO_X_raw = (int16_t)((GYRO_RxBuffer[2] << 8) + GYRO_RxBuffer[1]);
+  GYRO_Y_raw = (int16_t)((GYRO_RxBuffer[5] << 8) + GYRO_RxBuffer[4]);
+  GYRO_Z_raw = (int16_t)((GYRO_RxBuffer[8] << 8) + GYRO_RxBuffer[7]);
 
   temp = (GYRO_X_raw / 64);
   temp = temp * 5 / 4;
@@ -128,21 +128,21 @@ void GYRO_ConvertData(void)
 
 /*******************************************************************************
 * Function Name  : ACC_ConvertData
-* Description    : Converts s16 data to u10
+* Description    : Converts int16_t data to u10
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
 void ACC_ConvertData(void)
 {
-  s16 ACC_X_raw;
-  s16 ACC_Y_raw;
-  s16 ACC_Z_raw;
+  int16_t ACC_X_raw;
+  int16_t ACC_Y_raw;
+  int16_t ACC_Z_raw;
 
-  s32 temp;
+  int32_t temp;
 
-  ACC_X_raw = (s16)((ACC_RxBuffer[11] << 8) + ACC_RxBuffer[10]);
-  ACC_Y_raw = (s16)((ACC_RxBuffer[14] << 8) + ACC_RxBuffer[13]);
-  ACC_Z_raw = (s16)((ACC_RxBuffer[17] << 8) + ACC_RxBuffer[16]);
+  ACC_X_raw = (int16_t)((ACC_RxBuffer[11] << 8) + ACC_RxBuffer[10]);
+  ACC_Y_raw = (int16_t)((ACC_RxBuffer[14] << 8) + ACC_RxBuffer[13]);
+  ACC_Z_raw = (int16_t)((ACC_RxBuffer[17] << 8) + ACC_RxBuffer[16]);
 
   temp = (-1)*(ACC_X_raw / 64);
   //temp = temp * 4 / 3;
@@ -292,7 +292,7 @@ void ACC_Config(void)
 *******************************************************************************/
 void __GYRO_ISR(void)
 {
-  int i;
+  uint32_t i;
 
   if (!GYRO_Enable || !ACC_Enable)
     return;
@@ -325,7 +325,7 @@ void __GYRO_ISR(void)
 *******************************************************************************/
 void __ACC_ISR(void)
 {
-  int i;
+  uint32_t i;
 
   if (!GYRO_Enable || !ACC_Enable)
     return;
