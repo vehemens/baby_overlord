@@ -110,7 +110,7 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 #define P_ZIGBEE_ID_L		88
 #define P_ZIGBEE_ID_H		89
 
-////////////////////////////////////////////////////////////////////////
+/* Exported macro ------------------------------------------------------------*/
 #define WORD_CAST(AA)           (*(uint16_t *)(&(AA)))
 
 #define GW_MODEL_NUMBER           WORD_CAST(gbpControlTable[P_MODEL_NUMBER_L])
@@ -184,51 +184,12 @@ typedef enum {OFF = 0, ON = !OFF} PowerState;
 
 #define DEFAULT_ID	200
 
-extern volatile uint8_t gbpRxInterruptBuffer[];
-extern volatile uint8_t gbpTxInterruptBuffer[];
-extern volatile uint8_t gbRxBufferWritePointer;
-extern volatile uint8_t gbRxBufferReadPointer;
-extern volatile uint8_t gbTxBufferWritePointer;
-extern volatile uint8_t gbTxBufferReadPointer;
-
-extern volatile uint8_t gbpRxD0Buffer[];
-extern volatile uint8_t gbpTxD0Buffer[];
-extern volatile uint8_t gbRxD0BufferWritePointer;
-extern volatile uint8_t gbRxD0BufferReadPointer;
-extern volatile uint8_t gbTxD0BufferWritePointer;
-extern volatile uint8_t gbTxD0BufferReadPointer;
-
-extern volatile uint8_t gbpRxD1Buffer[];
-extern volatile uint8_t gbpTxD1Buffer[];
-extern volatile uint8_t gbRxD1BufferWritePointer;
-extern volatile uint8_t gbRxD1BufferReadPointer;
-extern volatile uint8_t gbTxD1BufferWritePointer;
-extern volatile uint8_t gbTxD1BufferReadPointer;
-
-extern volatile uint8_t gbTxD0Transmitting;
-extern volatile uint8_t gbTxD1Transmitting;
-
-extern volatile uint8_t gbMiliSec;
-
-extern uint8_t ROM_INITIAL_DATA[];
-
-extern volatile uint8_t gbpControlTable[];
-
-extern uint8_t gbLEDBlinkCounter;
-
-extern volatile uint8_t gbLEDHeadR;
-extern volatile uint8_t gbLEDHeadG;
-extern volatile uint8_t gbLEDHeadB;
-
-extern volatile uint8_t gbLEDEyeR;
-extern volatile uint8_t gbLEDEyeG;
-extern volatile uint8_t gbLEDEyeB;
-
-extern volatile uint8_t gbLEDPwm;
-
+/* Exported functions ------------------------------------------------------- */
 void ProcessInit(void);
 void ProcessPackets(void);
-void ProcessInstruction(uint8_t length);
+
+/* External variables --------------------------------------------------------*/
+extern volatile uint8_t gbpControlTable[];
 
 #endif /* _DYNAMIXEL_CM_DXL_COM_HEADER */
 

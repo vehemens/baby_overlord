@@ -1,20 +1,23 @@
+/******************************************************************************
+* File Name          : CM_DXL_COM.c
+* Author             : X
+* Version            : X
+* Date               : X
+* Description        : This file contains the inteligent toss mode between
+                       host and dynamixel.
+*******************************************************************************/
+
+/* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
 #include "hw_config.h"
 #include "CM_DXL_COM.h"
 #include "dynamixel.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  <Compile Option>
-/////////////////////////////////////////////////////////////////////////////
-
+/* Private define ------------------------------------------------------------*/
 #define TIMEOUT_CHECK
 #define TIMEOUT_MILISEC 100
 
 #define BROADCAST_PING_DISABLE
-
-/////////////////////////////////////////////////////////////////////////////
-//  <Constant Definition>
-/////////////////////////////////////////////////////////////////////////////
 
 #define VOLTAGE_ERROR_BIT     0x01
 #define ANGLE_LIMIT_ERROR_BIT 0x02
@@ -28,33 +31,44 @@
 #define RETURN_READ_PACKET 1
 #define RETURN_ALL_PACKET 2
 
+#define DEFAULT_BAUD_RATE 1    //1Mbps at 16MHz
+
+#define PROGRAM_VERSION 0x13     // for ax12, freq. selectable
+
+#define CW_ANGLE_FIXED_LIMIT 0 // 0+30 dudung031002
+#define CCW_ANGLE_FIXED_LIMIT (1023) // 300-30 dudung031002
+
+/* Private macro -------------------------------------------------------------*/
+#define SYSTEM_RESET NVIC_GenerateSystemReset()
+
+/* Private variables ---------------------------------------------------------*/
 /*__flash*/ uint8_t gbpParameterRange[][2] =
 {
   //EEPROM area
-  {1,0},	//P_MODEL_NUMBER_L	0
-  {1,0},	//P_MODEL_NUMBER_H	1
-  {1,0},	//P_VERSION		2
-  {0,253},	//P_ID			3
-  {1,254},	//P_BAUD_RATE		4
-  {0,254},	//P_RETURN_DELAY_TIME	5
-  {0,255},	//P_CW_ANGLE_LIMIT_L	6
-  {0,3},	//P_CW_ANGLE_LIMIT_H	7
-  {0,255},	//P_CCW_ANGLE_LIMIT_L	8
-  {0,3},	//P_CCW_ANGLE_LIMIT_H	9
-  {1,0},	//P_SYSTEM_DATA2	10 for center calibration offset
-  {0,150},	//P_LIMIT_TEMPERATURE	11
-  {50,250},	//P_DOWN_LIMIT_VOLTAGE	12
-  {50,250},	//P_UP_LIMIT_VOLTAGE	13
-  {0,255},	//P_MAX_TORQUE_L	14
-  {0,3},	//P_MAX_TORQUE_H	15
-  {0,2},	//P_RETURN_LEVEL	16
-  {0,0x7f},	//P_ALARM_LED		17
-  {0,0x7f},	//P_ALARM_SHUTDOWN	18
-  {0,255},	//P_OPERATING_MODE	19
-  {1,0},	//P_DOWN_CALIBRATION_L	20
-  {1,0},	//P_DOWN_CALIBRATION_H	21
-  {1,0},	//P_UP_CALIBRATION_L	22
-  {1,0},	//P_UP_CALIBRATOIN_H	23
+  {1, 0},	//P_MODEL_NUMBER_L	0
+  {1, 0},	//P_MODEL_NUMBER_H	1
+  {1, 0},	//P_VERSION		2
+  {0, 253},	//P_ID			3
+  {1, 254},	//P_BAUD_RATE		4
+  {0, 254},	//P_RETURN_DELAY_TIME	5
+  {0, 255},	//P_CW_ANGLE_LIMIT_L	6
+  {0, 3},	//P_CW_ANGLE_LIMIT_H	7
+  {0, 255},	//P_CCW_ANGLE_LIMIT_L	8
+  {0, 3},	//P_CCW_ANGLE_LIMIT_H	9
+  {1, 0},	//P_SYSTEM_DATA2	10 for center calibration offset
+  {0, 150},	//P_LIMIT_TEMPERATURE	11
+  {50, 250},	//P_DOWN_LIMIT_VOLTAGE	12
+  {50, 250},	//P_UP_LIMIT_VOLTAGE	13
+  {0, 255},	//P_MAX_TORQUE_L	14
+  {0, 3},	//P_MAX_TORQUE_H	15
+  {0, 2},	//P_RETURN_LEVEL	16
+  {0, 0x7f},	//P_ALARM_LED		17
+  {0, 0x7f},	//P_ALARM_SHUTDOWN	18
+  {0, 255},	//P_OPERATING_MODE	19
+  {1, 0},	//P_DOWN_CALIBRATION_L	20
+  {1, 0},	//P_DOWN_CALIBRATION_H	21
+  {1, 0},	//P_UP_CALIBRATION_L	22
+  {1, 0},	//P_UP_CALIBRATOIN_H	23
 
   //RAM area
   {0, 1},	//P_DYNAMIXEL_POWER	24
@@ -114,15 +128,15 @@
   {1, 0},	//			78
   {1, 0},	//P_ADC15		79
   {1, 0},	//			80
-  {0,0xFF},	//P_BUZZER_DATA0	81
-  {0,0xFF},	//P_BUZZER_DATA1	82
-  {0,0xFF},	//P_TX_REMOCON_DATA_L	83
-  {0,0xFF},	//P_TX_REMOCON_DATA_H	84
-  {1,0},	//P_RX_REMOCON_DATA_L	85
-  {1,0},	//P_RX_REMOCON_DATA_H	86
-  {1,0},	//P_RX_REMOCON_DATA_ARRIVED	87
-  {1,0},	//P_ZIGBEE_ID_L		88
-  {1,0},	//P_ZIGBEE_ID_H		89
+  {0, 0xFF},	//P_BUZZER_DATA0	81
+  {0, 0xFF},	//P_BUZZER_DATA1	82
+  {0, 0xFF},	//P_TX_REMOCON_DATA_L	83
+  {0, 0xFF},	//P_TX_REMOCON_DATA_H	84
+  {1, 0},	//P_RX_REMOCON_DATA_L	85
+  {1, 0},	//P_RX_REMOCON_DATA_H	86
+  {1, 0},	//P_RX_REMOCON_DATA_ARRIVED	87
+  {1, 0},	//P_ZIGBEE_ID_L		88
+  {1, 0},	//P_ZIGBEE_ID_H		89
 };
 
 /*__flash*/ uint8_t gbpDataSize[] =
@@ -222,26 +236,7 @@
   0		//P_ZIGBEE_ID_H		89
 };
 
-#define DEFAULT_BAUD_RATE 1    //1Mbps at 16MHz
-
-#define PROGRAM_VERSION 0x13     // for ax12, freq. selectable
-
-#define CW_ANGLE_FIXED_LIMIT 0 // 0+30 dudung031002
-#define CCW_ANGLE_FIXED_LIMIT (1023) // 300-30 dudung031002
-
-//uint8_t ROM_INITIAL_DATA[]={ 28, 0 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
-//MODEL NUMBER 0X7300
 uint8_t ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
-
-/////////////////////////////////////////////////////////////////////////////
-//  <Macro Definition>
-/////////////////////////////////////////////////////////////////////////////
-
-#define SYSTEM_RESET NVIC_GenerateSystemReset()
-
-/////////////////////////////////////////////////////////////////////////////
-//  </Include Header Files>
-/////////////////////////////////////////////////////////////////////////////
 
 volatile uint8_t gbpRxInterruptBuffer[256];
 volatile uint8_t gbpTxInterruptBuffer[256];
@@ -280,12 +275,8 @@ volatile uint8_t gbpParameter[256];
 uint8_t gbStartAddress;
 
 uint8_t gbInterruptCheckError;
-uint8_t gbRegAddress, gbRegParameterLength;
-uint8_t gbpRegParameter[MAX_PACKET_LENGTH];
 
 volatile uint8_t gbpControlTable[CONTROL_TABLE_LEN + 1];
-
-uint8_t gbLEDBlinkCounter;
 
 volatile uint8_t gbLEDHeadR;
 volatile uint8_t gbLEDHeadG;
@@ -295,15 +286,21 @@ volatile uint8_t gbLEDEyeR;
 volatile uint8_t gbLEDEyeG;
 volatile uint8_t gbLEDEyeB;
 
-volatile uint8_t gbLEDPwm;
-
+/* Private function prototypes -----------------------------------------------*/
+void ProcessInstruction(uint8_t length);
 void WriteControlTable(void);
 uint8_t WriteControlTableRangeCheck(void);
 void ReturnPacket(uint8_t bError);
 void ProcessAfterWriting(void);
 
-uint8_t gbDxlPwr;
+/* Private functions ---------------------------------------------------------*/
 
+/*******************************************************************************
+* Function Name  : ProcessInit
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ProcessInit(void)
 {
   uint8_t bCount;
@@ -345,6 +342,12 @@ void ProcessInit(void)
   gbLEDEyeB = (GW_LED_EYE >> 10) & 0x1f;
 }
 
+/*******************************************************************************
+* Function Name  : ProcessPackets
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ProcessPackets(void)
 {
   uint8_t bCount, bLength, bCount0xff, bCheckSum;
@@ -466,6 +469,12 @@ RX_PACKET_TIMEOUT:
   }
 }
 
+/*******************************************************************************
+* Function Name  : ProcessInstruction
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ProcessInstruction(uint8_t length)
 {
   uint8_t bCount, bLength, bEndAddress, bCount0xff, bCheckSum, bReturn, bPrevID;
@@ -632,8 +641,10 @@ void ProcessInstruction(uint8_t length)
   {
     if (gbRxID != BROADCASTING_ID && GB_RETURN_LEVEL >= RETURN_READ_PACKET)
     {
-      bEndAddress = gbStartAddress+gbpParameter[1] - 1;
+      bEndAddress = gbStartAddress + gbpParameter[1] - 1;
+
       bLength = gbpParameter[1] + 2; //Errorstatus,Checksum
+
       bCheckSum = GB_ID + bLength + gbInterruptCheckError;
 
       gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
@@ -669,13 +680,17 @@ void ProcessInstruction(uint8_t length)
           wFixedData = WORD_CAST(gbpControlTable[bCount]);
 
           bFixedData = (uint8_t)(wFixedData & 0xff);
+
           gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
+
           bCheckSum += bFixedData;
 
           bFixedData = (uint8_t)((wFixedData >> 8) & 0xff);
+
           gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
+
           bCheckSum += bFixedData;
 
           bCount++;
@@ -683,8 +698,10 @@ void ProcessInstruction(uint8_t length)
         else //length == 1 or 0
         {
           bFixedData = gbpControlTable[bCount];
+
           gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
+
           bCheckSum += bFixedData;
         }
       }
@@ -767,13 +784,19 @@ RX_PACKET_TIMEOUT:
   return;
 }
 
+/*******************************************************************************
+* Function Name  : WriteControlTable
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void WriteControlTable(void)
 {
   uint8_t bCount, bPointer;
 
   for (bCount = 1; bCount < gbParameterLength; bCount++) //Writing
   {
-    bPointer = gbStartAddress+bCount - 1;
+    bPointer = gbStartAddress + bCount - 1;
 
     if (gbpDataSize[bPointer] == 2) //&& bCount < gbParameterLength-2) //length was already checked.
     {
@@ -797,6 +820,12 @@ void WriteControlTable(void)
   }
 }
 
+/*******************************************************************************
+* Function Name  : WriteControlTableRangeCheck
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 uint8_t WriteControlTableRangeCheck(void)
 {
   uint8_t bCount, bPointer;
@@ -808,7 +837,7 @@ uint8_t WriteControlTableRangeCheck(void)
 
   for (bCount = 1; bCount < gbParameterLength; bCount++) //Range Check
   {
-    bPointer = gbStartAddress+bCount - 1;
+    bPointer = gbStartAddress + bCount - 1;
 
     if (bPointer > CONTROL_TABLE_LEN ||
       gbpParameterRange[bPointer][LOW_LIMIT] > gbpParameter[bCount] ||
@@ -822,6 +851,12 @@ uint8_t WriteControlTableRangeCheck(void)
   return 0;
 }
 
+/*******************************************************************************
+* Function Name  : ReturnPacket
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ReturnPacket(uint8_t bError)
 {
   uint8_t bCheckSum;
@@ -829,6 +864,7 @@ void ReturnPacket(uint8_t bError)
   if (gbInstruction == INST_PING || (gbRxID != BROADCASTING_ID && GB_RETURN_LEVEL >= RETURN_ALL_PACKET))
   {
     bError |= gbInterruptCheckError;
+
     bCheckSum = ~(GB_ID + 2 + bError);
 
     gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
@@ -851,18 +887,20 @@ void ReturnPacket(uint8_t bError)
   }
 }
 
+/*******************************************************************************
+* Function Name  : ProcessAfterWriting
+* Description    : XX
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
 void ProcessAfterWriting(void)
 {
   uint8_t bCount;
 
   for (bCount = 0; bCount < gbParameterLength - 1; bCount++) //Range Check
   {
-    switch (gbStartAddress+bCount)
+    switch (gbStartAddress + bCount)
     {
-    case P_DYNAMIXEL_POWER:
-      gbDxlPwr = GB_DYNAMIXEL_POWER;
-      break;
-
     case P_LED_PANNEL:
       LED_SetState(GB_LED_MODE, ON);
       LED_SetState(~GB_LED_MODE, OFF);
