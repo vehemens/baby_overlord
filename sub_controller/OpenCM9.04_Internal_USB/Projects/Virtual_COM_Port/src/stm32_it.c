@@ -32,6 +32,8 @@
 #include "stm32_it.h"
 #include "usb_lib.h"
 #include "usb_istr.h"
+#include "button.h"
+#include "gyro_acc.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -120,10 +122,7 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 
 #include "CM_DXL_COM.h"
 
-extern volatile uint16_t CCR1_Val;       // from system_init.c
-extern volatile uint16_t CCR2_Val;       // from system_init.c
-extern volatile uint16_t CCR3_Val;       // from system_init.c
-extern volatile uint16_t CCR4_Val;       // from system_init.c
+extern volatile uint16_t CCR4_Val;
 
 volatile uint32_t capture = 0;
 volatile uint8_t Counter = 0;
@@ -167,7 +166,7 @@ void TIM2_IRQHandler(void)
       //LED_SetState(LED_RX,OFF);
       //LED_SetState(LED_TX,OFF);
 
-      if (!(b1Sec&0x07))
+      if (!(b1Sec & 0x07))
       {
         //ISR_BATTERY_CHECK();
       }
@@ -175,11 +174,12 @@ void TIM2_IRQHandler(void)
       b1Sec++;
     }
 
-    /*
-     iff(!(Counter1 & 32)) // 3960us, 250Hz
+#if 0
+    if (!(Counter1 & 32)) // 3960us, 250Hz
     {
     }
-    */
+#endif
+
     gwCounter1++;
   }
 }

@@ -36,12 +36,12 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-#define         ID1          (0x1FFFF7E8)
-#define         ID2          (0x1FFFF7EC)
-#define         ID3          (0x1FFFF7F0)
+#define ID1 (0x1FFFF7E8)
+#define ID2 (0x1FFFF7EC)
+#define ID3 (0x1FFFF7F0)
 
-#define USB_DISCONNECT                      GPIOC
-#define USB_DISCONNECT_PIN                  GPIO_Pin_13
+#define USB_DISCONNECT_GPIO_PORT	GPIOC
+#define USB_DISCONNECT_GPIO_PIN		GPIO_Pin_13
 
 
 #if defined USE_DXL_USART1

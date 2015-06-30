@@ -92,10 +92,10 @@ void IO_Config(void)
   EXTI_StructInit(&EXTI_InitStructure);
 
   /* USB */
-  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
+  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_GPIO_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
+  GPIO_Init(USB_DISCONNECT_GPIO_PORT, &GPIO_InitStructure);
 
   EXTI_ClearITPendingBit(EXTI_Line18);
 
@@ -370,11 +370,11 @@ void USB_Cable_Config(FunctionalState NewState)
 {
   if (NewState != DISABLE)
   {
-    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+    GPIO_ResetBits(USB_DISCONNECT_GPIO_PORT, USB_DISCONNECT_GPIO_PIN);
   }
   else
   {
-    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+    GPIO_SetBits(USB_DISCONNECT_GPIO_PORT, USB_DISCONNECT_GPIO_PIN);
   }
 }
 
