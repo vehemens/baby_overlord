@@ -42,7 +42,7 @@
 #define SYSTEM_RESET NVIC_GenerateSystemReset()
 
 /* Private variables ---------------------------------------------------------*/
-/*__flash*/ uint8_t gbpParameterRange[][2] =
+uint8_t gbpParameterRange[][2] =
 {
   //EEPROM area
   {1, 0},	//P_MODEL_NUMBER_L	0
@@ -139,7 +139,7 @@
   {1, 0},	//P_ZIGBEE_ID_H		89
 };
 
-/*__flash*/ uint8_t gbpDataSize[] =
+uint8_t gbpDataSize[] =
 {
   //EEPROM area
   2,		//P_MODEL_NUMBER_L	0
@@ -236,7 +236,33 @@
   0		//P_ZIGBEE_ID_H		89
 };
 
-uint8_t ROM_INITIAL_DATA[]={ 0, 0x73 ,PROGRAM_VERSION, DEFAULT_ID, DEFAULT_BAUD_RATE, 0, CW_ANGLE_FIXED_LIMIT&0xff, CW_ANGLE_FIXED_LIMIT>>8, CCW_ANGLE_FIXED_LIMIT&0xff, CCW_ANGLE_FIXED_LIMIT>>8,  0,  85-5, 60,190,255,  3,  2/*0Ver8*/, 0x24,  0x24,  0,  0&0xff,0>>8,0&0xff,0>>8};
+uint8_t ROM_INITIAL_DATA[] =
+{
+  0,		//P_MODEL_NUMBER_L	0
+  0x73,		//P_MODEL_NUMBER_H	1
+  PROGRAM_VERSION,	//P_VERSION		2
+  DEFAULT_ID,	//P_ID			3
+  DEFAULT_BAUD_RATE,	//P_BAUD_RATE		4
+  0,		//P_RETURN_DELAY_TIME	5
+  CW_ANGLE_FIXED_LIMIT & 0xff,	//P_CW_ANGLE_LIMIT_L	6
+  CW_ANGLE_FIXED_LIMIT >> 8,	//P_CW_ANGLE_LIMIT_H	7
+  CCW_ANGLE_FIXED_LIMIT & 0xff,	//P_CCW_ANGLE_LIMIT_L	8
+  CCW_ANGLE_FIXED_LIMIT >> 8,	//P_CCW_ANGLE_LIMIT_H	9
+  0,		//P_SYSTEM_DATA2	10
+  85 - 5,	//P_LIMIT_TEMPERATURE	11
+  60,		//P_UP_LIMIT_VOLTAGE 	12
+  190,		//P_DOWN_LIMIT_VOLTAGE	13
+  255,		//P_MAX_TORQUE_L	14
+  3,		//P_MAX_TORQUE_H	15
+  2,		//P_RETURN_LEVEL	16
+  0x24,		//P_ALARM_LED		17
+  0x24,		//P_ALARM_SHUTDOWN	18
+  0,		//P_OPERATING_MODE	19
+  0 & 0xff,	//P_DOWN_CALIBRATION_L	20
+  0 >> 8,	//P_DOWN_CALIBRATION_H	21
+  0 & 0xff,	//P_UP_CALIBRATOIN_L	22
+  0 >> 8	//P_UP_CALIBRATOIN_H	23
+};
 
 volatile uint8_t gbpRxInterruptBuffer[256];
 volatile uint8_t gbpTxInterruptBuffer[256];
