@@ -285,12 +285,16 @@ void MotionManager::Process()
                 {
                     if((*i)->m_Joint.GetEnable(id) == true)
                     {
+#ifdef MX28_1024
                         MotionStatus::m_CurrentJoints.SetSlope(id, (*i)->m_Joint.GetCWSlope(id), (*i)->m_Joint.GetCCWSlope(id));
+#endif
                         MotionStatus::m_CurrentJoints.SetValue(id, (*i)->m_Joint.GetValue(id));
 
+#ifndef MX28_1024
                         MotionStatus::m_CurrentJoints.SetPGain(id, (*i)->m_Joint.GetPGain(id));
                         MotionStatus::m_CurrentJoints.SetIGain(id, (*i)->m_Joint.GetIGain(id));
                         MotionStatus::m_CurrentJoints.SetDGain(id, (*i)->m_Joint.GetDGain(id));
+#endif
                     }
                 }
             }

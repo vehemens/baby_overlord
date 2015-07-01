@@ -42,9 +42,11 @@ Walking::Walking()
 	BALANCE_HIP_ROLL_GAIN = 0.5;
 	BALANCE_ANKLE_ROLL_GAIN = 1.0;
 
+#ifndef MX28_1024
 	P_GAIN = JointData::P_GAIN_DEFAULT;
     I_GAIN = JointData::I_GAIN_DEFAULT;
     D_GAIN = JointData::D_GAIN_DEFAULT;
+#endif
 
 	X_MOVE_AMPLITUDE = 0;
 	Y_MOVE_AMPLITUDE = 0;
@@ -61,6 +63,7 @@ Walking::Walking()
 
 	m_Joint.SetAngle(JointData::ID_HEAD_TILT, Kinematics::EYE_TILT_OFFSET_ANGLE);
 
+#ifdef MX28_1024
 	m_Joint.SetSlope(JointData::ID_R_SHOULDER_PITCH, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
 	m_Joint.SetSlope(JointData::ID_L_SHOULDER_PITCH, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
     m_Joint.SetSlope(JointData::ID_R_SHOULDER_ROLL, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
@@ -69,12 +72,14 @@ Walking::Walking()
     m_Joint.SetSlope(JointData::ID_L_ELBOW, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
 	m_Joint.SetSlope(JointData::ID_HEAD_PAN, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
 
+#else
     m_Joint.SetPGain(JointData::ID_R_SHOULDER_PITCH, 8);
     m_Joint.SetPGain(JointData::ID_L_SHOULDER_PITCH, 8);
     m_Joint.SetPGain(JointData::ID_R_SHOULDER_ROLL, 8);
     m_Joint.SetPGain(JointData::ID_L_SHOULDER_ROLL, 8);
     m_Joint.SetPGain(JointData::ID_R_ELBOW, 8);
     m_Joint.SetPGain(JointData::ID_L_ELBOW, 8);
+#endif
 }
 
 Walking::~Walking()
@@ -109,11 +114,13 @@ void Walking::LoadINISettings(minIni* ini, const std::string &section)
     if((value = ini->getd(section, "balance_hip_roll_gain", INVALID_VALUE)) != INVALID_VALUE)   BALANCE_HIP_ROLL_GAIN = value;
     if((value = ini->getd(section, "balance_ankle_roll_gain", INVALID_VALUE)) != INVALID_VALUE) BALANCE_ANKLE_ROLL_GAIN = value;
 
+#ifndef MX28_1024
     int ivalue = INVALID_VALUE;
 
     if((ivalue = ini->geti(section, "p_gain", INVALID_VALUE)) != INVALID_VALUE)                 P_GAIN = ivalue;
     if((ivalue = ini->geti(section, "i_gain", INVALID_VALUE)) != INVALID_VALUE)                 I_GAIN = ivalue;
     if((ivalue = ini->geti(section, "d_gain", INVALID_VALUE)) != INVALID_VALUE)                 D_GAIN = ivalue;
+#endif
 }
 void Walking::SaveINISettings(minIni* ini)
 {
@@ -141,9 +148,11 @@ void Walking::SaveINISettings(minIni* ini, const std::string &section)
     ini->put(section,   "balance_hip_roll_gain",    BALANCE_HIP_ROLL_GAIN);
     ini->put(section,   "balance_ankle_roll_gain",  BALANCE_ANKLE_ROLL_GAIN);
 
+#ifndef MX28_1024
     ini->put(section,   "p_gain",                   P_GAIN);
     ini->put(section,   "i_gain",                   I_GAIN);
     ini->put(section,   "d_gain",                   D_GAIN);
+#endif
 }
 
 double Walking::wsin(double time, double period, double period_shift, double mag, double mag_shift)
@@ -615,10 +624,12 @@ void Walking::Process()
 	m_Joint.SetValue(JointData::ID_L_SHOULDER_PITCH,    outValue[13]);
 	m_Joint.SetAngle(JointData::ID_HEAD_PAN, A_MOVE_AMPLITUDE);
 
+#ifndef MX28_1024
 	for(int id = JointData::ID_R_HIP_YAW; id <= JointData::ID_L_ANKLE_ROLL; id++)
 	{
 	    m_Joint.SetPGain(id, P_GAIN);
         m_Joint.SetIGain(id, I_GAIN);
         m_Joint.SetDGain(id, D_GAIN);
 	}
+#endif
 }
