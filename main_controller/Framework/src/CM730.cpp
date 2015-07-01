@@ -5,7 +5,9 @@
  *
  */
 #include <stdio.h>
+#ifdef FSR_FEET
 #include "FSR.h"
+#endif
 #include "CM730.h"
 #include "MotionStatus.h"
 
@@ -414,6 +416,7 @@ void CM730::MakeBulkReadPacket()
 //        }
 //    }
 
+#ifdef FSR_FEET
     if(Ping(FSR::ID_L_FSR, 0) == SUCCESS)
     {
         m_BulkReadTxPacket[PARAMETER+3*number+1] = 10;               // length
@@ -429,6 +432,7 @@ void CM730::MakeBulkReadPacket()
         m_BulkReadTxPacket[PARAMETER+3*number+3] = FSR::P_FSR1_L;    // start address
         number++;
     }
+#endif
 
     m_BulkReadTxPacket[LENGTH]          = (number * 3) + 3;
 }

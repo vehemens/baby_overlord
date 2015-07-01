@@ -7,7 +7,9 @@
 
 #include <stdio.h>
 #include <math.h>
+#ifdef FSR_FEET
 #include "FSR.h"
+#endif
 #include "MX28.h"
 #include "MotionManager.h"
 
@@ -131,7 +133,11 @@ void MotionManager::StartLogging()
     m_LogFileStream.open(szFile, std::ios::out);
     for(int id = 1; id < JointData::NUMBER_OF_JOINTS; id++)
         m_LogFileStream << "ID_" << id << "_GP,ID_" << id << "_PP,";
+#ifdef FSR_FEET
     m_LogFileStream << "GyroFB,GyroRL,AccelFB,AccelRL,L_FSR_X,L_FSR_Y,R_FSR_X,R_FSR_Y" << std::endl;
+#else
+    m_LogFileStream << "GyroFB,GyroRL,AccelFB,AccelRL" << std::endl;
+#endif
 
     m_IsLogging = true;
 }
@@ -337,10 +343,12 @@ void MotionManager::Process()
         m_LogFileStream << m_CM730->m_BulkReadData[CM730::ID_CM].ReadWord(CM730::P_GYRO_X_L) << ",";
         m_LogFileStream << m_CM730->m_BulkReadData[CM730::ID_CM].ReadWord(CM730::P_ACCEL_Y_L) << ",";
         m_LogFileStream << m_CM730->m_BulkReadData[CM730::ID_CM].ReadWord(CM730::P_ACCEL_X_L) << ",";
+#ifdef FSR_FEET
         m_LogFileStream << m_CM730->m_BulkReadData[FSR::ID_L_FSR].ReadByte(FSR::P_FSR_X) << ",";
         m_LogFileStream << m_CM730->m_BulkReadData[FSR::ID_L_FSR].ReadByte(FSR::P_FSR_Y) << ",";
         m_LogFileStream << m_CM730->m_BulkReadData[FSR::ID_R_FSR].ReadByte(FSR::P_FSR_X) << ",";
         m_LogFileStream << m_CM730->m_BulkReadData[FSR::ID_R_FSR].ReadByte(FSR::P_FSR_Y) << ",";
+#endif
         m_LogFileStream << std::endl;
     }
 
