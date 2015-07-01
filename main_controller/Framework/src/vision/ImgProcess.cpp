@@ -205,6 +205,7 @@ void ImgProcess::Dilation(Image* src, Image* dest)
     }
 }
 
+#ifdef FLIP_FRAME
 void ImgProcess::HFlipYUV(Image* img)
 {
     int sizeline = img->m_Width * 2; /* 2 bytes per pixel*/
@@ -238,6 +239,7 @@ void ImgProcess::VFlipYUV(Image* img)
         memcpy(img->m_ImageData+(img->m_Height-1-h)*sizeline, line1, sizeline);
     }
 }
+#endif
 
 // ***   WEBOTS PART  *** //
 
