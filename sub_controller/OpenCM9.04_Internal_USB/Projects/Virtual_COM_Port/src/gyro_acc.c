@@ -14,7 +14,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define RX_BUFFER_SIZE 18
+#define RX_BUFFER_SIZE 9
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -140,9 +140,9 @@ void ACC_ConvertData(void)
 
   int32_t temp;
 
-  ACC_X_raw = (int16_t)((ACC_RxBuffer[11] << 8) + ACC_RxBuffer[10]);
-  ACC_Y_raw = (int16_t)((ACC_RxBuffer[14] << 8) + ACC_RxBuffer[13]);
-  ACC_Z_raw = (int16_t)((ACC_RxBuffer[17] << 8) + ACC_RxBuffer[16]);
+  ACC_X_raw = (int16_t)((ACC_RxBuffer[2] << 8) + ACC_RxBuffer[1]);
+  ACC_Y_raw = (int16_t)((ACC_RxBuffer[5] << 8) + ACC_RxBuffer[4]);
+  ACC_Z_raw = (int16_t)((ACC_RxBuffer[8] << 8) + ACC_RxBuffer[7]);
 
   temp = (-1)*(ACC_X_raw / 64);
   //temp = temp * 4 / 3;
