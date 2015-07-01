@@ -15,18 +15,8 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void GYRO_ClearData(void);
-void ACC_ClearData(void);
-
-void GYRO_PushData(uint16_t dat);
-void ACC_PushData(uint16_t dat);
-
-void GYRO_ConvertData(void);
-void ACC_ConvertData(void);
-
 void GYRO_Config(void);
 void ACC_Config(void);
-
 void __GYRO_ISR(void);
 void __ACC_ISR(void);
 

@@ -14,26 +14,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define RX_BUFFER_SIZE 9
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-volatile uint8_t GYRO_TxBuffer[9] = {
-  0xE8,0xFF,0xFF,
-  0xEA,0xFF,0xFF,
-  0xEC,0xFF,0xFF};
-
-volatile uint8_t ACC_TxBuffer[9] = {
-  0xE8,0xFF,0xFF,
-  0xEA,0xFF,0xFF,
-  0xEC,0xFF,0xFF};
-
-volatile uint8_t GYRO_RxBuffer[RX_BUFFER_SIZE];
-volatile uint8_t ACC_RxBuffer[RX_BUFFER_SIZE];
-
-volatile uint8_t GYRO_RxBufferPointer = 0;
-volatile uint8_t ACC_RxBufferPointer = 0;
-
 volatile uint8_t GYRO_Enable = 0;
 volatile uint8_t ACC_Enable = 0;
 
@@ -46,47 +28,125 @@ uint16_t ACC_Y;
 uint16_t ACC_Z;
 
 /* Private function prototypes -----------------------------------------------*/
+void GYRO_ConvertData(uint8_t rxbuf[]);
+void ACC_ConvertData(uint8_t rxbuf[]);
+void GYRO_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len);
+void ACC_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len);
+void SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len);
+
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : X_ClearData
-* Description    : Resets buffer pointer
+* Function Name  : Gyro_Config
+* Description    : Configures GYRO
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_ClearData(void)
+void GYRO_Config(void)
 {
-  GYRO_RxBufferPointer = 0;
-}
+  uint16_t i;
+  uint8_t txbuf[4] =
+    {
+    0x20, 0xFF,
+    0x23, 0x20
+    };
+  uint8_t rxbuf[4];
 
-void ACC_ClearData(void)
-{
-  ACC_RxBufferPointer = 0;
+  for (i = 0; i < 2; i++)
+  {
+    GYRO_SPI_TR(&txbuf[2 * i], &rxbuf[2 * i], 2);
+  }
+
+  GYRO_Enable = 1;
 }
 
 /*******************************************************************************
-* Function Name  : X_PushData
-* Description    : Reads register and places data into a buffer
+* Function Name  : ACC_Config
+* Description    : Configures accelerometer
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void GYRO_PushData(uint16_t dat)
+void ACC_Config(void)
 {
-  GYRO_RxBuffer[(GYRO_RxBufferPointer++)%RX_BUFFER_SIZE] = (uint8_t)(dat & 0x00FF);
+  uint16_t i;
+  uint8_t txbuf[4] =
+    {
+    0x20, 0xA7,
+    0x21, 0x08
+    };
+  uint8_t rxbuf[4];
+
+  for (i = 0; i < 2; i++)
+  {
+    ACC_SPI_TR(&txbuf[2 * i], &rxbuf[2 * i], 2);
+  }
+
+  ACC_Enable = 1;
 }
 
-void ACC_PushData(uint16_t dat)
+/*******************************************************************************
+* Function Name  : __GYRO_ISR
+* Description    : Reads GYRO rates
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
+void __GYRO_ISR(void)
 {
-  ACC_RxBuffer[(ACC_RxBufferPointer++)%RX_BUFFER_SIZE] = (uint8_t)(dat & 0x00FF);
+  uint16_t i;
+  uint8_t txbuf[9] =
+    {
+    0xE8,0xFF,0xFF,
+    0xEA,0xFF,0xFF,
+    0xEC,0xFF,0xFF
+    };
+  uint8_t rxbuf[9];
+
+  if (!GYRO_Enable || !ACC_Enable)
+    return;
+
+  for (i = 0; i < 3; i++)
+  {
+    GYRO_SPI_TR(&txbuf[3 * i], &rxbuf[3 * i], 3);
+  }
+
+  GYRO_ConvertData(rxbuf);
+}
+
+/*******************************************************************************
+* Function Name  : __ACC_ISR
+* Description    : Reads accelerometer rates
+* Input          : None.
+* Return         : None.
+*******************************************************************************/
+void __ACC_ISR(void)
+{
+  uint16_t i;
+  uint8_t txbuf[9] =
+    {
+    0xE8,0xFF,0xFF,
+    0xEA,0xFF,0xFF,
+    0xEC,0xFF,0xFF
+    };
+  uint8_t rxbuf[9];
+
+  if (!GYRO_Enable || !ACC_Enable)
+    return;
+
+  for (i = 0; i < 3; i++)
+  {
+    ACC_SPI_TR(&txbuf[3 * i], &rxbuf[3 * i], 3);
+  }
+
+  ACC_ConvertData(rxbuf);
 }
 
 /*******************************************************************************
 * Function Name  : GYRO_ConvertData
-* Description    : Converts int16_t data to u10
-* Input          : None.
+* Description    : Converts raw data to u10
+* Input          : Message buffer
 * Return         : None.
 *******************************************************************************/
-void GYRO_ConvertData(void)
+void GYRO_ConvertData(uint8_t rxbuf[])
 {
   int16_t GYRO_X_raw;
   int16_t GYRO_Y_raw;
@@ -94,9 +154,9 @@ void GYRO_ConvertData(void)
 
   int32_t temp;
 
-  GYRO_X_raw = (int16_t)((GYRO_RxBuffer[2] << 8) + GYRO_RxBuffer[1]);
-  GYRO_Y_raw = (int16_t)((GYRO_RxBuffer[5] << 8) + GYRO_RxBuffer[4]);
-  GYRO_Z_raw = (int16_t)((GYRO_RxBuffer[8] << 8) + GYRO_RxBuffer[7]);
+  GYRO_X_raw = ((int16_t)rxbuf[2] << 8) | rxbuf[1];
+  GYRO_Y_raw = ((int16_t)rxbuf[5] << 8) | rxbuf[4];
+  GYRO_Z_raw = ((int16_t)rxbuf[8] << 8) | rxbuf[7];
 
   temp = (GYRO_X_raw / 64);
   temp = temp * 5 / 4;
@@ -128,11 +188,11 @@ void GYRO_ConvertData(void)
 
 /*******************************************************************************
 * Function Name  : ACC_ConvertData
-* Description    : Converts int16_t data to u10
-* Input          : None.
+* Description    : Converts raw data to u10
+* Input          : Message buffer
 * Return         : None.
 *******************************************************************************/
-void ACC_ConvertData(void)
+void ACC_ConvertData(uint8_t rxbuf[])
 {
   int16_t ACC_X_raw;
   int16_t ACC_Y_raw;
@@ -140,9 +200,9 @@ void ACC_ConvertData(void)
 
   int32_t temp;
 
-  ACC_X_raw = (int16_t)((ACC_RxBuffer[2] << 8) + ACC_RxBuffer[1]);
-  ACC_Y_raw = (int16_t)((ACC_RxBuffer[5] << 8) + ACC_RxBuffer[4]);
-  ACC_Z_raw = (int16_t)((ACC_RxBuffer[8] << 8) + ACC_RxBuffer[7]);
+  ACC_X_raw = ((int16_t)rxbuf[2] << 8) | rxbuf[1];
+  ACC_Y_raw = ((int16_t)rxbuf[5] << 8) | rxbuf[4];
+  ACC_Z_raw = ((int16_t)rxbuf[8] << 8) | rxbuf[7];
 
   temp = (-1)*(ACC_X_raw / 64);
   //temp = temp * 4 / 3;
@@ -173,181 +233,59 @@ void ACC_ConvertData(void)
 }
 
 /*******************************************************************************
-* Function Name  : Gyro_Config
-* Description    : Configures GYRO device
-* Input          : None.
+* Function Name  : GYRO_SPI_TR
+* Description    : TR GYRO
+* Input          : Message buffers and length
 * Return         : None.
 *******************************************************************************/
-void GYRO_Config(void)
+void GYRO_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
 {
-  GYRO_ClearData();
-
-  // write 0x20FF
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+
   GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
 
-
-  SPI_I2S_SendData(SPI1, 0x20);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  SPI_I2S_SendData(SPI1, 0xFF);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
-
+  SPI_TR(txbuf, rxbuf, len);
 
   GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
-
-
-  //write 0x2320
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-  GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
-
-
-  SPI_I2S_SendData(SPI1, 0x23);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  SPI_I2S_SendData(SPI1, 0x20);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
-
-  GYRO_Enable = 1;
 }
 
 /*******************************************************************************
-* Function Name  : ACC_Config
-* Description    : Configures accelerometer device
-* Input          : None.
+* Function Name  : ACC_SPI_TR
+* Description    : TR accelerometer
+* Input          : Message buffers and length
 * Return         : None.
 *******************************************************************************/
-void ACC_Config(void)
+void ACC_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
 {
-  ACC_ClearData();
-
-  // write 0x20A7
   while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+
   GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
 
-
-  SPI_I2S_SendData(SPI1, 0x20);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  SPI_I2S_SendData(SPI1, 0xA7);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
-
+  SPI_TR(txbuf, rxbuf, len);
 
   GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-
-  //write 0x2108
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-  GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-
-  SPI_I2S_SendData(SPI1, 0x21);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  SPI_I2S_SendData(SPI1, 0x08);
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-  ACC_PushData(SPI_I2S_ReceiveData(SPI1));
-
-
-  GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-  ACC_Enable = 1;
 }
 
 /*******************************************************************************
-* Function Name  : __GYRO_ISR
-* Description    : Reads GYRO rates
-* Input          : None.
+* Function Name  : SPI_TR
+* Description    : TR device
+* Input          : Message buffers and length
 * Return         : None.
 *******************************************************************************/
-void __GYRO_ISR(void)
+void SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
 {
-  uint32_t i;
+  uint16_t i;
 
-  if (!GYRO_Enable || !ACC_Enable)
-    return;
-
-  GYRO_ClearData();
-
-  for (i = 0; i < 9; i++)
+  for (i = 0; i < len; i++)
   {
-    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-    GPIO_ResetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+    SPI_I2S_SendData(SPI1, txbuf[i]);
 
-    SPI_I2S_SendData(SPI1, GYRO_TxBuffer[i]);
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 
     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-    GYRO_PushData(SPI_I2S_ReceiveData(SPI1));
 
-    if ((i + 1) % 3 == 0)
-      GPIO_SetBits(SIG_GYRO_CS_GPIO_PORT, SIG_GYRO_CS_GPIO_PIN);
+    rxbuf[i] = (uint8_t)(SPI_I2S_ReceiveData(SPI1) & (uint16_t)0x00FF);
   }
-
-  GYRO_ConvertData();
-}
-
-/*******************************************************************************
-* Function Name  : __ACC_ISR
-* Description    : Reads accelerometer rates
-* Input          : None.
-* Return         : None.
-*******************************************************************************/
-void __ACC_ISR(void)
-{
-  uint32_t i;
-
-  if (!GYRO_Enable || !ACC_Enable)
-    return;
-
-  ACC_ClearData();
-
-  for (i = 0; i < 9; i++)
-  {
-    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-    GPIO_ResetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-
-    SPI_I2S_SendData(SPI1, ACC_TxBuffer[i]);
-    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
-
-    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
-    ACC_PushData(SPI_I2S_ReceiveData(SPI1));
-
-    if ((i + 1) % 3 == 0)
-      GPIO_SetBits(SIG_ACC_CS_GPIO_PORT, SIG_ACC_CS_GPIO_PIN);
-  }
-
-  ACC_ConvertData();
 }
 
 /******************* (C) COPYRIGHT 2010 ROBOTIS *****END OF FILE****/
