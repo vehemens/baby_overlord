@@ -16,10 +16,14 @@
 #define MODVAL_COL		35
 #define PRSVAL_COL		42
 #define ERRORS_COL		49
+#ifdef MX28_1024
+#define INVERT_COL      56
+#else
 #define P_GAIN_COL      56
 #define I_GAIN_COL      63
 #define D_GAIN_COL      70
 #define INVERT_COL      77
+#endif
 
 
 // Position of Row
@@ -78,7 +82,9 @@ void EndCommandMode();
 void HelpCmd();
 void OnOffCmd(Robot::CM730 *cm730, bool on, int num_param, int *list);
 void SaveCmd(minIni *ini);
+#ifndef MX28_1024
 void GainCmd(Robot::CM730 *cm730, int value, int pid_col);
+#endif
 
 void ReadStep(Robot::CM730 *cm730);
 
