@@ -6,7 +6,11 @@
 
 
 #define PROGRAM_VERSION		"v1.00"
-#define SCREEN_COL			80
+#ifdef MX28_1024
+#define SCREEN_COL			66
+#else
+#define SCREEN_COL			88
+#endif
 #define SCREEN_ROW			22
 
 // Position of Column
