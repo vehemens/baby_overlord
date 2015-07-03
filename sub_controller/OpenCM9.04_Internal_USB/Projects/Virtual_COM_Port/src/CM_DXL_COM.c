@@ -673,11 +673,11 @@ void ProcessInstruction(uint8_t length)
 
       bCheckSum = GB_ID + bLength + gbInterruptCheckError;
 
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = GB_ID;
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bLength;
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = gbInterruptCheckError;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = GB_ID;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bLength;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = gbInterruptCheckError;
 
       gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
@@ -707,14 +707,14 @@ void ProcessInstruction(uint8_t length)
 
           bFixedData = (uint8_t)(wFixedData & 0xff);
 
-          gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
+          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
 
           bFixedData = (uint8_t)((wFixedData >> 8) & 0xff);
 
-          gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
+          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
@@ -725,7 +725,7 @@ void ProcessInstruction(uint8_t length)
         {
           bFixedData = gbpControlTable[bCount];
 
-          gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bFixedData;
+          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
@@ -733,7 +733,7 @@ void ProcessInstruction(uint8_t length)
       }
       bCheckSum ^= 0xff;
 
-      gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bCheckSum;
+      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bCheckSum;
 
       //if (gbTxD1Transmitting == 0) {
@@ -757,8 +757,8 @@ void ProcessInstruction(uint8_t length)
 
       //}
 
-      while (gbTxD1BufferWritePointer != gbTxD1BufferReadPointer)
-        CNTR_To_USB_Send_Data(gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+      while (gbTxBufferWritePointer != gbTxBufferReadPointer)
+        CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
 
       //while (gbTxD1Transmitting);
     }
@@ -893,12 +893,12 @@ void ReturnPacket(uint8_t bError)
 
     bCheckSum = ~(GB_ID + 2 + bError);
 
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 0xff;
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = GB_ID;
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = 2;
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bError;
-    gbpTxD1Buffer[gbTxD1BufferWritePointer++] = bCheckSum;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = GB_ID;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 2;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bError;
+    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
 
     //if (gbTxD1Transmitting==0) {
       //gbTxD1Transmitting = 1;
@@ -906,8 +906,8 @@ void ReturnPacket(uint8_t bError)
       //USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
     //}
 
-    while (gbTxD1BufferWritePointer != gbTxD1BufferReadPointer)
-      CNTR_To_USB_Send_Data(gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
+    while (gbTxBufferWritePointer != gbTxBufferReadPointer)
+      CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
 
     //while (gbTxD1Transmitting);
   }
