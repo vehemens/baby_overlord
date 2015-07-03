@@ -278,15 +278,7 @@ volatile uint8_t gbRxD0BufferReadPointer;
 volatile uint8_t gbTxD0BufferWritePointer;
 volatile uint8_t gbTxD0BufferReadPointer;
 
-volatile uint8_t gbpRxD1Buffer[256];
-volatile uint8_t gbpTxD1Buffer[256];
-volatile uint8_t gbRxD1BufferWritePointer;
-volatile uint8_t gbRxD1BufferReadPointer;
-volatile uint8_t gbTxD1BufferWritePointer;
-volatile uint8_t gbTxD1BufferReadPointer;
-
 volatile uint8_t gbTxD0Transmitting;
-volatile uint8_t gbTxD1Transmitting;
 
 volatile uint8_t gbMiliSec;
 
@@ -346,13 +338,7 @@ void ProcessInit(void)
   gbTxD0BufferWritePointer = 0;
   gbTxD0BufferReadPointer = 0;
 
-  gbRxD1BufferWritePointer = 0;
-  gbRxD1BufferReadPointer = 0;
-  gbTxD1BufferWritePointer = 0;
-  gbTxD1BufferReadPointer = 0;
-
   gbTxD0Transmitting = 0;
-  gbTxD1Transmitting = 0;
 
   GB_ID = DEFAULT_ID;
 
@@ -690,17 +676,6 @@ void ProcessInstruction(uint8_t length)
         uint8_t bFixedData;
         uint16_t wFixedData;
 
-#if 0
-        if (bCount == P_RX_REMOCON_DATA_ARRIVED)
-        {
-          GB_RX_REMOCON_DATA_ARRIVED = zgb_rx_check();
-        }
-        else if (bCount == P_RX_REMOCON_DATA_L)
-        {
-          GW_RX_REMOCON_DATA = zgb_rx_data();
-        }
-#endif
-
         if (gbpDataSize[bCount] == 2 && bCount < bEndAddress)
         {
           wFixedData = WORD_CAST(gbpControlTable[bCount]);
@@ -736,31 +711,8 @@ void ProcessInstruction(uint8_t length)
       gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bCheckSum;
 
-      //if (gbTxD1Transmitting == 0) {
-        //gbTxD1Transmitting = 1;
-        //if (TXD1_FINISH) {
-        //USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-        //USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
-        //TXD1_DATA = gbpTxD1Buffer[gbTxD1BufferReadPointer++];
-      //}
-
-#if 0
-      if (GPIO_ReadOutputDataBit(PORT_ENABLE_TXD, PIN_ENABLE_TXD) == Bit_RESET) {
-        GPIO_ResetBits(PORT_ENABLE_RXD, PIN_ENABLE_RXD);  // RX Disable
-        GPIO_SetBits(PORT_ENABLE_TXD, PIN_ENABLE_TXD);  // TX Enable
-#endif
-      //if (GPIO_ReadOutputDataBit(PORT_DXL_DIR, PIN_DXL_DIR) == Bit_RESET) {
-        //GPIO_SetBits(PORT_DXL_DIR, PIN_DXL_DIR);  // TX Enable
-
-        //USART_SendData(DXL_USART, gbpTxD0Buffer[gbTxD0BufferReadPointer++]);
-        //USART_ITConfig(DXL_USART, USART_IT_TC, ENABLE);
-
-      //}
-
       while (gbTxBufferWritePointer != gbTxBufferReadPointer)
         CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
-
-      //while (gbTxD1Transmitting);
     }
   }
 
@@ -900,16 +852,8 @@ void ReturnPacket(uint8_t bError)
     gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bError;
     gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
 
-    //if (gbTxD1Transmitting==0) {
-      //gbTxD1Transmitting = 1;
-      //USART_SendData(PC_USART, gbpTxD1Buffer[gbTxD1BufferReadPointer++]);
-      //USART_ITConfig(PC_USART, USART_IT_TC, ENABLE);
-    //}
-
     while (gbTxBufferWritePointer != gbTxBufferReadPointer)
       CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
-
-    //while (gbTxD1Transmitting);
   }
 }
 
