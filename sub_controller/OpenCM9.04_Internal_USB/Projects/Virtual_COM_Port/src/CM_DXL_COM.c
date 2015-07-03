@@ -340,6 +340,8 @@ void ProcessInit(void)
 
   gbTxD0Transmitting = 0;
 
+  gbInterruptCheckError = 0;
+
   GB_ID = DEFAULT_ID;
 
   GW_LED_HEAD = ((0 >> 3) << 10) | ((255 >> 3) << 5) | (0 >> 3);
