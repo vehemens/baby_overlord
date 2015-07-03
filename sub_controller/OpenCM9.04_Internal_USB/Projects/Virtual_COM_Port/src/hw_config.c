@@ -124,6 +124,11 @@ void IO_Config(void)
   GPIO_Init(DXL_USART_DIR_GPIO_PORT, &GPIO_InitStructure);
 
   /* LEDs */
+  GPIO_InitStructure.GPIO_Pin = LED_TEST_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(LED_TEST_GPIO_PORT, &GPIO_InitStructure);
+
   GPIO_InitStructure.GPIO_Pin = LED_MANAGE_GPIO_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -140,6 +145,10 @@ void IO_Config(void)
   GPIO_Init(LED_PLAY_GPIO_PORT, &GPIO_InitStructure);
 
   /* Buttons */
+  GPIO_InitStructure.GPIO_Pin = SW_TEST_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+  GPIO_Init(SW_TEST_GPIO_PORT, &GPIO_InitStructure);
+
   GPIO_InitStructure.GPIO_Pin = SW_MODE_GPIO_PIN;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
   GPIO_Init(SW_MODE_GPIO_PORT, &GPIO_InitStructure);
@@ -182,6 +191,7 @@ void IO_Config(void)
   GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
 
   /* LEDs */
+  GPIO_SetBits(LED_TEST_GPIO_PORT, LED_TEST_GPIO_PIN);
   GPIO_SetBits(LED_MANAGE_GPIO_PORT, LED_MANAGE_GPIO_PIN);
   GPIO_SetBits(LED_EDIT_GPIO_PORT, LED_EDIT_GPIO_PIN);
   GPIO_SetBits(LED_PLAY_GPIO_PORT, LED_PLAY_GPIO_PIN);
