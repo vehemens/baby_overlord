@@ -397,7 +397,7 @@ void CM730::MakeBulkReadPacket()
     m_BulkReadTxPacket[INSTRUCTION]     = INST_BULK_READ;
     m_BulkReadTxPacket[PARAMETER]       = (unsigned char)0x0;
 
-    if(Ping(CM730::ID_CM, 0) == SUCCESS)
+    //if(Ping(CM730::ID_CM, 0) == SUCCESS)
     {
         m_BulkReadTxPacket[PARAMETER+3*number+1] = 30;
         m_BulkReadTxPacket[PARAMETER+3*number+2] = CM730::ID_CM;
