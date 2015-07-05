@@ -63,7 +63,7 @@ Walking::Walking()
 	R_ELBOW =  29.300;
 	L_ELBOW = -29.593;
 	HEAD_PAN = 0;
-	HEAD_TILT = Kinematics::EYE_TILT_OFFSET_ANGLE;
+	HEAD_TILT = Kinematics::GetInstance()->EYE_TILT_OFFSET_ANGLE;
 }
 
 Walking::~Walking()
@@ -171,10 +171,10 @@ bool Walking::computeIK(double *out, double x, double y, double z, double a, dou
 	Matrix3D Tad, Tda, Tcd, Tdc, Tac;
 	Vector3D vec;
     double _Rac, _Acos, _Atan, _k, _l, _m, _n, _s, _c, _theta;
-	double LEG_LENGTH = Kinematics::LEG_LENGTH;
-	double THIGH_LENGTH = Kinematics::THIGH_LENGTH;
-	double CALF_LENGTH = Kinematics::CALF_LENGTH;
-	double ANKLE_LENGTH = Kinematics::ANKLE_LENGTH;
+	double LEG_LENGTH = Kinematics::GetInstance()->LEG_LENGTH;
+	double THIGH_LENGTH = Kinematics::GetInstance()->THIGH_LENGTH;
+	double CALF_LENGTH = Kinematics::GetInstance()->CALF_LENGTH;
+	double ANKLE_LENGTH = Kinematics::GetInstance()->ANKLE_LENGTH;
 
 	Tad.SetTransform(Point3D(x, y, z - LEG_LENGTH), Vector3D(a * 180.0 / PI, b * 180.0 / PI, c * 180.0 / PI));
 
@@ -539,7 +539,7 @@ void Walking::Process()
         m_Body_Swing_Y = -ep[1];
         m_Body_Swing_Z = ep[2];
     }
-	m_Body_Swing_Z -= Kinematics::LEG_LENGTH;
+	m_Body_Swing_Z -= Kinematics::GetInstance()->LEG_LENGTH;
 
     // Compute arm swing
     if(m_X_Move_Amplitude == 0)

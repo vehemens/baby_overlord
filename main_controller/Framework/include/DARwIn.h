@@ -14,6 +14,7 @@
 #include "MotionManager.h"
 #include "MotionStatus.h"
 #include "JointData.h"
+#include "Kinematics.h"
 #include "Action.h"
 #include "Walking.h"
 #include "Head.h"

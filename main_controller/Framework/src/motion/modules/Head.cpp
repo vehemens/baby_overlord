@@ -26,11 +26,11 @@ Head::Head()
 
 	m_LeftLimit = 70;
 	m_RightLimit = -70;
-	m_TopLimit = Kinematics::EYE_TILT_OFFSET_ANGLE;
-	m_BottomLimit = Kinematics::EYE_TILT_OFFSET_ANGLE - 65;
+	m_TopLimit = Kinematics::GetInstance()->EYE_TILT_OFFSET_ANGLE;
+	m_BottomLimit = Kinematics::GetInstance()->EYE_TILT_OFFSET_ANGLE - 65;
 
 	m_Pan_Home = 0.0;
-	m_Tilt_Home = Kinematics::EYE_TILT_OFFSET_ANGLE - 30.0;
+	m_Tilt_Home = Kinematics::GetInstance()->EYE_TILT_OFFSET_ANGLE - 30.0;
 
 	m_Joint.SetEnableHeadOnly(true);
 }
