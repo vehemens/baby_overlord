@@ -64,24 +64,6 @@ Walking::Walking()
 	L_ELBOW = -29.593;
 	HEAD_PAN = 0;
 	HEAD_TILT = Kinematics::EYE_TILT_OFFSET_ANGLE;
-
-#ifdef MX28_1024
-	m_Joint.SetSlope(JointData::ID_R_SHOULDER_PITCH, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-	m_Joint.SetSlope(JointData::ID_L_SHOULDER_PITCH, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-    m_Joint.SetSlope(JointData::ID_R_SHOULDER_ROLL, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-    m_Joint.SetSlope(JointData::ID_L_SHOULDER_ROLL, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-    m_Joint.SetSlope(JointData::ID_R_ELBOW, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-    m_Joint.SetSlope(JointData::ID_L_ELBOW, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-	m_Joint.SetSlope(JointData::ID_HEAD_PAN, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-
-#else
-    m_Joint.SetPGain(JointData::ID_R_SHOULDER_PITCH, 8);
-    m_Joint.SetPGain(JointData::ID_L_SHOULDER_PITCH, 8);
-    m_Joint.SetPGain(JointData::ID_R_SHOULDER_ROLL, 8);
-    m_Joint.SetPGain(JointData::ID_L_SHOULDER_ROLL, 8);
-    m_Joint.SetPGain(JointData::ID_R_ELBOW, 8);
-    m_Joint.SetPGain(JointData::ID_L_ELBOW, 8);
-#endif
 }
 
 Walking::~Walking()
@@ -658,14 +640,47 @@ void Walking::Process()
 	m_Joint.SetAngle(JointData::ID_HEAD_PAN,            HEAD_PAN);
 	m_Joint.SetAngle(JointData::ID_HEAD_TILT,           HEAD_TILT);
 
-	for(int id = JointData::ID_R_HIP_YAW; id <= JointData::ID_L_ANKLE_ROLL; id++)
+	for(int id=JointData::ID_R_SHOULDER_PITCH; id<JointData::NUMBER_OF_JOINTS; id++)
 	{
+	    switch(id)
+	    {
+	    case JointData::ID_R_HIP_YAW:
+	    case JointData::ID_L_HIP_YAW:
+	    case JointData::ID_R_HIP_ROLL:
+	    case JointData::ID_L_HIP_ROLL:
+	    case JointData::ID_R_HIP_PITCH:
+	    case JointData::ID_L_HIP_PITCH:
+	    case JointData::ID_R_KNEE:
+	    case JointData::ID_L_KNEE:
+	    case JointData::ID_R_ANKLE_PITCH:
+	    case JointData::ID_L_ANKLE_PITCH:
+	    case JointData::ID_R_ANKLE_ROLL:
+	    case JointData::ID_L_ANKLE_ROLL:
 #ifdef MX28_1024
-	    m_Joint.SetSlope(id, JointData::C_SLOPE, JointData::C_SLOPE);
+	        m_Joint.SetSlope(id, JointData::C_SLOPE, JointData::C_SLOPE);
 #else
-	    m_Joint.SetPGain(id, P_GAIN);
-        m_Joint.SetIGain(id, I_GAIN);
-        m_Joint.SetDGain(id, D_GAIN);
+	        m_Joint.SetPGain(id, P_GAIN);
+	        m_Joint.SetIGain(id, I_GAIN);
+	        m_Joint.SetDGain(id, D_GAIN);
 #endif
+		break;
+
+	    case JointData::ID_R_SHOULDER_PITCH:
+	    case JointData::ID_L_SHOULDER_PITCH:
+	    case JointData::ID_R_SHOULDER_ROLL:
+	    case JointData::ID_L_SHOULDER_ROLL:
+	    case JointData::ID_R_ELBOW:
+	    case JointData::ID_L_ELBOW:
+	    case JointData::ID_HEAD_PAN:
+	    case JointData::ID_HEAD_TILT:
+#ifdef MX28_1024
+	        m_Joint.SetSlope(id, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
+#else
+	        m_Joint.SetPGain(id, 8);
+	        m_Joint.SetIGain(id, JointData::I_GAIN_DEFAULT);
+	        m_Joint.SetDGain(id, JointData::D_GAIN_DEFAULT);
+#endif
+		break;
+	    }
 	}
 }
