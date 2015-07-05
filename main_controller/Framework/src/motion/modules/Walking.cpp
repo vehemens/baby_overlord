@@ -657,7 +657,7 @@ void Walking::Process()
 	    case JointData::ID_R_ANKLE_ROLL:
 	    case JointData::ID_L_ANKLE_ROLL:
 #ifdef MX28_1024
-	        m_Joint.SetSlope(id, JointData::C_SLOPE, JointData::C_SLOPE);
+	        m_Joint.SetSlope(id, C_SLOPE, C_SLOPE);
 #else
 	        m_Joint.SetPGain(id, P_GAIN);
 	        m_Joint.SetIGain(id, I_GAIN);
