@@ -36,10 +36,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
-/* Interval between sending IN packets in frame number (1 frame = 1ms) */
-#define VCOMPORT_IN_FRAME_INTERVAL             5
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 extern uint8_t USART_Rx_Buffer[];
@@ -123,18 +119,10 @@ void EP3_OUT_Callback(void)
 *******************************************************************************/
 void SOF_Callback(void)
 {
-  static uint32_t FrameCount = 0;
-  
   if(bDeviceState == CONFIGURED)
   {
-    if (FrameCount++ == VCOMPORT_IN_FRAME_INTERVAL)
-    {
-      /* Reset the frame counter */
-      FrameCount = 0;
-      
-      /* Check the data to be sent through IN pipe */
-      Handle_USBAsynchXfer();
-    }
+    /* Check the data to be sent through IN pipe */
+    Handle_USBAsynchXfer();
   }  
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
