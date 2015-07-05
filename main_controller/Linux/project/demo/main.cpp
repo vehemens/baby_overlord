@@ -120,7 +120,7 @@ int main(void)
     if(0 < firm_ver && firm_ver < 27)
     {
 #ifdef MX28_1024
-        Action::GetInstance()->LoadFile(MOTION_FILE_PATH);
+        Action::GetInstance()->LoadFile((char*)MOTION_FILE_PATH);
 #else
         fprintf(stderr, "MX-28's firmware is not support 4096 resolution!! \n");
         fprintf(stderr, "Upgrade MX-28's firmware to version 27(0x1B) or higher.\n\n");
