@@ -316,7 +316,7 @@ int LinuxCamera::v4l2SetControl(int control, int value)
 {
     struct v4l2_control control_s;
     struct v4l2_queryctrl queryctrl;
-    int min, max, step, val_def;
+    int min, max; //, step, val_def;
     int err;
 
     queryctrl.id = control;
@@ -327,8 +327,8 @@ int LinuxCamera::v4l2SetControl(int control, int value)
 
     min = queryctrl.minimum;
     max = queryctrl.maximum;
-    step = queryctrl.step;
-    val_def = queryctrl.default_value;
+    //step = queryctrl.step;
+    //val_def = queryctrl.default_value;
     if((value >= min) && (value <= max)) {
         control_s.id = control;
         control_s.value = value;
@@ -387,7 +387,7 @@ int LinuxCamera::ReadFrame()
 #if 0
     for(int i = 0; i < fbuffer->m_YUVFrame->m_ImageSize; i++)
 #else
-    for(int i = 0; i < buf.bytesused; i++)
+    for(unsigned int i = 0; i < buf.bytesused; i++)
 #endif
         fbuffer->m_YUVFrame->m_ImageData[i] = ((unsigned char*)buffers[buf.index].start)[i];
 #ifdef FLIP_FRAME
