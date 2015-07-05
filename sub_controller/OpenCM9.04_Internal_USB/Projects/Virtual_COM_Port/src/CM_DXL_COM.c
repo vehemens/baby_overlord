@@ -278,8 +278,6 @@ volatile uint8_t gbRxD0BufferReadPointer;
 volatile uint8_t gbTxD0BufferWritePointer;
 volatile uint8_t gbTxD0BufferReadPointer;
 
-volatile uint8_t gbTxD0Transmitting;
-
 volatile uint8_t gbMiliSec;
 
 uint8_t gbRxID;
@@ -337,8 +335,6 @@ void ProcessInit(void)
   gbRxD0BufferReadPointer = 0;
   gbTxD0BufferWritePointer = 0;
   gbTxD0BufferReadPointer = 0;
-
-  gbTxD0Transmitting = 0;
 
   gbInterruptCheckError = 0;
 
@@ -438,7 +434,7 @@ RX_PACKET_TIMEOUT:
         #endif
       }
       gbInstruction = gbpRxInterruptBuffer[gbRxBufferReadPointer++];
-      bCheckSum = gbRxID+bLength+gbInstruction;
+      bCheckSum = gbRxID + bLength + gbInstruction;
 
       for (bCount = 0; bCount < gbParameterLength + 1; bCount++)
       {
@@ -469,6 +465,7 @@ RX_PACKET_TIMEOUT:
       {
         //buffer initialize
         gbRxBufferWritePointer = gbRxBufferReadPointer;
+
         if (gbInstruction == INST_PING) {
         }
         else {
@@ -500,7 +497,7 @@ void ProcessInstruction(uint8_t length)
     gbRxD0BufferWritePointer = gbRxD0BufferReadPointer = 0;
 
     bPrevID = 0xFF;
-    for (bCount = 2; bCount < bLength - 3; bCount += (3))
+    for (bCount = 2; bCount < bLength - 3; bCount += 3)
     {
       if (gbpParameter[bCount] == GB_ID)
       {
@@ -582,7 +579,7 @@ void ProcessInstruction(uint8_t length)
               }
 
               bWaitInstruction = gbpRxD0Buffer[gbRxD0BufferReadPointer++];
-              bWaitCheckSum = bWaitRxID+bWaitLength + bWaitInstruction;
+              bWaitCheckSum = bWaitRxID + bWaitLength + bWaitInstruction;
 
               for (bCount = 0; bCount < bWaitParameterLength + 1; bCount++)
               {
@@ -618,7 +615,7 @@ void ProcessInstruction(uint8_t length)
     }
   }
 
-  if (gbInstruction == INST_SYNC_WRITE || gbInstruction == INST_SYNC_REG_WRITE) //INST_SYNC_WR or INST_SYNC_REG_WR
+  if (gbInstruction == INST_SYNC_WRITE || gbInstruction == INST_SYNC_REG_WRITE)
   {
     uint8_t bTmpLength, bCount0;
     bTmpLength = gbpParameter[1];
@@ -724,10 +721,9 @@ void ProcessInstruction(uint8_t length)
       (gbpParameter[4] == 0x0f) && (gbpParameter[5] == 0xaa) &&
       (gbParameterLength == 6))
     {
-      if (gbStartAddress < CONTROL_TABLE_LEN) {
+      if (gbStartAddress < CONTROL_TABLE_LEN)
+      {
         BKP_WriteBackupRegister((gbStartAddress + 1) << 2, gbpParameter[1]);
-      }
-      else {
       }
     }
   }
@@ -825,7 +821,6 @@ uint8_t WriteControlTableRangeCheck(void)
     {
       return RANGE_ERROR_BIT;
     }
-    //else if (bPointer == P_GOAL_POSITION_L)
   }
 
   return 0;

@@ -374,7 +374,7 @@ void Leave_LowPowerMode(void)
 * Function Name  : USB_Cable_Config
 * Description    : Software Connection/Disconnection of USB Cable
 * Input          : None.
-* Return         : Status
+* Return         : None.
 *******************************************************************************/
 void USB_Cable_Config(FunctionalState NewState)
 {
@@ -393,7 +393,7 @@ void USB_Cable_Config(FunctionalState NewState)
 * Description    : send the received data from USB to the UART 0.
 * Input          : data_buffer: data address.
                    Nb_bytes: number of bytes to send.
-* Return         : none.
+* Return         : None.
 *******************************************************************************/
 extern uint8_t gbpRxInterruptBuffer[];
 extern uint8_t gbRxBufferWritePointer;
@@ -421,7 +421,7 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 * Function Name  : Handle_USBAsynchXfer.
 * Description    : send data to USB.
 * Input          : None.
-* Return         : none.
+* Return         : None.
 *******************************************************************************/
 void Handle_USBAsynchXfer(void)
 {
@@ -456,7 +456,7 @@ void Handle_USBAsynchXfer(void)
 * Function Name  : CNTR_To_USB_Send_Data.
 * Description    : send the received data from CNTR to USB.
 * Input          : None.
-* Return         : none.
+* Return         : None.
 *******************************************************************************/
 void CNTR_To_USB_Send_Data(uint8_t data)
 {
@@ -467,7 +467,7 @@ void CNTR_To_USB_Send_Data(uint8_t data)
 * Function Name  : USART_To_USB_Send_Data.
 * Description    : send the received data from USART to USB.
 * Input          : None.
-* Return         : none.
+* Return         : None.
 *******************************************************************************/
 void USART_To_USB_Send_Data(void)
 {
