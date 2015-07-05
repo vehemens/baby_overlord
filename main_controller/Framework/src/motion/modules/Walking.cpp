@@ -42,7 +42,9 @@ Walking::Walking()
 	BALANCE_HIP_ROLL_GAIN = 0.5;
 	BALANCE_ANKLE_ROLL_GAIN = 1.0;
 
-#ifndef MX28_1024
+#ifdef MX28_1024
+	C_SLOPE = JointData::SLOPE_DEFAULT;
+#else
 	P_GAIN = JointData::P_GAIN_DEFAULT;
     I_GAIN = JointData::I_GAIN_DEFAULT;
     D_GAIN = JointData::D_GAIN_DEFAULT;
@@ -123,9 +125,11 @@ void Walking::LoadINISettings(minIni* ini, const std::string &section)
     if((value = ini->getd(section, "head_pan", INVALID_VALUE)) != INVALID_VALUE)                HEAD_PAN = value;
     if((value = ini->getd(section, "head_tilt", INVALID_VALUE)) != INVALID_VALUE)               HEAD_TILT = value;
 
-#ifndef MX28_1024
     int ivalue = INVALID_VALUE;
 
+#ifdef MX28_1024
+    if((ivalue = ini->geti(section, "c_slope", INVALID_VALUE)) != INVALID_VALUE)                C_SLOPE = ivalue;
+#else
     if((ivalue = ini->geti(section, "p_gain", INVALID_VALUE)) != INVALID_VALUE)                 P_GAIN = ivalue;
     if((ivalue = ini->geti(section, "i_gain", INVALID_VALUE)) != INVALID_VALUE)                 I_GAIN = ivalue;
     if((ivalue = ini->geti(section, "d_gain", INVALID_VALUE)) != INVALID_VALUE)                 D_GAIN = ivalue;
@@ -166,7 +170,9 @@ void Walking::SaveINISettings(minIni* ini, const std::string &section)
     ini->put(section,   "head_pan",                 HEAD_PAN);
     ini->put(section,   "head_tilt",                HEAD_TILT);
 
-#ifndef MX28_1024
+#ifdef MX28_1024
+    ini->put(section,   "c_slope",                  C_SLOPE);
+#else
     ini->put(section,   "p_gain",                   P_GAIN);
     ini->put(section,   "i_gain",                   I_GAIN);
     ini->put(section,   "d_gain",                   D_GAIN);
@@ -652,12 +658,14 @@ void Walking::Process()
 	m_Joint.SetAngle(JointData::ID_HEAD_PAN,            HEAD_PAN);
 	m_Joint.SetAngle(JointData::ID_HEAD_TILT,           HEAD_TILT);
 
-#ifndef MX28_1024
 	for(int id = JointData::ID_R_HIP_YAW; id <= JointData::ID_L_ANKLE_ROLL; id++)
 	{
+#ifdef MX28_1024
+	    m_Joint.SetSlope(id, JointData::C_SLOPE, JointData::C_SLOPE);
+#else
 	    m_Joint.SetPGain(id, P_GAIN);
         m_Joint.SetIGain(id, I_GAIN);
         m_Joint.SetDGain(id, D_GAIN);
-	}
 #endif
+	}
 }
