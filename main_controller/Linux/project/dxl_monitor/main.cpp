@@ -45,13 +45,14 @@ int main()
 		while(1)
 		{
 			Prompt(gID);
-			gets(input);
+			//gets(input);
+			fgets(input, MAXNUM_INPUTCHAR, stdin);
 			fflush(stdin);
 			input_len = strlen(input);
 			if(input_len == 0)
 				continue;
 
-			token = strtok( input, " " );
+			token = strtok( input, " \n" );
 			if(token == 0)
 				continue;
 

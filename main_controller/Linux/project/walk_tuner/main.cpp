@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     minIni* ini = new minIni(INI_FILE_PATH);
 
-    mjpg_streamer* streamer = new mjpg_streamer(0, 0);
+    //mjpg_streamer* streamer = new mjpg_streamer(0, 0);
     httpd::ini = ini;
 
     //////////////////// Framework Initialize ////////////////////////////

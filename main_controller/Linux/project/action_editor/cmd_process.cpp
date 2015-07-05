@@ -126,7 +126,7 @@ void GoToCursor(int col, int row)
 {
 	char *cursor;
 	char *esc_sequence;
-	cursor = tigetstr("cup");
+	cursor = tigetstr((char *)"cup");
 	esc_sequence = tparm(cursor, row, col);
 	putp(esc_sequence);
 
@@ -264,8 +264,8 @@ void DrawIntro(CM730 *cm730)
 {
 	int nrows, ncolumns;
     setupterm(NULL, fileno(stdout), (int *)0);
-    nrows = tigetnum("lines");
-    ncolumns = tigetnum("cols");
+    nrows = tigetnum((char *)"lines");
+    ncolumns = tigetnum((char *)"cols");
 
 	system("clear");
 	printf("\n");
@@ -568,7 +568,7 @@ int GetValue()
 	}
 	else if( col <= STP6_COL )
 	{
-		int i;
+		int i = 0;
 		switch(col)
 		{
 		case STP0_COL:
@@ -690,7 +690,7 @@ void SetValue(CM730 *cm730, int value)
 	}
 	else if( col <= STP6_COL )
 	{
-		int i;
+		int i = 0;
 		switch(col)
 		{
 		case STP0_COL:
@@ -1382,7 +1382,8 @@ void NameCmd()
 	GoToCursor(CMD_COL, CMD_ROW);
 	printf("name: ");
 	char name[80] = {0};
-	gets(name);
+	//gets(name);
+	fgets(name, 80, stdin);
 	fflush(stdin);
 	for(int i=0; i<=Action::MAXNUM_NAME; i++)
 		Page.header.name[i] = name[i];

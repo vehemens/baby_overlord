@@ -148,7 +148,7 @@ void GoToCursor(int col, int row)
 {
 	char *cursor;
 	char *esc_sequence;
-	cursor = tigetstr("cup");
+	cursor = tigetstr((char *)"cup");
 	esc_sequence = tparm(cursor, row, col);
 	putp(esc_sequence);
 
@@ -292,8 +292,8 @@ void DrawIntro(CM730 *cm730)
 
 	int nrows, ncolumns;
     setupterm(NULL, fileno(stdout), (int *)0);
-    nrows = tigetnum("lines");
-    ncolumns = tigetnum("cols");
+    nrows = tigetnum((char *)"lines");
+    ncolumns = tigetnum((char *)"cols");
 
 	system("clear");
 	printf("\n");
