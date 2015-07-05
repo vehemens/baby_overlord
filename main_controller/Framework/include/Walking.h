@@ -132,6 +132,16 @@ namespace Robot
 		double PELVIS_OFFSET;
 		double HIP_PITCH_OFFSET;
 
+		// Upper body angles
+		double R_SHOULDER_PITCH;
+		double L_SHOULDER_PITCH;
+		double R_SHOULDER_ROLL;
+		double L_SHOULDER_ROLL;
+		double R_ELBOW;
+		double L_ELBOW;
+		double HEAD_PAN;
+		double HEAD_TILT;
+
 		int    P_GAIN;
 		int    I_GAIN;
 		int    D_GAIN;

@@ -54,14 +54,14 @@ Walking::Walking()
 	A_MOVE_AIM_ON = false;
 	BALANCE_ENABLE = true;
 
-	m_Joint.SetAngle(JointData::ID_R_SHOULDER_PITCH, -48.345);
-	m_Joint.SetAngle(JointData::ID_L_SHOULDER_PITCH, 41.313);
-	m_Joint.SetAngle(JointData::ID_R_SHOULDER_ROLL, -17.873);
-    m_Joint.SetAngle(JointData::ID_L_SHOULDER_ROLL, 17.580);
-	m_Joint.SetAngle(JointData::ID_R_ELBOW, 29.300);
-	m_Joint.SetAngle(JointData::ID_L_ELBOW, -29.593);
-
-	m_Joint.SetAngle(JointData::ID_HEAD_TILT, Kinematics::EYE_TILT_OFFSET_ANGLE);
+	R_SHOULDER_PITCH = -48.345;
+	L_SHOULDER_PITCH =  41.313;
+	R_SHOULDER_ROLL = -17.873;
+	L_SHOULDER_ROLL =  17.580;
+	R_ELBOW =  29.300;
+	L_ELBOW = -29.593;
+	HEAD_PAN = 0;
+	HEAD_TILT = Kinematics::EYE_TILT_OFFSET_ANGLE;
 
 #ifdef MX28_1024
 	m_Joint.SetSlope(JointData::ID_R_SHOULDER_PITCH, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
@@ -114,6 +114,15 @@ void Walking::LoadINISettings(minIni* ini, const std::string &section)
     if((value = ini->getd(section, "balance_hip_roll_gain", INVALID_VALUE)) != INVALID_VALUE)   BALANCE_HIP_ROLL_GAIN = value;
     if((value = ini->getd(section, "balance_ankle_roll_gain", INVALID_VALUE)) != INVALID_VALUE) BALANCE_ANKLE_ROLL_GAIN = value;
 
+    if((value = ini->getd(section, "r_shoulder_pitch", INVALID_VALUE)) != INVALID_VALUE)        R_SHOULDER_PITCH = value;
+    if((value = ini->getd(section, "l_shoulder_pitch", INVALID_VALUE)) != INVALID_VALUE)        L_SHOULDER_PITCH = value;
+    if((value = ini->getd(section, "r_shoulder_roll", INVALID_VALUE)) != INVALID_VALUE)         R_SHOULDER_ROLL = value;
+    if((value = ini->getd(section, "l_shoulder_roll", INVALID_VALUE)) != INVALID_VALUE)         L_SHOULDER_ROLL = value;
+    if((value = ini->getd(section, "r_elbow", INVALID_VALUE)) != INVALID_VALUE)                 R_ELBOW = value;
+    if((value = ini->getd(section, "l_elbow", INVALID_VALUE)) != INVALID_VALUE)                 L_ELBOW = value;
+    if((value = ini->getd(section, "head_pan", INVALID_VALUE)) != INVALID_VALUE)                HEAD_PAN = value;
+    if((value = ini->getd(section, "head_tilt", INVALID_VALUE)) != INVALID_VALUE)               HEAD_TILT = value;
+
 #ifndef MX28_1024
     int ivalue = INVALID_VALUE;
 
@@ -147,6 +156,15 @@ void Walking::SaveINISettings(minIni* ini, const std::string &section)
     ini->put(section,   "balance_ankle_pitch_gain", BALANCE_ANKLE_PITCH_GAIN);
     ini->put(section,   "balance_hip_roll_gain",    BALANCE_HIP_ROLL_GAIN);
     ini->put(section,   "balance_ankle_roll_gain",  BALANCE_ANKLE_ROLL_GAIN);
+
+    ini->put(section,   "r_shoulder_pitch",         R_SHOULDER_PITCH);
+    ini->put(section,   "l_shoulder_pitch",         L_SHOULDER_PITCH);
+    ini->put(section,   "r_shoulder_roll",          R_SHOULDER_ROLL);
+    ini->put(section,   "l_shoulder_roll",          L_SHOULDER_ROLL);
+    ini->put(section,   "r_elbow",                  R_ELBOW);
+    ini->put(section,   "l_elbow",                  L_ELBOW);
+    ini->put(section,   "head_pan",                 HEAD_PAN);
+    ini->put(section,   "head_tilt",                HEAD_TILT);
 
 #ifndef MX28_1024
     ini->put(section,   "p_gain",                   P_GAIN);
@@ -375,6 +393,10 @@ void Walking::Process()
 	int dir[14]          = {   -1,        -1,          1,         1,         -1,            1,          -1,        -1,         -1,         -1,         1,            1,           1,           -1      };
     double initAngle[14] = {   0.0,       0.0,        0.0,       0.0,        0.0,          0.0,         0.0,       0.0,        0.0,        0.0,       0.0,          0.0,       -48.345,       41.313    };
 	int outValue[14];
+
+    // hack
+    initAngle[12] = R_SHOULDER_PITCH;
+    initAngle[13] = L_SHOULDER_PITCH;
 
     // Update walk parameters
     if(m_Time == 0)
@@ -622,7 +644,13 @@ void Walking::Process()
 	m_Joint.SetValue(JointData::ID_L_ANKLE_ROLL,        outValue[11]);
 	m_Joint.SetValue(JointData::ID_R_SHOULDER_PITCH,    outValue[12]);
 	m_Joint.SetValue(JointData::ID_L_SHOULDER_PITCH,    outValue[13]);
-	m_Joint.SetAngle(JointData::ID_HEAD_PAN, A_MOVE_AMPLITUDE);
+
+	m_Joint.SetAngle(JointData::ID_R_SHOULDER_ROLL,     R_SHOULDER_ROLL);
+	m_Joint.SetAngle(JointData::ID_L_SHOULDER_ROLL,     L_SHOULDER_ROLL);
+	m_Joint.SetAngle(JointData::ID_R_ELBOW,             R_ELBOW);
+	m_Joint.SetAngle(JointData::ID_L_ELBOW,             L_ELBOW);
+	m_Joint.SetAngle(JointData::ID_HEAD_PAN,            HEAD_PAN);
+	m_Joint.SetAngle(JointData::ID_HEAD_TILT,           HEAD_TILT);
 
 #ifndef MX28_1024
 	for(int id = JointData::ID_R_HIP_YAW; id <= JointData::ID_L_ANKLE_ROLL; id++)
