@@ -452,6 +452,7 @@ void LinuxCamera::CaptureFrame()
     }
 }
 
+#ifdef WEBOTS
 // WEBOTS PART //
 
 int LinuxCamera::ReadFrameWb()
@@ -569,4 +570,4 @@ void LinuxCamera::CaptureFrameWb()
         /* EAGAIN - continue select loop. */
     }
 }
-
+#endif

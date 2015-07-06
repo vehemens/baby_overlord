@@ -26,9 +26,11 @@ namespace Robot
         static void HFlipYUV(Image* img);
         static void VFlipYUV(Image* img);
 
+#ifdef WEBOTS
 // ***   WEBOTS PART  *** //
 
 		static void BGRAtoHSV(FrameBuffer *buf);
+#endif
 	};
 }
 

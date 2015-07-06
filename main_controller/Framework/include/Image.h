@@ -21,7 +21,9 @@ namespace Robot
 	    static const int YUV_PIXEL_SIZE = 4;
 	    static const int RGB_PIXEL_SIZE = 3;
 	    static const int HSV_PIXEL_SIZE = 4;
+#ifdef WEBOTS
 	    static const int BGRA_PIXEL_SIZE = 4;  // For Webots only
+#endif
 
         unsigned char *m_ImageData; /* pointer to aligned image data */
         int m_Width;                /* image width in pixels */
@@ -47,7 +49,9 @@ namespace Robot
 	    Image *m_YUVFrame;
 	    Image *m_RGBFrame;
 	    Image *m_HSVFrame;
+#ifdef WEBOTS
 	    Image *m_BGRAFrame;  // for Webots only
+#endif
 
 	    FrameBuffer(int width, int height);
 	    virtual ~FrameBuffer();

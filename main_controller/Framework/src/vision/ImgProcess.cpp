@@ -241,6 +241,7 @@ void ImgProcess::VFlipYUV(Image* img)
 }
 #endif
 
+#ifdef WEBOTS
 // ***   WEBOTS PART  *** //
 
 void ImgProcess::BGRAtoHSV(FrameBuffer *buf)
@@ -298,4 +299,4 @@ void ImgProcess::BGRAtoHSV(FrameBuffer *buf)
         buf->m_HSVFrame->m_ImageData[i*buf->m_HSVFrame->m_PixelSize+3] = (unsigned char)(tv & 0xFF);
     }
 }
-
+#endif

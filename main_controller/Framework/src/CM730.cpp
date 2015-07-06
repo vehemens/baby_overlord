@@ -702,6 +702,7 @@ int CM730::MakeColor(int red, int green, int blue)
 	return (int)(((b>>3)<<10)|((g>>3)<<5)|(r>>3));
 }
 
+#ifdef WEBOTS
 // ***   WEBOTS PART  *** //
 
 void CM730::MakeBulkReadPacketWb()
@@ -730,4 +731,4 @@ void CM730::MakeBulkReadPacketWb()
 
 		m_BulkReadTxPacket[LENGTH] = (number * 3) + 3;
 }
-
+#endif

@@ -58,7 +58,9 @@ namespace Robot
 
         void ErrorExit(const char* s);
 	    int ReadFrame();
+#ifdef WEBOTS
 	    int ReadFrameWb();  // for Webots only
+#endif
 
 	protected:
 
@@ -86,7 +88,9 @@ namespace Robot
 	    unsigned char GetAutoWhiteBalance() { return (unsigned char)(v4l2GetControl(V4L2_CID_AUTO_WHITE_BALANCE)); }
 
 	    void CaptureFrame();
+#ifdef WEBOTS
 	    void CaptureFrameWb(); // for Webots only
+#endif
 	};
 }
 
