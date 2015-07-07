@@ -23,8 +23,10 @@ namespace Robot
 		static void Dilation(Image* img);
         static void Dilation(Image* src, Image* dest);
 
+#ifdef FLIP_FRAME
         static void HFlipYUV(Image* img);
         static void VFlipYUV(Image* img);
+#endif
 
 #ifdef WEBOTS
 // ***   WEBOTS PART  *** //
