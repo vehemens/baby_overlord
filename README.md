@@ -7,8 +7,8 @@ OpenCM485 boards.
 
 Code modifications within this project are GPL GNU v3.
 
-Original DARwIn-OP source code can be found here:
-https://sourceforge.net/projects/darwinop/
+DARwIn-OP source code can be found here: https://sourceforge.net/projects/darwinop/
 
-Original NimbRo-OP patches can be found here:
-https://github.com/NimbRo/nimbro-op
+NimbRo-OP patches can be found here: https://github.com/NimbRo/nimbro-op
+
+HROS1 source code can be found here: https://github.com/Interbotix/HROS1-Framework
