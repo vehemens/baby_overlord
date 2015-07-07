@@ -143,25 +143,33 @@ void Head::MoveTracking()
 {
 	double pOffset, dOffset;
 
-	pOffset = m_Pan_err * m_Pan_p_gain;
-	pOffset *= pOffset;
-	if(m_Pan_err < 0)
-		pOffset = -pOffset;
-	dOffset = m_Pan_err_diff * m_Pan_d_gain;
-	dOffset *= dOffset;
-	if(m_Pan_err_diff < 0)
-		dOffset = -dOffset;
-	m_PanAngle += (pOffset + dOffset);
+	// Do nothing if we do not have control. This prevents run-away
+	// on pan/tilt values.
+	if(m_Joint.GetEnable(JointData::ID_HEAD_PAN))
+	{
+		pOffset = m_Pan_err * m_Pan_p_gain;
+		pOffset *= pOffset;
+		if(m_Pan_err < 0)
+			pOffset = -pOffset;
+		dOffset = m_Pan_err_diff * m_Pan_d_gain;
+		dOffset *= dOffset;
+		if(m_Pan_err_diff < 0)
+			dOffset = -dOffset;
+		m_PanAngle += (pOffset + dOffset);
+	}
 
-	pOffset = m_Tilt_err * m_Tilt_p_gain;
-	pOffset *= pOffset;
-	if(m_Tilt_err < 0)
-		pOffset = -pOffset;
-	dOffset = m_Tilt_err_diff * m_Tilt_d_gain;
-	dOffset *= dOffset;
-	if(m_Tilt_err_diff < 0)
-		dOffset = -dOffset;
-	m_TiltAngle += (pOffset + dOffset);
+	if(m_Joint.GetEnable(JointData::ID_HEAD_TILT))
+	{
+		pOffset = m_Tilt_err * m_Tilt_p_gain;
+		pOffset *= pOffset;
+		if(m_Tilt_err < 0)
+			pOffset = -pOffset;
+		dOffset = m_Tilt_err_diff * m_Tilt_d_gain;
+		dOffset *= dOffset;
+		if(m_Tilt_err_diff < 0)
+			dOffset = -dOffset;
+		m_TiltAngle += (pOffset + dOffset);
+	}
 
 	CheckLimit();
 }
@@ -170,7 +178,11 @@ void Head::Process()
 {
 	if(m_Joint.GetEnable(JointData::ID_HEAD_PAN) == true)
 		m_Joint.SetAngle(JointData::ID_HEAD_PAN, m_PanAngle);
+	else
+		m_PanAngle = MotionStatus::m_CurrentJoints.GetAngle(JointData::ID_HEAD_PAN);
 
 	if(m_Joint.GetEnable(JointData::ID_HEAD_TILT) == true)
 		m_Joint.SetAngle(JointData::ID_HEAD_TILT, m_TiltAngle);
+	else
+		m_TiltAngle = MotionStatus::m_CurrentJoints.GetAngle(JointData::ID_HEAD_TILT);
 }
