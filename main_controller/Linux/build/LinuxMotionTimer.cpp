@@ -13,7 +13,10 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#if defined(__i386__)
+#if defined(__arm__)
+#define __NR_ioprio_set         314
+#define __NR_ioprio_get         315
+#elif defined(__i386__)
 #define __NR_ioprio_set         289
 #define __NR_ioprio_get         290
 #elif defined(__ppc__)
