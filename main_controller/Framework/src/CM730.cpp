@@ -695,9 +695,9 @@ int CM730::GetHighByte(int word)
 
 int CM730::MakeColor(int red, int green, int blue)
 {
-	int r = red & 0xFF;
-	int g = green & 0xFF;
-	int b = blue & 0xFF;
+	int r = red & 0x1F;
+	int g = green & 0x1F;
+	int b = blue & 0x1F;
 
 	return (int)(((b>>3)<<10)|((g>>3)<<5)|(r>>3));
 }
