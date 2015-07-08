@@ -80,9 +80,9 @@ l_elbow=15.0
 head_pan=30.0
 head_tilt=-20.0
 c_slope=32
-p_gain=32
-i_gain=0
-d_gain=0
+#p_gain=32
+#i_gain=0
+#d_gain=0
 
 [Head Pan/Tilt]
 pan_p_gain=0.1
