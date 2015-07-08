@@ -50,7 +50,7 @@ int main(void)
 
     change_current_dir();
 
-    Action::GetInstance()->LoadFile(MOTION_FILE_PATH);
+    Action::GetInstance()->LoadFile((char*)MOTION_FILE_PATH);
 
     //////////////////// Framework Initialize ////////////////////////////
     LinuxCM730 linux_cm730("/dev/ttyUSB0");
