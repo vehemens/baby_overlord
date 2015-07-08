@@ -61,6 +61,7 @@ int main(void)
 			return 0;
 	}
     MotionManager::GetInstance()->LoadINISettings(ini);
+	Kinematics::GetInstance()->LoadINISettings(ini);
     Walking::GetInstance()->LoadINISettings(ini);
 
 	MotionManager::GetInstance()->AddModule((MotionModule*)Head::GetInstance());

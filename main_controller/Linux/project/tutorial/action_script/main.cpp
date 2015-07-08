@@ -61,6 +61,7 @@ int main(void)
             return 0;
     }
     MotionManager::GetInstance()->LoadINISettings(ini);
+    Kinematics::GetInstance()->LoadINISettings(ini);
     MotionManager::GetInstance()->AddModule((MotionModule*)Action::GetInstance());
     LinuxMotionTimer *motion_timer = new LinuxMotionTimer(MotionManager::GetInstance());
     motion_timer->Start();

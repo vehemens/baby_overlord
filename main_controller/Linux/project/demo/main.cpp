@@ -100,6 +100,8 @@ int main(void)
         }
     }
 
+    Kinematics::GetInstance()->LoadINISettings(ini);
+
     Walking::GetInstance()->LoadINISettings(ini);
 
     MotionManager::GetInstance()->AddModule((MotionModule*)Action::GetInstance());
