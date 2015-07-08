@@ -4,8 +4,12 @@
  *  Created on: 2011. 1. 21.
  *      Author: zerom
  */
+
 #include <stdio.h>
 #include <unistd.h>
+
+#include "Config.h"
+
 #include "VisionMode.h"
 #include "Action.h"
 #include "ColorFinder.h"

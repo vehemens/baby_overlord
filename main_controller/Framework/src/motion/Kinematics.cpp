@@ -6,6 +6,9 @@
  */
 
 #include <math.h>
+
+#include "Config.h"
+
 #include "Kinematics.h"
 #include "minIni.h"
 

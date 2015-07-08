@@ -4,6 +4,7 @@
  *   Author: ROBOTIS
  *
  */
+
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -13,6 +14,9 @@
 #include <sys/time.h>
 #include <linux/serial.h>
 #include <sys/ioctl.h>
+
+#include "Config.h"
+
 #include "LinuxCM730.h"
 
 using namespace Robot;

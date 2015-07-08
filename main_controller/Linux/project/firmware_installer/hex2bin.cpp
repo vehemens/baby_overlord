@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+
+#include "Config.h"
+
 #include "hex2bin.h"
 
 

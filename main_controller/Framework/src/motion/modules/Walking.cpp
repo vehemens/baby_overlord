@@ -4,8 +4,12 @@
  *   Author: ROBOTIS
  *
  */
+
 #include <stdio.h>
 #include <math.h>
+
+#include "Config.h"
+
 #include "Vector.h"
 #include "Matrix.h"
 #include "MX28.h"

@@ -9,6 +9,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sstream>
+
+#include "Config.h"
+
 #include "LinuxNetwork.h"
 
 using namespace Robot;

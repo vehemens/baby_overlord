@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "Config.h"
+
 #include "StatusCheck.h"
 #include "Head.h"
 #include "Action.h"

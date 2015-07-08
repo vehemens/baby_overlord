@@ -12,6 +12,8 @@
 #include <libgen.h>
 #include <signal.h>
 
+#include "Config.h"
+
 #include "mjpg_streamer.h"
 #include "LinuxDARwIn.h"
 

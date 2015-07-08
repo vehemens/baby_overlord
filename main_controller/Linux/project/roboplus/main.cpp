@@ -8,6 +8,9 @@
 #include <signal.h>
 #include <ncurses.h>
 #include <libgen.h>
+
+#include "Config.h"
+
 #include "LinuxDARwIn.h"
 
 using namespace Robot;

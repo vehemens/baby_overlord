@@ -6,6 +6,9 @@
  */
 
 #include <stdio.h>
+
+#include "Config.h"
+
 #include "MX28.h"
 #include "Kinematics.h"
 #include "MotionStatus.h"

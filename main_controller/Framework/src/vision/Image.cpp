@@ -7,6 +7,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include "Config.h"
+
 #include "Image.h"
 
 using namespace Robot;

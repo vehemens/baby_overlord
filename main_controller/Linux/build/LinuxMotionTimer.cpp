@@ -5,13 +5,15 @@
  *
  */
 
-#include "MotionModule.h"
-#include "LinuxMotionTimer.h"
-
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+
+#include "Config.h"
+
+#include "MotionModule.h"
+#include "LinuxMotionTimer.h"
 
 #if defined(__arm__)
 #define __NR_ioprio_set         314

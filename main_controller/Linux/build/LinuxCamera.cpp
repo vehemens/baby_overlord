@@ -15,6 +15,8 @@
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 
+#include "Config.h"
+
 #include "Camera.h"
 #include "LinuxCamera.h"
 #include "ImgProcess.h"

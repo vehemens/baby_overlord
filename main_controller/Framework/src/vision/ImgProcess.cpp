@@ -7,6 +7,8 @@
 
 #include <string.h>
 
+#include "Config.h"
+
 #include "ImgProcess.h"
 
 using namespace Robot;

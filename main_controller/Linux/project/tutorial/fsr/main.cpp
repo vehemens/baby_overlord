@@ -7,6 +7,8 @@
 #include <term.h>
 #include <pthread.h>
 
+#include "Config.h"
+
 #include "LinuxDARwIn.h"
 #include "FSR.h"
 #include "mjpg_streamer.h"

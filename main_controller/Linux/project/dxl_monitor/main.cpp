@@ -2,6 +2,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
+
+#include "Config.h"
+
 #include "LinuxDARwIn.h"
 #include "cmd_process.h"
 

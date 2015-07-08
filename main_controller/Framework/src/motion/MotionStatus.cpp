@@ -5,6 +5,8 @@
  *
  */
 
+#include "Config.h"
+
 #include "MotionStatus.h"
 
 using namespace Robot;

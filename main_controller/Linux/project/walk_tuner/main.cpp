@@ -7,6 +7,9 @@
 #include <ncurses.h>
 #include <signal.h>
 #include <libgen.h>
+
+#include "Config.h"
+
 #include "cmd_process.h"
 #include "mjpg_streamer.h"
 

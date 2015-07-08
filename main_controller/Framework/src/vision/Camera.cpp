@@ -5,6 +5,7 @@
  *
  */
 
+#include "Config.h"
 
 #include "Camera.h"
 

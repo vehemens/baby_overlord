@@ -6,6 +6,9 @@
 #include <ncurses.h>
 #include <libgen.h>
 #include <signal.h>
+
+#include "Config.h"
+
 #include "cmd_process.h"
 
 #ifdef MX28_1024

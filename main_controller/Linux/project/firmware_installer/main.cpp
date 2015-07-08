@@ -10,6 +10,9 @@
 #include <term.h>
 #include <ncurses.h>
 #include <libgen.h>
+
+#include "Config.h"
+
 #include "hex2bin.h"
 
 #include <getopt.h>

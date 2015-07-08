@@ -6,6 +6,9 @@
  */
 
 #include <string.h>
+
+#include "Config.h"
+
 #include "MotionStatus.h"
 #include "Action.h"
 
@@ -402,7 +405,6 @@ void Action::Process()
 							}
 						}
 					}
-
 
 #ifdef MX28_1024
 					m_Joint.SetSlope(bID, 1 << (m_PlayPage.header.slope[bID]>>4), 1 << (m_PlayPage.header.slope[bID]&0x0f));                    

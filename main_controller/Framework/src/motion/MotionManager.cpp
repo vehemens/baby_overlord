@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include <math.h>
+
+#include "Config.h"
+
 #ifdef FSR_FEET
 #include "FSR.h"
 #endif

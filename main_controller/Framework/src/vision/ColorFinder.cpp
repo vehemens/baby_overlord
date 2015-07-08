@@ -7,6 +7,8 @@
 
 #include <stdlib.h>
 
+#include "Config.h"
+
 #include "ColorFinder.h"
 #include "ImgProcess.h"
 

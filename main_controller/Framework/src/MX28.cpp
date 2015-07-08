@@ -4,6 +4,9 @@
  *  
  *
  */
+
+#include "Config.h"
+
 #include "MX28.h"
 
 using namespace Robot;

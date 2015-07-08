@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#include "Config.h"
+
 #include "Action.h"
 #include "LinuxActionScript.h"
 #include "LinuxMotionTimer.h"
@@ -127,10 +129,12 @@ int LinuxActionScript::PlayMP3(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
-#if 0
-        execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
-#else
+#if defined PADSP
         execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#elif defined MPLAYER
+        execl("/usr/bin/mplayer", "mplayer", filename, (char*)0);
+#else
+        execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
 #endif
         fprintf(stderr, "exec failed!! \n");
         break;
@@ -155,10 +159,12 @@ int LinuxActionScript::PlayMP3Wait(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
-#if 0
-        execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
-#else
+#if defined PADSP
         execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#elif defined MPLAYER
+        execl("/usr/bin/mplayer", "mplayer", filename, (char*)0);
+#else
+        execl("/usr/bin/madplay", "madplay", filename, "-q", (char*)0);
 #endif
         fprintf(stderr, "exec failed!! \n");
         break;

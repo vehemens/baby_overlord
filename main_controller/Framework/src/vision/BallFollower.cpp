@@ -6,6 +6,9 @@
  */
 
 #include <stdio.h>
+
+#include "Config.h"
+
 #include "ImgProcess.h"
 #include "MX28.h"
 #include "Head.h"

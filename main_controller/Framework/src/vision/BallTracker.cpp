@@ -6,6 +6,9 @@
  */
 
 #include <math.h>
+
+#include "Config.h"
+
 #include "Head.h"
 #include "Camera.h"
 #include "ImgProcess.h"

@@ -5,6 +5,9 @@
 #include <term.h>
 #include <fcntl.h>
 #include <ncurses.h>
+
+#include "Config.h"
+
 #include "cmd_process.h"
 
 using namespace Robot;

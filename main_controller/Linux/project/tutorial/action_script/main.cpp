@@ -9,6 +9,8 @@
 #include <string.h>
 #include <libgen.h>
 
+#include "Config.h"
+
 #include "Camera.h"
 #include "Point.h"
 #include "mjpg_streamer.h"
