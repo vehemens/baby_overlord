@@ -16,7 +16,7 @@
 #include "mjpg_streamer.h"
 #include "LinuxDARwIn.h"
 
-#define INI_FILE_PATH       "../../../../Data/config.ini"
+#define INI_FILE_PATH       "../../../Data/config.ini"
 #define U2D_DEV_NAME        "/dev/ttyUSB0"
 
 using namespace Robot;

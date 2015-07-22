@@ -15,7 +15,7 @@
 
 using namespace Robot;
 
-#define INI_FILE_PATH       "../../../../Data/config.ini"
+#define INI_FILE_PATH       "../../../Data/config.ini"
 #define U2D_DEV_NAME        "/dev/ttyUSB0"
 
 void draw_target(Image* img, int x, int y, int r, int g, int b);
