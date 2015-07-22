@@ -20,6 +20,7 @@
 
 #include "Action.h"
 #include "Head.h"
+#include "Kinematics.h"
 #include "Walking.h"
 #include "MX28.h"
 #include "MotionManager.h"
