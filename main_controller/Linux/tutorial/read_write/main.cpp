@@ -14,7 +14,7 @@ int main()
 	printf( "\n===== Read/Write Tutorial for DARwIn =====\n\n");
 
 	//////////////////// Framework Initialize ////////////////////////////
-	LinuxCM730 linux_cm730("/dev/ttyUSB0");
+	LinuxCM730 linux_cm730(CM730_DEV_NAME);
 	CM730 cm730(&linux_cm730);
 	if(cm730.Connect() == false)
 	{

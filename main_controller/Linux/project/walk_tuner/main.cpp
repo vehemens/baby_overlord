@@ -13,11 +13,9 @@
 #include "cmd_process.h"
 #include "mjpg_streamer.h"
 
-#define INI_FILE_PATH       "../../../Data/config.ini"
-
 using namespace Robot;
 
-LinuxCM730 linux_cm730("/dev/ttyUSB0");
+LinuxCM730 linux_cm730(CM730_DEV_NAME);
 CM730 cm730(&linux_cm730);
 
 void change_current_dir()

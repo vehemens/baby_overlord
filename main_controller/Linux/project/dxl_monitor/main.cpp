@@ -14,7 +14,7 @@
 
 using namespace Robot;
 
-LinuxCM730 linux_cm730("/dev/ttyUSB0");
+LinuxCM730 linux_cm730(CM730_DEV_NAME);
 CM730 cm730(&linux_cm730);
 
 int gID = CM730::ID_CM;

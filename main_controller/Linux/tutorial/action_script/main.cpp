@@ -28,14 +28,6 @@
 #include "LinuxCM730.h"
 #include "LinuxActionScript.h"
 
-#ifdef MX28_1024
-#define MOTION_FILE_PATH    "../../../Data/motion_1024.bin"
-#else
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin"
-#endif
-
-#define INI_FILE_PATH       "../../../Data/config.ini"
-
 void change_current_dir()
 {
     char exepath[1024] = {0};
@@ -54,7 +46,7 @@ int main(void)
     Action::GetInstance()->LoadFile((char*)MOTION_FILE_PATH);
 
     //////////////////// Framework Initialize ////////////////////////////
-    LinuxCM730 linux_cm730("/dev/ttyUSB0");
+    LinuxCM730 linux_cm730(CM730_DEV_NAME);
     CM730 cm730(&linux_cm730);
     if(MotionManager::GetInstance()->Initialize(&cm730) == false)
     {

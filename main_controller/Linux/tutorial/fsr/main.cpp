@@ -15,9 +15,6 @@
 
 using namespace Robot;
 
-#define INI_FILE_PATH       "../../../Data/config.ini"
-#define U2D_DEV_NAME        "/dev/ttyUSB0"
-
 void draw_target(Image* img, int x, int y, int r, int g, int b);
 
 void change_current_dir()
@@ -79,7 +76,7 @@ int main()
     }
 
     //////////////////// Framework Initialize ////////////////////////////
-    LinuxCM730 linux_cm730(U2D_DEV_NAME);
+    LinuxCM730 linux_cm730(CM730_DEV_NAME);
     CM730 cm730(&linux_cm730);
     if(MotionManager::GetInstance()->Initialize(&cm730) == false)
     {

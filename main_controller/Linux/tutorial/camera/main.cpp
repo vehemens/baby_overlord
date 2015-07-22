@@ -15,8 +15,6 @@
 #include "minIni.h"
 #include "LinuxCamera.h"
 
-#define INI_FILE_PATH       "config.ini"
-
 void change_current_dir()
 {
     char exepath[1024] = {0};

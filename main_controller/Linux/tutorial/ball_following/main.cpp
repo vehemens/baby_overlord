@@ -16,9 +16,6 @@
 #include "mjpg_streamer.h"
 #include "LinuxDARwIn.h"
 
-#define INI_FILE_PATH       "../../../Data/config.ini"
-#define U2D_DEV_NAME        "/dev/ttyUSB0"
-
 using namespace Robot;
 
 
@@ -53,7 +50,7 @@ int main(void)
 	follower.DEBUG_PRINT = true;
 
 	//////////////////// Framework Initialize ////////////////////////////
-	LinuxCM730 linux_cm730(U2D_DEV_NAME);
+	LinuxCM730 linux_cm730(CM730_DEV_NAME);
 	CM730 cm730(&linux_cm730);
 	if(MotionManager::GetInstance()->Initialize(&cm730) == false)
 	{

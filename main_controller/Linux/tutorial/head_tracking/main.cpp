@@ -16,10 +16,6 @@
 #include "mjpg_streamer.h"
 #include "LinuxDARwIn.h"
 
-#define INI_FILE_PATH       "config.ini"
-
-#define U2D_DEV_NAME        "/dev/ttyUSB0"
-
 void change_current_dir()
 {
     char exepath[1024] = {0};
@@ -48,7 +44,7 @@ int main(void)
     BallTracker tracker = BallTracker();
 
 	//////////////////// Framework Initialize ////////////////////////////
-	LinuxCM730 linux_cm730(U2D_DEV_NAME);
+	LinuxCM730 linux_cm730(CM730_DEV_NAME);
 	CM730 cm730(&linux_cm730);
 	if(MotionManager::GetInstance()->Initialize(&cm730) == false)
 	{

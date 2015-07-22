@@ -20,19 +20,9 @@
 #include "StatusCheck.h"
 #include "VisionMode.h"
 
-#ifdef MX28_1024
-#define MOTION_FILE_PATH    "../../../Data/motion_1024.bin"
-#else
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin"
-#endif
-
-#define INI_FILE_PATH       "../../../Data/config.ini"
 #define SCRIPT_FILE_PATH    "script.asc"
 
-#define U2D_DEV_NAME0       "/dev/ttyUSB0"
-#define U2D_DEV_NAME1       "/dev/ttyUSB1"
-
-LinuxCM730 linux_cm730(U2D_DEV_NAME0);
+LinuxCM730 linux_cm730(CM730_DEV_NAME);
 CM730 cm730(&linux_cm730);
 
 void change_current_dir()
@@ -92,7 +82,6 @@ int main(void)
     //////////////////// Framework Initialize ////////////////////////////
     if(MotionManager::GetInstance()->Initialize(&cm730) == false)
     {
-        linux_cm730.SetPortName(U2D_DEV_NAME1);
         if(MotionManager::GetInstance()->Initialize(&cm730) == false)
         {
             printf("Fail to initialize Motion Manager!\n");
