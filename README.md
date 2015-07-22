@@ -12,3 +12,5 @@ DARwIn-OP source code can be found here: https://sourceforge.net/projects/darwin
 NimbRo-OP patches can be found here: https://github.com/NimbRo/nimbro-op
 
 HROS1 source code can be found here: https://github.com/Interbotix/HROS1-Framework
+
+HROS5 source code can be found here: https://github.com/Interbotix/HROS5-Framework
