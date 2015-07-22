@@ -9,9 +9,9 @@
 // Baby Overlord
 #define PADSP
 
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin"
+#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin.baby_overlord"
 
-#define INI_FILE_PATH       "../../../Data/config.ini"
+#define INI_FILE_PATH       "../../../Data/config.ini.baby_overlord"
 
 #define CM730_DEV_NAME      "/dev/ttyUSB0"
 #endif
