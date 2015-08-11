@@ -1,9 +1,3 @@
-OpenOCD
-
-Note that the version of openocd used is a local build as of git commit
-db8029b which is newer then the 0.8.0 release.
-
-
 Board Configuration:
 
 OpenCM9.04
