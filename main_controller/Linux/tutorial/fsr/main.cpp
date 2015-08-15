@@ -83,6 +83,7 @@ int main()
         printf("Fail to initialize Motion Manager!\n");
             return 0;
     }
+    Kinematics::GetInstance()->LoadINISettings(ini);
     MotionManager::GetInstance()->LoadINISettings(ini);
     Walking::GetInstance()->LoadINISettings(ini);
 
