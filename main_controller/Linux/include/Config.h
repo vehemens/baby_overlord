@@ -9,9 +9,9 @@
 // Baby Overlord
 #define PADSP
 
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin.baby_overlord"
+#define MOTION_FILE_PATH    "../../../Data/baby_overlord/motion_4096.bin"
 
-#define INI_FILE_PATH       "../../../Data/config.ini.baby_overlord"
+#define INI_FILE_PATH       "../../../Data/baby_overlord/config.ini"
 
 #define CM730_DEV_NAME      "/dev/ttyUSB0"
 #endif
@@ -25,12 +25,12 @@
 #define FSR_FEET
 
 #ifdef MX28_1024
-#define MOTION_FILE_PATH    "../../../Data/motion_1024.bin.darwin"
+#define MOTION_FILE_PATH    "../../../Data/darwin/motion_1024.bin"
 #else
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin.darwin"
+#define MOTION_FILE_PATH    "../../../Data/darwin/motion_4096.bin"
 #endif
 
-#define INI_FILE_PATH       "../../../Data/config.ini.darwin"
+#define INI_FILE_PATH       "../../../Data/darwin/config.ini"
 
 #define CM730_DEV_NAME      "/dev/ttyUSB0"
 #endif
@@ -41,9 +41,9 @@
 
 #define MPLAYER
 
-#define MOTION_FILE_PATH    "../../../Data/motion_1024.bin.hros1"
+#define MOTION_FILE_PATH    "../../../Data/hros1/motion_4096.bin"
 
-#define INI_FILE_PATH       "../../../Data/config.ini.hros1"
+#define INI_FILE_PATH       "../../../Data/hros1/config.ini"
 
 #define CM730_DEV_NAME      "/dev/ttyUSB0"
 #endif
@@ -52,9 +52,9 @@
 // HROS5
 #define MPLAYER
 
-#define MOTION_FILE_PATH    "../../../Data/motion_4096.bin.hros5"
+#define MOTION_FILE_PATH    "../../../Data/hros5/motion_4096.bin"
 
-#define INI_FILE_PATH       "../../../Data/config.ini.hros5"
+#define INI_FILE_PATH       "../../../Data/hros5/config.ini"
 
 #define CM730_DEV_NAME      "/dev/ttyUSB0"
 #endif
