@@ -96,7 +96,7 @@ namespace Robot
         Walking();
 
 		double wsin(double time, double period, double period_shift, double mag, double mag_shift);
-		bool computeIK(double *out, double x, double y, double z, double a, double b, double c);
+		//bool computeIK(double *out, double x, double y, double z, double a, double b, double c);
 		void update_param_time();
 		void update_param_move();
 		void update_param_balance();

@@ -39,6 +39,8 @@ namespace Robot
 
 		void LoadINISettings(minIni* ini);
 		void SaveINISettings(minIni* ini);
+
+		bool computeIK(double *out, double x, double y, double z, double a, double b, double c);
 	};
 }
 

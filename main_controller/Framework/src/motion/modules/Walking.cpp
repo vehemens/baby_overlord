@@ -170,6 +170,7 @@ double Walking::wsin(double time, double period, double period_shift, double mag
 	return mag * sin(2 * 3.141592 / period * time - period_shift) + mag_shift;
 }
 
+#if 0
 bool Walking::computeIK(double *out, double x, double y, double z, double a, double b, double c)
 {
 	Matrix3D Tad, Tda, Tcd, Tdc, Tac;
@@ -248,6 +249,7 @@ bool Walking::computeIK(double *out, double x, double y, double z, double a, dou
 
     return true;
 }
+#endif
 
 void Walking::update_param_time()
 {
@@ -565,8 +567,8 @@ void Walking::Process()
     }
 
     // Compute angles
-    if((computeIK(&angle[0], ep[0], ep[1], ep[2], ep[3], ep[4], ep[5]) == 1)
-        && (computeIK(&angle[6], ep[6], ep[7], ep[8], ep[9], ep[10], ep[11]) == 1))
+    if((Kinematics::GetInstance()->computeIK(&angle[0], ep[0], ep[1], ep[2], ep[3], ep[4], ep[5]) == 1)
+        && (Kinematics::GetInstance()->computeIK(&angle[6], ep[6], ep[7], ep[8], ep[9], ep[10], ep[11]) == 1))
     {
         for(int i=0; i<12; i++)
             angle[i] *= 180.0 / PI;
