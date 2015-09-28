@@ -7,7 +7,7 @@
 
 #if 1
 // Baby Overlord
-#define PADSP
+#define MPG123
 
 #define MOTION_FILE_PATH    "../../../Data/baby_overlord/motion_4096.bin"
 

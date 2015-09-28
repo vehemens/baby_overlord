@@ -129,8 +129,8 @@ int LinuxActionScript::PlayMP3(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
-#if defined PADSP
-        execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#if defined MPG123
+        execl("/usr/bin/mpg123", "mpg123", "-q", filename, (char*)0);
 #elif defined MPLAYER
         execl("/usr/bin/mplayer", "mplayer", filename, (char*)0);
 #else
@@ -159,8 +159,8 @@ int LinuxActionScript::PlayMP3Wait(const char* filename)
         break;
     case 0:
         fprintf(stderr, "Playing MPEG stream from \"%s\" ...\n", filename);
-#if defined PADSP
-        execl("/usr/bin/padsp", "padsp", "madplay", "-q", filename, (char*)0);
+#if defined MPG123
+        execl("/usr/bin/mpg123", "mpg123", "-q", filename, (char*)0);
 #elif defined MPLAYER
         execl("/usr/bin/mplayer", "mplayer", filename, (char*)0);
 #else
