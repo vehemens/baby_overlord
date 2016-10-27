@@ -105,12 +105,6 @@ bool Action::LoadFile( char* filename )
 {
 	FILE *action = fopen( filename, "r+b" );
 
-#ifdef WEBOTS
-	// Olivier.Michel@cyberbotics.com added the following line to allow opening a readonly file located in the Webots installation directory.
-  // This is mainly problematic on Windows
-	if( action == 0 ) action = fopen( filename, "rb" );
-#endif
-
 	if( action == 0 )
 	{
 		if(DEBUG_PRINT == true)
@@ -406,11 +400,7 @@ void Action::Process()
 						}
 					}
 
-#ifdef MX28_1024
-					m_Joint.SetSlope(bID, 1 << (m_PlayPage.header.slope[bID]>>4), 1 << (m_PlayPage.header.slope[bID]&0x0f));                    
-#else
                     m_Joint.SetPGain(bID, (256 >> (m_PlayPage.header.slope[bID]>>4)) << 2);
-#endif
                 }
             }
         }

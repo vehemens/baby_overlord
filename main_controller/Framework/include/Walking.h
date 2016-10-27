@@ -143,13 +143,9 @@ namespace Robot
 		double HEAD_TILT;
 
 		// Leg gains
-#ifdef MX28_1024
-		int    C_SLOPE;
-#else
 		int    P_GAIN;
 		int    I_GAIN;
 		int    D_GAIN;
-#endif
 
 		int GetCurrentPhase()		{ return m_Phase; }
 		double GetBodySwingY()		{ return m_Body_Swing_Y; }

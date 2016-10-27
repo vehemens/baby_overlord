@@ -46,13 +46,9 @@ Walking::Walking()
 	BALANCE_HIP_ROLL_GAIN = 0.5;
 	BALANCE_ANKLE_ROLL_GAIN = 1.0;
 
-#ifdef MX28_1024
-	C_SLOPE = JointData::SLOPE_DEFAULT;
-#else
 	P_GAIN = JointData::P_GAIN_DEFAULT;
     I_GAIN = JointData::I_GAIN_DEFAULT;
     D_GAIN = JointData::D_GAIN_DEFAULT;
-#endif
 
 	X_MOVE_AMPLITUDE = 0;
 	Y_MOVE_AMPLITUDE = 0;
@@ -113,13 +109,9 @@ void Walking::LoadINISettings(minIni* ini, const std::string &section)
 
     int ivalue = INVALID_VALUE;
 
-#ifdef MX28_1024
-    if((ivalue = ini->geti(section, "c_slope", INVALID_VALUE)) != INVALID_VALUE)                C_SLOPE = ivalue;
-#else
     if((ivalue = ini->geti(section, "p_gain", INVALID_VALUE)) != INVALID_VALUE)                 P_GAIN = ivalue;
     if((ivalue = ini->geti(section, "i_gain", INVALID_VALUE)) != INVALID_VALUE)                 I_GAIN = ivalue;
     if((ivalue = ini->geti(section, "d_gain", INVALID_VALUE)) != INVALID_VALUE)                 D_GAIN = ivalue;
-#endif
 }
 void Walking::SaveINISettings(minIni* ini)
 {
@@ -156,13 +148,9 @@ void Walking::SaveINISettings(minIni* ini, const std::string &section)
     ini->put(section,   "head_pan",                 HEAD_PAN);
     ini->put(section,   "head_tilt",                HEAD_TILT);
 
-#ifdef MX28_1024
-    ini->put(section,   "c_slope",                  C_SLOPE);
-#else
     ini->put(section,   "p_gain",                   P_GAIN);
     ini->put(section,   "i_gain",                   I_GAIN);
     ini->put(section,   "d_gain",                   D_GAIN);
-#endif
 }
 
 double Walking::wsin(double time, double period, double period_shift, double mag, double mag_shift)
@@ -597,20 +585,7 @@ void Walking::Process()
     {
 		double rlGyroErr = MotionStatus::RL_GYRO;
 		double fbGyroErr = MotionStatus::FB_GYRO;
-#ifdef MX28_1024
-        outValue[1] += (int)(dir[1] * rlGyroErr * BALANCE_HIP_ROLL_GAIN); // R_HIP_ROLL
-        outValue[7] += (int)(dir[7] * rlGyroErr * BALANCE_HIP_ROLL_GAIN); // L_HIP_ROLL
 
-        outValue[3] -= (int)(dir[3] * fbGyroErr * BALANCE_KNEE_GAIN); // R_KNEE
-        outValue[9] -= (int)(dir[9] * fbGyroErr * BALANCE_KNEE_GAIN); // L_KNEE
-        
-        outValue[4] -= (int)(dir[4] * fbGyroErr * BALANCE_ANKLE_PITCH_GAIN); // R_ANKLE_PITCH
-        outValue[10] -= (int)(dir[10] * fbGyroErr * BALANCE_ANKLE_PITCH_GAIN); // L_ANKLE_PITCH        
-        
-        outValue[5] -= (int)(dir[5] * rlGyroErr * BALANCE_ANKLE_ROLL_GAIN); // R_ANKLE_ROLL
-        outValue[11] -= (int)(dir[11] * rlGyroErr * BALANCE_ANKLE_ROLL_GAIN); // L_ANKLE_ROLL
-#else
-		outValue[1] += (int)(dir[1] * rlGyroErr * BALANCE_HIP_ROLL_GAIN*4); // R_HIP_ROLL
         outValue[7] += (int)(dir[7] * rlGyroErr * BALANCE_HIP_ROLL_GAIN*4); // L_HIP_ROLL
 
         outValue[3] -= (int)(dir[3] * fbGyroErr * BALANCE_KNEE_GAIN*4); // R_KNEE
@@ -621,7 +596,6 @@ void Walking::Process()
 
 		outValue[5] -= (int)(dir[5] * rlGyroErr * BALANCE_ANKLE_ROLL_GAIN*4); // R_ANKLE_ROLL
         outValue[11] -= (int)(dir[11] * rlGyroErr * BALANCE_ANKLE_ROLL_GAIN*4); // L_ANKLE_ROLL
-#endif
     }
 
 	m_Joint.SetValue(JointData::ID_R_HIP_YAW,           outValue[0]);
@@ -662,13 +636,9 @@ void Walking::Process()
 	    case JointData::ID_L_ANKLE_PITCH:
 	    case JointData::ID_R_ANKLE_ROLL:
 	    case JointData::ID_L_ANKLE_ROLL:
-#ifdef MX28_1024
-	        m_Joint.SetSlope(id, C_SLOPE, C_SLOPE);
-#else
 	        m_Joint.SetPGain(id, P_GAIN);
 	        m_Joint.SetIGain(id, I_GAIN);
 	        m_Joint.SetDGain(id, D_GAIN);
-#endif
 		break;
 
 	    case JointData::ID_R_SHOULDER_PITCH:
@@ -679,13 +649,9 @@ void Walking::Process()
 	    case JointData::ID_L_ELBOW:
 	    case JointData::ID_HEAD_PAN:
 	    case JointData::ID_HEAD_TILT:
-#ifdef MX28_1024
-	        m_Joint.SetSlope(id, JointData::SLOPE_EXTRASOFT, JointData::SLOPE_EXTRASOFT);
-#else
 	        m_Joint.SetPGain(id, 8);
 	        m_Joint.SetIGain(id, JointData::I_GAIN_DEFAULT);
 	        m_Joint.SetDGain(id, JointData::D_GAIN_DEFAULT);
-#endif
 		break;
 	    }
 	}

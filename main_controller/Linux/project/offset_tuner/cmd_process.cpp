@@ -24,11 +24,9 @@ Action::PAGE Page;
 Action::STEP Step;
 Action::STEP PresentPos;
 
-#ifndef MX28_1024
 int P_Gain[JointData::NUMBER_OF_JOINTS];
 int I_Gain[JointData::NUMBER_OF_JOINTS];
 int D_Gain[JointData::NUMBER_OF_JOINTS];
-#endif
 
 //                           1     2     3     4     5     6     7     8     9    10    11    12    13    14    15    16    17    18    19    20
 int InitPose[21] = {2047, 1480, 2610, 1747, 2343, 2147, 1944, 2047, 2047, 2047, 2047, 2013, 2080, 2047, 2047, 2063, 2030, 2047, 2047, 2047, 2170};
@@ -101,19 +99,14 @@ void ReadStep(CM730 *cm730)
 				if(value == 1)
 				{
 				    unsigned char table[50];
-#ifdef MX28_1024
-				    if(cm730->ReadTable(id, MX28::P_GOAL_POSITION_L, MX28::P_PRESENT_POSITION_H, table, 0) == CM730::SUCCESS)
-#else
+
 				    if(cm730->ReadTable(id, MX28::P_D_GAIN, MX28::P_PRESENT_POSITION_H, table, 0) == CM730::SUCCESS)
-#endif
 				    {
 				        Step.position[id] = cm730->MakeWord(table[MX28::P_GOAL_POSITION_L], table[MX28::P_GOAL_POSITION_H]);
 				        PresentPos.position[id] = cm730->MakeWord(table[MX28::P_PRESENT_POSITION_L], table[MX28::P_PRESENT_POSITION_H]);
-#ifndef MX28_1024
 				        P_Gain[id] = table[MX28::P_P_GAIN];
 				        I_Gain[id] = table[MX28::P_I_GAIN];
 				        D_Gain[id] = table[MX28::P_D_GAIN];
-#endif
 				    }
 					//if(cm730->ReadWord(id, MX28::P_GOAL_POSITION_L, &value, 0) == CM730::SUCCESS)
 					//	Step.position[id] = value;
@@ -197,7 +190,6 @@ void MoveLeftCursor()
 		GoToCursor(PRSVAL_COL, Row);
 		break;
 
-#ifndef MX28_1024
     case P_GAIN_COL:
         GoToCursor(ERRORS_COL, Row);
         break;
@@ -209,14 +201,9 @@ void MoveLeftCursor()
 	case D_GAIN_COL:
         GoToCursor(I_GAIN_COL, Row);
         break;
-#endif
 
 	case INVERT_COL:
-#ifdef MX28_1024
-        GoToCursor(ERRORS_COL, Row);
-#else
         GoToCursor(D_GAIN_COL, Row);
-#endif
         break;
 	}
 }
@@ -242,14 +229,9 @@ void MoveRightCursor()
 		break;
 
     case ERRORS_COL:
-#ifdef MX28_1024
-        GoToCursor(INVERT_COL, Row);
-#else
         GoToCursor(P_GAIN_COL, Row);
-#endif
         break;
 
-#ifndef MX28_1024
     case P_GAIN_COL:
         GoToCursor(I_GAIN_COL, Row);
         break;
@@ -261,7 +243,6 @@ void MoveRightCursor()
     case D_GAIN_COL:
         GoToCursor(INVERT_COL, Row);
         break;
-#endif
 	}
 }
 
@@ -332,34 +313,7 @@ void DrawPage()
 	int old_row = Row;
 
     system("clear");
-    //       012345678901234567890123456789012345678901234567890123456789012345
-#ifdef MX28_1024
-    printf( "ID: 1(R_SHO_PITCH)  [    ]        [    ]|                       \n" );//0
-    printf( "ID: 2(L_SHO_PITCH)  [    ]        [    ]|                       \n" );//1
-    printf( "ID: 3(R_SHO_ROLL)   [    ]        [    ]|                       \n" );//2
-    printf( "ID: 4(L_SHO_ROLL)   [    ]        [    ]|                       \n" );//3
-    printf( "ID: 5(R_ELBOW)      [    ]        [    ]|                       \n" );//4
-    printf( "ID: 6(L_ELBOW)      [    ]        [    ]|                       \n" );//5
-    printf( "ID: 7(R_HIP_YAW)    [    ]        [    ]|                       \n" );//6
-    printf( "ID: 8(L_HIP_YAW)    [    ]        [    ]|                       \n" );//7
-    printf( "ID: 9(R_HIP_ROLL)   [    ]        [    ]|                       \n" );//8
-    printf( "ID:10(L_HIP_ROLL)   [    ]        [    ]|                       \n" );//9
-    printf( "ID:11(R_HIP_PITCH)  [    ]        [    ]|                       \n" );//0
-    printf( "ID:12(L_HIP_PITCH)  [    ]        [    ]|                       \n" );//1
-    printf( "ID:13(R_KNEE)       [    ]        [    ]|                       \n" );//2
-    printf( "ID:14(L_KNEE)       [    ]        [    ]|                       \n" );//3
-    printf( "ID:15(R_ANK_PITCH)  [    ]        [    ]|                       \n" );//4
-    printf( "ID:16(L_ANK_PITCH)  [    ]        [    ]|                       \n" );//5
-    printf( "ID:17(R_ANK_ROLL)   [    ]        [    ]|                       \n" );//6
-    printf( "ID:18(L_ANK_ROLL)   [    ]        [    ]|                       \n" );//7
-    printf( "ID:19(HEAD_PAN)     [    ]        [    ]|                       \n" );//8
-    printf( "ID:20(HEAD_TILT)    [    ]        [    ]|                       \n" );//9
-    printf( "                     GOAL  OFFSET MODVAL PRSPOS ERRORS INVERT   \n" );//0
-    printf( "]                                                                 " );//1
 
-	for(int i=0; i<=5; i++ )
-		DrawStep(i);
-#else
     //       012345678901234567890123456789012345678901234567890123456789012345678901234567890123456
     printf( "ID: 1(R_SHO_PITCH)  [    ]        [    ]|                                            \n" );//0
     printf( "ID: 2(L_SHO_PITCH)  [    ]        [    ]|                                            \n" );//1
@@ -386,7 +340,6 @@ void DrawPage()
 
 	for(int i=0; i<=8; i++ )
 		DrawStep(i);
-#endif
 
 	GoToCursor(old_col, old_row);
 }
@@ -455,7 +408,6 @@ void DrawStep(int index)
 		break;
 
 	case 5:
-#ifndef MX28_1024
 	    col = P_GAIN_COL;
         for( int id=JointData::ID_R_SHOULDER_PITCH; id<JointData::NUMBER_OF_JOINTS; id++ )
         {
@@ -483,7 +435,6 @@ void DrawStep(int index)
         break;
 
     case 8:
-#endif
         col = INVERT_COL;
         for( int id=JointData::ID_R_SHOULDER_PITCH; id<JointData::NUMBER_OF_JOINTS; id++ )
         {
@@ -595,14 +546,12 @@ int GetValue()
         return PresentPos.position[row + 1];
     else if( col == ERRORS_COL )
         return PresentPos.position[row + 1] - Step.position[row + 1];
-#ifndef MX28_1024
     else if( col == P_GAIN_COL )
         return P_Gain[row + 1];
     else if( col == I_GAIN_COL )
         return I_Gain[row + 1];
     else if( col == D_GAIN_COL )
         return D_Gain[row + 1];
-#endif
     else if( col == INVERT_COL )
         return MotionManager::GetInstance()->m_invert[row + 1];
 
@@ -707,7 +656,6 @@ void SetValue(CM730 *cm730, int value)
     {
         printf( "%.4d ", GetValue());
     }
-#ifndef MX28_1024
     else if( col == P_GAIN_COL )
     {
         if(value >= 0 && value <= 254)
@@ -753,7 +701,6 @@ void SetValue(CM730 *cm730, int value)
             }
         }
     }
-#endif
 
 	GoToCursor(col, row);	
 }
@@ -831,11 +778,11 @@ void HelpCmd()
 	printf(" exit               Exits the program.\n");
 	printf(" re                 Refreshes the screen.\n");
 	printf(" set [value]        Sets value on cursor [value].\n");
-#ifndef MX28_1024
+
     printf(" pgain [value]      Sets ALL actuators' P gain to [value].\n");
     printf(" igain [value]      Sets ALL actuators' I gain to [value].\n");
     printf(" dgain [value]      Sets ALL actuators' D gain to [value].\n");
-#endif
+
 	printf(" save               Saves offset changes.\n");
 	printf(" on/off             Turn On/Off torque from ALL actuators.\n");
 	printf(" on/off [index1] [index2] ...  \n"
@@ -871,7 +818,6 @@ void OnOffCmd(CM730 *cm730, bool on, int num_param, int *list)
 }
 
 
-#ifndef MX28_1024
 void GainCmd(CM730 *cm730, int value, int pid_col)
 {
     if(value < 0 || value > 254)
@@ -910,7 +856,6 @@ void GainCmd(CM730 *cm730, int value, int pid_col)
         DrawStep(7);
     }
 }
-#endif
 
 void SaveCmd(minIni *ini)
 {

@@ -1348,11 +1348,7 @@ void GoCmd(CM730 *cm730, int index)
 		else
 			wDistance = wGoalPosition - wStartPosition;
 
-#ifdef MX28_1024
-		wDistance >>= 3;
-#else
 		wDistance >>= 5;
-#endif
 		if( wDistance < 4 )
 			wDistance = 4;
 

@@ -199,12 +199,6 @@ namespace Robot
 		static int GetLowByte(int word);
 		static int GetHighByte(int word);
 		static int MakeColor(int red, int green, int blue);
-
-#ifdef WEBOTS
-// ***   WEBOTS PART  *** //
-
-		void MakeBulkReadPacketWb();
-#endif
 	};
 }
 

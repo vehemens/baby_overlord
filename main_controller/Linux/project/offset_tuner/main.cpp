@@ -198,7 +198,6 @@ int main(int argc, char *argv[])
                         OnOffCmd(&cm730, false, num_param, iparam);
                     else if(strcmp(cmd, "save") == 0)
                         SaveCmd(ini);
-#ifndef MX28_1024
                     else if(strcmp(cmd, "pgain") == 0)
                     {
                         if(num_param > 0)
@@ -220,7 +219,6 @@ int main(int argc, char *argv[])
                         else
                             PrintCmd("Need parameter");
                     }
-#endif
                     else
                         PrintCmd("Bad command! please input 'help'");
                 }

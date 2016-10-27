@@ -18,8 +18,6 @@
 
 #if 0
 // DARwIn
-#define WEBOTS
-
 #define FLIP_FRAME
 
 #define FSR_FEET

@@ -20,14 +20,9 @@ JointData::JointData()
         m_Enable[i] = true;
         m_Value[i] = MX28::CENTER_VALUE;
         m_Angle[i] = 0.0;
-#ifdef MX28_1024
-        m_CWSlope[i] = SLOPE_DEFAULT;
-        m_CCWSlope[i] = SLOPE_DEFAULT;
-#else
         m_PGain[i] = P_GAIN_DEFAULT;
         m_IGain[i] = I_GAIN_DEFAULT;
         m_DGain[i] = D_GAIN_DEFAULT;
-#endif
     }
 }
 
@@ -42,9 +37,8 @@ void JointData::SetEnable(int id, bool enable)
 
 void JointData::SetEnable(int id, bool enable, bool exclusive)
 {
-#ifndef WEBOTS // Because MotionManager is not included in the lite version of the Framework used in the simulation
     if(enable && exclusive) MotionManager::GetInstance()->SetJointDisable(id);
-#endif
+
     m_Enable[id] = enable;
 }
 
@@ -205,31 +199,3 @@ double JointData::GetRadian(int id)
 {
     return GetAngle(id) * (180.0 / 3.141592);
 }
-
-#ifdef MX28_1024
-void JointData::SetSlope(int id, int cwSlope, int ccwSlope)
-{
-    SetCWSlope(id, cwSlope);
-    SetCCWSlope(id, ccwSlope);
-}
-
-void JointData::SetCWSlope(int id, int cwSlope)
-{
-    m_CWSlope[id] = cwSlope;
-}
-
-int JointData::GetCWSlope(int id)
-{
-    return m_CWSlope[id];
-}
-
-void JointData::SetCCWSlope(int id, int ccwSlope)
-{
-    m_CCWSlope[id] = ccwSlope;
-}
-
-int JointData::GetCCWSlope(int id)
-{
-    return m_CCWSlope[id];
-}
-#endif
