@@ -185,7 +185,7 @@ void Dump(CM730 *cm730, int id)
 	}
 	else // Actuator
 	{		
-		if(cm730->ReadTable(id, MX28::P_MODEL_NUMBER_L, MX28::P_PUNCH_H, &table[MX28::P_MODEL_NUMBER_L], 0) != CM730::SUCCESS)
+		if(cm730->ReadTable(id, MX28::P_MODEL_NUMBER_L, MX28::P_GOAL_ACCELERATION, &table[MX28::P_MODEL_NUMBER_L], 0) != CM730::SUCCESS)
 		{
 			printf(" Can not read table!\n");
 			return;
@@ -221,6 +221,11 @@ void Dump(CM730 *cm730, int id)
 		printf( " ALARM_LED              (R/W)[%.3d]:%5d\n", addr, value);
 		addr = MX28::P_ALARM_SHUTDOWN; value = table[addr];
 		printf( " ALARM_SHUTDOWN         (R/W)[%.3d]:%5d\n", addr, value);
+		addr = MX28::P_MULTI_TURN_OFFSET_L; value = CM730::MakeWord(table[addr], table[addr+1]);
+		printf( " MULTI_TURN_OFFSET      (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
+		addr = MX28::P_RESOLUTION_DIVIDER; value = table[addr];
+		printf( " RESOLUTION_DIVDER      (R/W)[%.3d]:%5d\n", addr, value);
+
 		printf( "\n" );
 		printf( " [RAM AREA]\n" );
 		addr = MX28::P_TORQUE_ENABLE; value = table[addr];
@@ -234,8 +239,6 @@ void Dump(CM730 *cm730, int id)
         printf( " I_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
         addr = MX28::P_P_GAIN; value = table[addr];
         printf( " P_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
-        addr = MX28::P_RESERVED; value = table[addr];
-        printf( " RESERVED               (R/W)[%.3d]:%5d\n", addr, value);
 
 		addr = MX28::P_GOAL_POSITION_L; value = CM730::MakeWord(table[addr], table[addr+1]);
 		printf( " GOAL_POSITION          (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
@@ -244,23 +247,25 @@ void Dump(CM730 *cm730, int id)
 		addr = MX28::P_TORQUE_LIMIT_L; value = CM730::MakeWord(table[addr], table[addr+1]);
 		printf( " TORQUE_LIMIT           (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
 		addr = MX28::P_PRESENT_POSITION_L; value = CM730::MakeWord(table[addr], table[addr+1]);
-		printf( " PRESENT_POSITION       (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
+		printf( " PRESENT_POSITION        (R)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
 		addr = MX28::P_PRESENT_SPEED_L; value = CM730::MakeWord(table[addr], table[addr+1]);
-		printf( " PRESENT_SPEED          (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
+		printf( " PRESENT_SPEED           (R) [%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
 		addr = MX28::P_PRESENT_LOAD_L; value = CM730::MakeWord(table[addr], table[addr+1]);
-		printf( " PRESENT_LOAD           (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
+		printf( " PRESENT_LOAD            (R) [%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
 		addr = MX28::P_PRESENT_VOLTAGE; value = table[addr];
-		printf( " PRESENT_VOLTAGE        (R/W)[%.3d]:%5d\n", addr, value);
+		printf( " PRESENT_VOLTAGE         (R) [%.3d]:%5d\n", addr, value);
 		addr = MX28::P_PRESENT_TEMPERATURE; value = table[addr];
-		printf( " PRESENT_TEMPERATURE    (R/W)[%.3d]:%5d\n", addr, value);
+		printf( " PRESENT_TEMPERATURE     (R) [%.3d]:%5d\n", addr, value);
 		addr = MX28::P_REGISTERED_INSTRUCTION; value = table[addr];
-		printf( " REGISTERED_INSTRUC     (R/W)[%.3d]:%5d\n", addr, value);
+		printf( " REGISTERED_INSTRUCTION  (R) [%.3d]:%5d\n", addr, value);
 		addr = MX28::P_MOVING; value = table[addr];
-		printf( " MOVING                 (R/W)[%.3d]:%5d\n", addr, value);
+		printf( " MOVING                  (R) [%.3d]:%5d\n", addr, value);
 		addr = MX28::P_LOCK; value = table[addr];
 		printf( " LOCK                   (R/W)[%.3d]:%5d\n", addr, value);
 		addr = MX28::P_PUNCH_L; value = CM730::MakeWord(table[addr], table[addr+1]);
 		printf( " PUNCH                  (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
+		addr = MX28::P_GOAL_ACCELERATION; value = table[addr];
+		printf( " GOAL_ACCELERATION      (R/W)[%.3d]:%5d\n", addr, value);
 
 		printf( "\n" );
 	}
@@ -577,7 +582,6 @@ void Write(Robot::CM730 *cm730, int id, int addr, int value)
 			|| addr == MX28::P_P_GAIN
 			|| addr == MX28::P_I_GAIN
 			|| addr == MX28::P_D_GAIN
-			|| addr == MX28::P_RESERVED
 			|| addr == MX28::P_LED
 			|| addr == MX28::P_LED)
 		{
