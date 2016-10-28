@@ -38,13 +38,51 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+uint8_t USB_Tx_State = 0;
+
+/* Extern variables ----------------------------------------------------------*/
 extern uint8_t USART_Rx_Buffer[];
 extern uint32_t USART_Rx_ptr_in;
 extern uint32_t USART_Rx_ptr_out;
-extern uint8_t USB_Tx_State;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
+
+/*******************************************************************************
+* Function Name  : EP1_IN_Asynch_Xfer
+* Description    : send buffered data to USB.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
+void EP1_IN_Asynch_Xfer(void)
+{
+  uint32_t USART_Rx_length;
+  uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
+  uint16_t USB_Tx_length;
+  uint32_t i;
+
+  if(USB_Tx_State == 0)
+  {
+    USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
+
+    if(USART_Rx_length != 0)
+    {
+      USB_Tx_length = USART_Rx_length < VIRTUAL_COM_PORT_DATA_SIZE ?
+        USART_Rx_length : VIRTUAL_COM_PORT_DATA_SIZE;
+
+      for (i = 0; i < USB_Tx_length; i++)
+      {
+        USB_Tx_Buffer[i] = USART_Rx_Buffer[(USART_Rx_ptr_out++)%USART_RX_DATA_SIZE];
+      }
+
+      UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
+      SetEPTxCount(ENDP1, USB_Tx_length);
+      SetEPTxValid(ENDP1);
+      USB_Tx_State = 1;
+    }
+  }
+}
 
 /*******************************************************************************
 * Function Name  : EP1_IN_Callback
@@ -53,7 +91,7 @@ extern uint8_t USB_Tx_State;
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP1_IN_Callback (void)
+void EP1_IN_Callback(void)
 {
   uint32_t USART_Rx_length;
   uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
@@ -71,7 +109,7 @@ void EP1_IN_Callback (void)
 
       for (i = 0; i < USB_Tx_length; i++)
       {
-        USB_Tx_Buffer[i] = USART_Rx_Buffer[USART_Rx_ptr_out++%USART_RX_DATA_SIZE];
+        USB_Tx_Buffer[i] = USART_Rx_Buffer[(USART_Rx_ptr_out++)%USART_RX_DATA_SIZE];
       }
 
       UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
@@ -109,7 +147,6 @@ void EP3_OUT_Callback(void)
   SetEPRxValid(ENDP3);
 }
 
-
 /*******************************************************************************
 * Function Name  : SOF_Callback / INTR_SOFINTR_Callback
 * Description    :
@@ -122,7 +159,7 @@ void SOF_Callback(void)
   if(bDeviceState == CONFIGURED)
   {
     /* Check the data to be sent through IN pipe */
-    Handle_USBAsynchXfer();
+    EP1_IN_Asynch_Xfer();
   }  
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

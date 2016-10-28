@@ -38,17 +38,14 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-ErrorStatus HSEStartUpStatus;
-
 uint8_t USART_Rx_Buffer[USART_RX_DATA_SIZE]; 
 uint32_t USART_Rx_ptr_in = 0;
 uint32_t USART_Rx_ptr_out = 0;
-uint8_t USB_Tx_State = 0;
-
-static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
+
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
@@ -418,41 +415,6 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 }
 
 /*******************************************************************************
-* Function Name  : Handle_USBAsynchXfer.
-* Description    : send data to USB.
-* Input          : None.
-* Return         : None.
-*******************************************************************************/
-void Handle_USBAsynchXfer(void)
-{
-  uint32_t USART_Rx_length;
-  uint8_t USB_Tx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
-  uint16_t USB_Tx_length;
-  uint32_t i;
-
-  if(USB_Tx_State == 0)
-  {
-    USART_Rx_length = USART_Rx_ptr_in - USART_Rx_ptr_out;
-
-    if(USART_Rx_length != 0)
-    {
-      USB_Tx_length = USART_Rx_length < VIRTUAL_COM_PORT_DATA_SIZE ?
-        USART_Rx_length : VIRTUAL_COM_PORT_DATA_SIZE;
-
-      for (i = 0; i < USB_Tx_length; i++)
-      {
-        USB_Tx_Buffer[i] = USART_Rx_Buffer[USART_Rx_ptr_out++%USART_RX_DATA_SIZE];
-      }
-
-      UserToPMABufferCopy(USB_Tx_Buffer, ENDP1_TXADDR, USB_Tx_length);
-      SetEPTxCount(ENDP1, USB_Tx_length);
-      SetEPTxValid(ENDP1);
-      USB_Tx_State = 1;
-    }
-  }
-}
-
-/*******************************************************************************
 * Function Name  : CNTR_To_USB_Send_Data.
 * Description    : send the received data from CNTR to USB.
 * Input          : None.
@@ -460,7 +422,7 @@ void Handle_USBAsynchXfer(void)
 *******************************************************************************/
 void CNTR_To_USB_Send_Data(uint8_t data)
 {
-  USART_Rx_Buffer[USART_Rx_ptr_in++%USART_RX_DATA_SIZE] = data;
+  USART_Rx_Buffer[(USART_Rx_ptr_in++)%USART_RX_DATA_SIZE] = data;
 }
 
 /*******************************************************************************
@@ -471,7 +433,7 @@ void CNTR_To_USB_Send_Data(uint8_t data)
 *******************************************************************************/
 void USART_To_USB_Send_Data(void)
 {
-  USART_Rx_Buffer[USART_Rx_ptr_in++%USART_RX_DATA_SIZE] = USART_ReceiveData(DXL_USART);
+  USART_Rx_Buffer[(USART_Rx_ptr_in++)%USART_RX_DATA_SIZE] = USART_ReceiveData(DXL_USART);
 }
 
 /*******************************************************************************
