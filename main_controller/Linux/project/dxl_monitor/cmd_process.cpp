@@ -277,6 +277,23 @@ void Reset(Robot::CM730 *cm730, int id)
 
 	if(id == CM730::ID_CM) // Sub board
 	{ 
+#if 0
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, CM730::P_BAUD_RATE, 1, 0) == CM730::SUCCESS)
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}
+#endif
+		
 		FailCount = 0;
 		while(1)
 		{
@@ -309,6 +326,23 @@ void Reset(Robot::CM730 *cm730, int id)
 	}
 	else // Actuator
 	{
+#if 0
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, MX28::P_BAUD_RATE, 1, 0) == CM730::SUCCESS)
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}
+#endif
+
 		FailCount = 0;
 		while(1)
 		{
@@ -324,101 +358,26 @@ void Reset(Robot::CM730 *cm730, int id)
 			usleep(10000);
 		}
 
-		double cwLimit = MX28::MIN_ANGLE;
-		double ccwLimit = MX28::MAX_ANGLE;
-
-		switch(id)
+#if 0
+		FailCount = 0;
+		while(1)
 		{
-		case JointData::ID_R_SHOULDER_ROLL:
-			cwLimit = -75.0;
-			ccwLimit = 135.0;
-			break;
+			if(cm730->WriteWord(id, MX28::P_CW_ANGLE_LIMIT_L, 0, 0) == CM730::SUCCESS)
+				break;
 
-		case JointData::ID_L_SHOULDER_ROLL:
-			cwLimit = -135.0;
-			ccwLimit = 75.0;
-			break;
-
-		case JointData::ID_R_ELBOW:
-			cwLimit = -95.0;
-			ccwLimit = 70.0;
-			break;
-
-		case JointData::ID_L_ELBOW:
-			cwLimit = -70.0;
-			ccwLimit = 95.0;
-			break;
-
-		case JointData::ID_R_HIP_YAW:
-            cwLimit = -123.0;
-            ccwLimit = 53.0;
-            break;
-
-		case JointData::ID_L_HIP_YAW:
-			cwLimit = -53.0;
-			ccwLimit = 123.0;
-			break;
-
-		case JointData::ID_R_HIP_ROLL:
-			cwLimit = -45.0;
-			ccwLimit = 59.0;
-			break;
-
-		case JointData::ID_L_HIP_ROLL:
-			cwLimit = -59.0;
-			ccwLimit = 45.0;
-			break;
-
-		case JointData::ID_R_HIP_PITCH:
-			cwLimit = -100.0;
-			ccwLimit = 29.0;
-			break;
-
-		case JointData::ID_L_HIP_PITCH:
-			cwLimit = -29.0;
-			ccwLimit = 100.0;
-			break;
-
-		case JointData::ID_R_KNEE:
-			cwLimit = -6.0;
-			ccwLimit = 130.0;
-			break;
-
-		case JointData::ID_L_KNEE:
-			cwLimit = -130.0;
-			ccwLimit = 6.0;
-			break;
-
-		case JointData::ID_R_ANKLE_PITCH:
-			cwLimit = -72.0;
-			ccwLimit = 80.0;
-			break;
-
-		case JointData::ID_L_ANKLE_PITCH:
-			cwLimit = -80.0;
-			ccwLimit = 72.0;
-			break;
-
-		case JointData::ID_R_ANKLE_ROLL:
-			cwLimit = -44.0;
-			ccwLimit = 63.0;
-			break;
-
-		case JointData::ID_L_ANKLE_ROLL:
-			cwLimit = -63.0;
-			ccwLimit = 44.0;
-			break;
-
-		case JointData::ID_HEAD_TILT:
-			cwLimit = -25.0;
-			ccwLimit = 55.0;
-			break;
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
 		}
-		
+
 		FailCount = 0;
 		while(1)
 		{
-			if(cm730->WriteWord(id, MX28::P_CW_ANGLE_LIMIT_L, MX28::Angle2Value(cwLimit), 0) == CM730::SUCCESS)
+			if(cm730->WriteWord(id, MX28::P_CCW_ANGLE_LIMIT_L, 0x0fff, 0) == CM730::SUCCESS)
 				break;
 
 			FailCount++;
@@ -429,20 +388,7 @@ void Reset(Robot::CM730 *cm730, int id)
 			}
 			usleep(10000);
 		}		
-		FailCount = 0;
-		while(1)
-		{
-			if(cm730->WriteWord(id, MX28::P_CCW_ANGLE_LIMIT_L, MX28::Angle2Value(ccwLimit), 0) == CM730::SUCCESS)
-				break;
 
-			FailCount++;
-			if(FailCount > FailMaxCount)
-			{
-				printf("Fail\n");
-				return;
-			}
-			usleep(10000);
-		}		
 		FailCount = 0;
 		while(1)
 		{
@@ -457,6 +403,7 @@ void Reset(Robot::CM730 *cm730, int id)
 			}
 			usleep(10000);
 		}
+
 		FailCount = 0;
 		while(1)
 		{
@@ -470,11 +417,12 @@ void Reset(Robot::CM730 *cm730, int id)
 				return;
 			}
 			usleep(10000);
-		}		
+		}
+
 		FailCount = 0;
 		while(1)
 		{
-			if(cm730->WriteByte(id, MX28::P_HIGH_LIMIT_VOLTAGE, 140, 0) == CM730::SUCCESS)
+			if(cm730->WriteByte(id, MX28::P_HIGH_LIMIT_VOLTAGE, 160, 0) == CM730::SUCCESS)
 				break;
 
 			FailCount++;
@@ -485,10 +433,11 @@ void Reset(Robot::CM730 *cm730, int id)
 			}
 			usleep(10000);
 		}
+
 		FailCount = 0;
 		while(1)
 		{
-			if(cm730->WriteWord(id, MX28::P_MAX_TORQUE_L, MX28::MAX_VALUE, 0) == CM730::SUCCESS)
+			if(cm730->WriteWord(id, MX28::P_MAX_TORQUE_L, 0x03ff, 0) == CM730::SUCCESS)
 				break;
 
 			FailCount++;
@@ -499,6 +448,24 @@ void Reset(Robot::CM730 *cm730, int id)
 			}
 			usleep(10000);
 		}
+#endif
+
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, MX28::P_RETURN_LEVEL, 2, 0) == CM730::SUCCESS)
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}
+
+#if 0
 		FailCount = 0;
 		while(1)
 		{
@@ -512,7 +479,8 @@ void Reset(Robot::CM730 *cm730, int id)
 				return;
 			}
 			usleep(10000);
-		}		 
+		}
+
 		FailCount = 0;
 		while(1)
 		{
@@ -527,6 +495,37 @@ void Reset(Robot::CM730 *cm730, int id)
 			}
 			usleep(10000);
 		}		 
+
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, MX28::P_MULTI_TURN_OFFSET_L, 0, 0) == CM730::SUCCESS) // Overload, Overheat
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}		 
+
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, MX28::P_RESOLUTION_DIVIDER, 1, 0) == CM730::SUCCESS) // Overload, Overheat
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}		 
+#endif
 	}
 
 	printf("Success\n");
