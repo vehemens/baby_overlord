@@ -31,13 +31,6 @@
 #define RETURN_READ_PACKET 1
 #define RETURN_ALL_PACKET 2
 
-#define DEFAULT_BAUD_RATE 1    //1Mbps at 16MHz
-
-#define PROGRAM_VERSION 0x13     // for ax12, freq. selectable
-
-#define CW_ANGLE_FIXED_LIMIT 0 // 0+30 dudung031002
-#define CCW_ANGLE_FIXED_LIMIT (1023) // 300-30 dudung031002
-
 /* Private macro -------------------------------------------------------------*/
 #define SYSTEM_RESET NVIC_GenerateSystemReset()
 
@@ -51,32 +44,32 @@ uint8_t gbpParameterRange[][2] =
   {0, 253},	//P_ID			3
   {1, 254},	//P_BAUD_RATE		4
   {0, 254},	//P_RETURN_DELAY_TIME	5
-  {0, 255},	//P_CW_ANGLE_LIMIT_L	6
-  {0, 3},	//P_CW_ANGLE_LIMIT_H	7
-  {0, 255},	//P_CCW_ANGLE_LIMIT_L	8
-  {0, 3},	//P_CCW_ANGLE_LIMIT_H	9
-  {1, 0},	//P_SYSTEM_DATA2	10 for center calibration offset
-  {0, 150},	//P_LIMIT_TEMPERATURE	11
-  {50, 250},	//P_DOWN_LIMIT_VOLTAGE	12
-  {50, 250},	//P_UP_LIMIT_VOLTAGE	13
-  {0, 255},	//P_MAX_TORQUE_L	14
-  {0, 3},	//P_MAX_TORQUE_H	15
+  {1, 0},	//			6
+  {1, 0},	//			7
+  {1, 0},	//			8
+  {1, 0},	//			9
+  {1, 0},	//			10
+  {1, 0},	//			11
+  {1, 0},	//			12
+  {1, 0},	//			13
+  {1, 0},	//			14
+  {1, 0},	//			15
   {0, 2},	//P_RETURN_LEVEL	16
-  {0, 0x7f},	//P_ALARM_LED		17
-  {0, 0x7f},	//P_ALARM_SHUTDOWN	18
-  {0, 255},	//P_OPERATING_MODE	19
-  {1, 0},	//P_DOWN_CALIBRATION_L	20
-  {1, 0},	//P_DOWN_CALIBRATION_H	21
-  {1, 0},	//P_UP_CALIBRATION_L	22
-  {1, 0},	//P_UP_CALIBRATOIN_H	23
+  {1, 0},	//			17
+  {1, 0},	//			18
+  {1, 0},	//			19
+  {1, 0},	//			20
+  {1, 0},	//			21
+  {1, 0},	//			22
+  {1, 0},	//			23
 
   //RAM area
   {0, 1},	//P_DYNAMIXEL_POWER	24
   {0, 7},	//P_LED_PANNEL		25
-  {0, 255},	//P_LED_HEAD		26
-  {0, 127},	//			27
-  {0, 255},	//P_LED_EYE		28
-  {0, 127},	//			29
+  {0, 255},	//P_LED_HEAD_L		26
+  {0, 127},	//P_LED_HEAD_H		27
+  {0, 255},	//P_LED_EYE_L		28
+  {0, 127},	//P_LED_EYE_H		29
   {1, 0},	//P_BUTTON		30
   {1, 0},	//			31
   {1, 0},	//			32
@@ -85,58 +78,49 @@ uint8_t gbpParameterRange[][2] =
   {1, 0},	//			35
   {1, 0},	//			36
   {1, 0},	//			37
-  {1, 0},	//P_GYRO_Z		38
-  {1, 0},	//			39
-  {1, 0},	//P_GYRO_Y		40
-  {1, 0},	//			41
-  {1, 0},	//P_GYRO_X		42
-  {1, 0},	//			43
-  {1, 0},	//P_ACC_X		44
-  {1, 0},	//			45
-  {1, 0},	//P_ACC_Y		46
-  {1, 0},	//			47
-  {1, 0},	//P_ACC_Z		48
-  {1, 0},	//			49
+  {1, 0},	//P_GYRO_Z_L		38
+  {1, 0},	//P_GYRO_Z_H		39
+  {1, 0},	//P_GYRO_Y_L		40
+  {1, 0},	//P_GYRO_Y_H		41
+  {1, 0},	//P_GYRO_X_L		42
+  {1, 0},	//P_GYRO_X_H		43
+  {1, 0},	//P_ACC_X_L		44
+  {1, 0},	//P_ACC_X_H		45
+  {1, 0},	//P_ACC_Y_L		46
+  {1, 0},	//P_ACC_Y_H		47
+  {1, 0},	//P_ACC_Z_L		48
+  {1, 0},	//P_ACC_Z_H		49
   {1, 0},	//P_ADC0_VOLTAGE	50
-  {1, 0},	//P_ADC1_MIC1		51
+  {1, 0},	//P_ADC1_MIC1_L		51
   {1, 0},	//			52
-  {1, 0},	//P_ADC9_MIC2		53
+  {1, 0},	//P_ADC2_L		53
   {1, 0},	//			54
-  {1, 0},	//P_ADC2		55
+  {1, 0},	//P_ADC3_L		55
   {1, 0},	//			56
-  {1, 0},	//P_ADC3		57
+  {1, 0},	//P_ADC4_L		57
   {1, 0},	//			58
-  {1, 0},	//P_ADC4		59
+  {1, 0},	//P_ADC5_L		59
   {1, 0},	//			60
-  {1, 0},	//P_ADC5		61
+  {1, 0},	//P_ADC6_L		61
   {1, 0},	//			62
-  {1, 0},	//P_ADC6		63
+  {1, 0},	//P_ADC7_L		63
   {1, 0},	//			64
-  {1, 0},	//P_ADC7		65
+  {1, 0},	//P_ADC8_L		65
   {1, 0},	//			66
-  {1, 0},	//P_ADC8		67
+  {1, 0},	//P_ADC9_MIC2_L		67
   {1, 0},	//			68
-  {1, 0},	//P_ADC10		69
+  {1, 0},	//P_ADC10_L		69
   {1, 0},	//			70
-  {1, 0},	//P_ADC11		71
+  {1, 0},	//P_ADC11_L		71
   {1, 0},	//			72
-  {1, 0},	//P_ADC12		73
+  {1, 0},	//P_ADC12_L		73
   {1, 0},	//			74
-  {1, 0},	//P_ADC13		75
+  {1, 0},	//P_ADC13_L		75
   {1, 0},	//			76
-  {1, 0},	//P_ADC14		77
+  {1, 0},	//P_ADC14_L		77
   {1, 0},	//			78
-  {1, 0},	//P_ADC15		79
+  {1, 0},	//P_ADC15_L		79
   {1, 0},	//			80
-  {0, 0xFF},	//P_BUZZER_DATA0	81
-  {0, 0xFF},	//P_BUZZER_DATA1	82
-  {0, 0xFF},	//P_TX_REMOCON_DATA_L	83
-  {0, 0xFF},	//P_TX_REMOCON_DATA_H	84
-  {1, 0},	//P_RX_REMOCON_DATA_L	85
-  {1, 0},	//P_RX_REMOCON_DATA_H	86
-  {1, 0},	//P_RX_REMOCON_DATA_ARRIVED	87
-  {1, 0},	//P_ZIGBEE_ID_L		88
-  {1, 0},	//P_ZIGBEE_ID_H		89
 };
 
 uint8_t gbpDataSize[] =
@@ -148,32 +132,32 @@ uint8_t gbpDataSize[] =
   1,		//P_ID			3
   1,		//P_BAUD_RATE		4
   1,		//P_RETURN_DELAY_TIME	5
-  2,		//P_CW_ANGLE_LIMIT_L	6
-  0,		//P_CW_ANGLE_LIMIT_H	7
-  2,		//P_CCW_ANGLE_LIMIT_L	8
-  0,		//P_CCW_ANGLE_LIMIT_H	9
-  1,		//P_SYSTEM_DATA2	10
-  1,		//P_LIMIT_TEMPERATURE	11
-  1,		//P_UP_LIMIT_VOLTAGE	12
-  1,		//P_DOWN_LIMIT_VOLTAGE	13
-  2,		//P_MAX_TORQUE_L	14
-  0,		//P_MAX_TORQUE_H	15
+  1,		//			6
+  1,		//			7
+  1,		//			8
+  1,		//			9
+  1,		//			10
+  1,		//			11
+  1,		//			12
+  1,		//			13
+  1,		//			14
+  1,		//			15
   1,		//P_RETURN_LEVEL	16
-  1,		//P_ALARM_LED		17
-  1,		//P_ALARM_SHUTDOWN	18
-  1,		//P_OPERATING_MODE	19
-  2,		//P_DOWN_CALIBRATION_L	20
-  0,		//P_DOWN_CALIBRATION_H	21
-  2,		//P_UP_CALIBRATION_L	22
-  0,		//P_UP_CALIBRATOIN_H	23
+  1,		//			17
+  1,		//			18
+  1,		//			19
+  1,		//			20
+  1,		//			21
+  1,		//			22
+  1,		//			23
 
   //RAM area
   1,		//P_DYNAMIXEL_POWER	24
   1,		//P_LED_PANNEL		25
-  2,		//P_LED_HEAD		26
-  0,		//			27
-  2,		//P_LED_EYE		28
-  0,		//			29
+  2,		//P_LED_HEAD_L		26
+  0,		//P_LED_HEAD_H		27
+  2,		//P_LED_EYE_L		28
+  0,		//P_LED_EYE_H		29
   1,		//P_BUTTON		30
   1,		//			31
   1,		//			32
@@ -182,86 +166,77 @@ uint8_t gbpDataSize[] =
   1,		//			35
   1,		//			36
   1,		//			37
-  2,		//P_GYRO_Z		38
-  0,		//			39
-  2,		//P_GYRO_Y		40
-  0,		//			41
-  2,		//P_GYRO_X		42
-  0,		//			43
-  2,		//P_ACC_X		44
-  0,		//			45
-  2,		//P_ACC_Y		46
-  0,		//			47
-  2,		//P_ACC_Z		48
-  0,		//			49
+  2,		//P_GYRO_Z_L		38
+  0,		//P_GYRO_Z_H		39
+  2,		//P_GYRO_Y_L		40
+  0,		//P_GYRO_Y_H		41
+  2,		//P_GYRO_X_L		42
+  0,		//P_GYRO_X_H		43
+  2,		//P_ACC_X_L		44
+  0,		//P_ACC_X_H		45
+  2,		//P_ACC_Y_L		46
+  0,		//P_ACC_Y_H		47
+  2,		//P_ACC_Z_L		48
+  0,		//P_ACC_Z_H		49
   1,		//P_ADC0_VOLTAGE	50
-  2,		//P_ADC1_MIC1		51
+  2,		//P_ADC1_MIC1_L		51
   0,		//			52
-  2,		//P_ADC9_MIC2		53
+  2,		//P_ADC2_L		53
   0,		//			54
-  2,		//P_ADC2		55
+  2,		//P_ADC3_L		55
   0,		//			56
-  2,		//P_ADC3		57
+  2,		//P_ADC4_L		57
   0,		//			58
-  2,		//P_ADC4		59
+  2,		//P_ADC5_L		59
   0,		//			60
-  2,		//P_ADC5		61
+  2,		//P_ADC6_L		61
   0,		//			62
-  2,		//P_ADC6		63
+  2,		//P_ADC7_L		63
   0,		//			64
-  2,		//P_ADC7		65
+  2,		//P_ADC8_L		65
   0,		//			66
-  2,		//P_ADC8		67
+  2,		//P_ADC9_MIC2_L		67
   0,		//			68
-  2,		//P_ADC10		69
+  2,		//P_ADC10_L		69
   0,		//			70
-  2,		//P_ADC11		71
+  2,		//P_ADC11_L		71
   0,		//			72
-  2,		//P_ADC12		73
+  2,		//P_ADC12_L		73
   0,		//			74
-  2,		//P_ADC13		75
+  2,		//P_ADC13_L		75
   0,		//			76
-  2,		//P_ADC14		77
+  2,		//P_ADC14_L		77
   0,		//			78
-  2,		//P_ADC15		79
+  2,		//P_ADC15_L		79
   0,		//			80
-  1,		//P_BUZZER_DATA0	81
-  1,		//P_BUZZER_DATA1	82
-  2,		//P_TX_REMOCON_DATA_L	83
-  0,		//P_TX_REMOCON_DATA_H	84
-  2,		//P_RX_REMOCON_DATA_L	85
-  0,		//P_RX_REMOCON_DATA_H	86
-  1,		//P_RX_REMOCON_DATA_ARRIVED	87
-  2,		//P_ZIGBEE_ID_L		88
-  0		//P_ZIGBEE_ID_H		89
 };
 
 uint8_t ROM_INITIAL_DATA[] =
 {
   0,		//P_MODEL_NUMBER_L	0
   0x73,		//P_MODEL_NUMBER_H	1
-  PROGRAM_VERSION,	//P_VERSION		2
-  DEFAULT_ID,	//P_ID			3
-  DEFAULT_BAUD_RATE,	//P_BAUD_RATE		4
+  0x13,		//P_VERSION		2
+  200,		//P_ID			3
+  1,		//P_BAUD_RATE		4
   0,		//P_RETURN_DELAY_TIME	5
-  CW_ANGLE_FIXED_LIMIT & 0xff,	//P_CW_ANGLE_LIMIT_L	6
-  CW_ANGLE_FIXED_LIMIT >> 8,	//P_CW_ANGLE_LIMIT_H	7
-  CCW_ANGLE_FIXED_LIMIT & 0xff,	//P_CCW_ANGLE_LIMIT_L	8
-  CCW_ANGLE_FIXED_LIMIT >> 8,	//P_CCW_ANGLE_LIMIT_H	9
-  0,		//P_SYSTEM_DATA2	10
-  85 - 5,	//P_LIMIT_TEMPERATURE	11
-  60,		//P_UP_LIMIT_VOLTAGE 	12
-  190,		//P_DOWN_LIMIT_VOLTAGE	13
-  255,		//P_MAX_TORQUE_L	14
-  3,		//P_MAX_TORQUE_H	15
+  0,		//			6
+  0,		//			7
+  0,		//			8
+  0,		//			9
+  0,		//			10
+  0,		//			11
+  0,		//			12
+  0,		//			13
+  0,		//			14
+  0,		//			15
   2,		//P_RETURN_LEVEL	16
-  0x24,		//P_ALARM_LED		17
-  0x24,		//P_ALARM_SHUTDOWN	18
-  0,		//P_OPERATING_MODE	19
-  0 & 0xff,	//P_DOWN_CALIBRATION_L	20
-  0 >> 8,	//P_DOWN_CALIBRATION_H	21
-  0 & 0xff,	//P_UP_CALIBRATOIN_L	22
-  0 >> 8	//P_UP_CALIBRATOIN_H	23
+  0,		//			17
+  0,		//			18
+  0,		//			19
+  0,		//			20
+  0,		//			21
+  0,		//			22
+  0		//			23
 };
 
 volatile uint8_t gbpRxInterruptBuffer[256];
@@ -337,8 +312,6 @@ void ProcessInit(void)
   gbTxD0BufferReadPointer = 0;
 
   gbInterruptCheckError = 0;
-
-  GB_ID = DEFAULT_ID;
 
   GW_LED_HEAD = ((0 >> 3) << 10) | ((255 >> 3) << 5) | (0 >> 3);
   GW_LED_EYE =  ((255 >> 3) << 10) | ((0 >> 3) << 5) | (0 >> 3);
@@ -873,13 +846,13 @@ void ProcessAfterWriting(void)
       LED_SetState(~GB_LED_MODE, OFF);
       break;
 
-    case P_LED_HEAD:
+    case P_LED_HEAD_L:
       gbLEDHeadR = GW_LED_HEAD & 0x1f;
       gbLEDHeadG = (GW_LED_HEAD >> 5) & 0x1f;
       gbLEDHeadB = (GW_LED_HEAD >> 10) & 0x1f;
       break;
 
-    case P_LED_EYE:
+    case P_LED_EYE_L:
       gbLEDEyeR = GW_LED_EYE & 0x1f;
       gbLEDEyeG = (GW_LED_EYE >> 5) & 0x1f;
       gbLEDEyeB = (GW_LED_EYE >> 10) & 0x1f;
