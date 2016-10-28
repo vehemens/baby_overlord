@@ -153,31 +153,24 @@ void MotionManager::StopLogging()
 
 void MotionManager::LoadINISettings(minIni* ini)
 {
-    LoadINISettings(ini, OFFSET_SECTION);
-}
-void MotionManager::LoadINISettings(minIni* ini, const std::string &section)
-{
     int ivalue = INVALID_VALUE;
 
     for(int i = 1; i < JointData::NUMBER_OF_JOINTS; i++)
     {
         char key[10];
         sprintf(key, "ID_%.2d", i);
-        if((ivalue = ini->geti(section, key, INVALID_VALUE)) != INVALID_VALUE)  m_Offset[i] = ivalue;
+        if((ivalue = ini->geti(OFFSET_SECTION, key, INVALID_VALUE)) != INVALID_VALUE) m_Offset[i] = ivalue;
         if((ivalue = ini->geti(INVERT_SECTION, key, INVALID_VALUE)) != INVALID_VALUE) m_invert[i] = ivalue;
     }
 }
+
 void MotionManager::SaveINISettings(minIni* ini)
-{
-    SaveINISettings(ini, OFFSET_SECTION);
-}
-void MotionManager::SaveINISettings(minIni* ini, const std::string &section)
 {
     for(int i = 1; i < JointData::NUMBER_OF_JOINTS; i++)
     {
         char key[10];
         sprintf(key, "ID_%.2d", i);
-        ini->put(section, key, m_Offset[i]);
+        ini->put(OFFSET_SECTION, key, m_Offset[i]);
         ini->put(INVERT_SECTION, key, (int)m_invert[i]);
     }
 }

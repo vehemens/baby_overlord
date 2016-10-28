@@ -72,85 +72,80 @@ Walking::~Walking()
 
 void Walking::LoadINISettings(minIni* ini)
 {
-    LoadINISettings(ini, WALKING_SECTION);
-}
-void Walking::LoadINISettings(minIni* ini, const std::string &section)
-{
+    const char *section = WALKING_SECTION;
     double value = INVALID_VALUE;
 
-    if((value = ini->getd(section, "x_offset", INVALID_VALUE)) != INVALID_VALUE)                X_OFFSET = value;
-    if((value = ini->getd(section, "y_offset", INVALID_VALUE)) != INVALID_VALUE)                Y_OFFSET = value;
-    if((value = ini->getd(section, "z_offset", INVALID_VALUE)) != INVALID_VALUE)                Z_OFFSET = value;
-    if((value = ini->getd(section, "roll_offset", INVALID_VALUE)) != INVALID_VALUE)             R_OFFSET = value;
-    if((value = ini->getd(section, "pitch_offset", INVALID_VALUE)) != INVALID_VALUE)            P_OFFSET = value;
-    if((value = ini->getd(section, "yaw_offset", INVALID_VALUE)) != INVALID_VALUE)              A_OFFSET = value;
-    if((value = ini->getd(section, "hip_pitch_offset", INVALID_VALUE)) != INVALID_VALUE)        HIP_PITCH_OFFSET = value;
-    if((value = ini->getd(section, "period_time", INVALID_VALUE)) != INVALID_VALUE)             PERIOD_TIME = value;
-    if((value = ini->getd(section, "dsp_ratio", INVALID_VALUE)) != INVALID_VALUE)               DSP_RATIO = value;
-    if((value = ini->getd(section, "step_forward_back_ratio", INVALID_VALUE)) != INVALID_VALUE) STEP_FB_RATIO = value;
-    if((value = ini->getd(section, "foot_height", INVALID_VALUE)) != INVALID_VALUE)             Z_MOVE_AMPLITUDE = value;
-    if((value = ini->getd(section, "swing_right_left", INVALID_VALUE)) != INVALID_VALUE)        Y_SWAP_AMPLITUDE = value;
-    if((value = ini->getd(section, "swing_top_down", INVALID_VALUE)) != INVALID_VALUE)          Z_SWAP_AMPLITUDE = value;
-    if((value = ini->getd(section, "pelvis_offset", INVALID_VALUE)) != INVALID_VALUE)           PELVIS_OFFSET = value;
-    if((value = ini->getd(section, "arm_swing_gain", INVALID_VALUE)) != INVALID_VALUE)          ARM_SWING_GAIN = value;
-    if((value = ini->getd(section, "balance_knee_gain", INVALID_VALUE)) != INVALID_VALUE)       BALANCE_KNEE_GAIN = value;
-    if((value = ini->getd(section, "balance_ankle_pitch_gain", INVALID_VALUE)) != INVALID_VALUE)BALANCE_ANKLE_PITCH_GAIN = value;
-    if((value = ini->getd(section, "balance_hip_roll_gain", INVALID_VALUE)) != INVALID_VALUE)   BALANCE_HIP_ROLL_GAIN = value;
-    if((value = ini->getd(section, "balance_ankle_roll_gain", INVALID_VALUE)) != INVALID_VALUE) BALANCE_ANKLE_ROLL_GAIN = value;
+    if((value = ini->getd(section, "x_offset",                 INVALID_VALUE)) != INVALID_VALUE) X_OFFSET = value;
+    if((value = ini->getd(section, "y_offset",                 INVALID_VALUE)) != INVALID_VALUE) Y_OFFSET = value;
+    if((value = ini->getd(section, "z_offset",                 INVALID_VALUE)) != INVALID_VALUE) Z_OFFSET = value;
+    if((value = ini->getd(section, "roll_offset",              INVALID_VALUE)) != INVALID_VALUE) R_OFFSET = value;
+    if((value = ini->getd(section, "pitch_offset",             INVALID_VALUE)) != INVALID_VALUE) P_OFFSET = value;
+    if((value = ini->getd(section, "yaw_offset",               INVALID_VALUE)) != INVALID_VALUE) A_OFFSET = value;
+    if((value = ini->getd(section, "hip_pitch_offset",         INVALID_VALUE)) != INVALID_VALUE) HIP_PITCH_OFFSET = value;
+    if((value = ini->getd(section, "period_time",              INVALID_VALUE)) != INVALID_VALUE) PERIOD_TIME = value;
+    if((value = ini->getd(section, "dsp_ratio",                INVALID_VALUE)) != INVALID_VALUE) DSP_RATIO = value;
+    if((value = ini->getd(section, "step_forward_back_ratio",  INVALID_VALUE)) != INVALID_VALUE) STEP_FB_RATIO = value;
+    if((value = ini->getd(section, "foot_height",              INVALID_VALUE)) != INVALID_VALUE) Z_MOVE_AMPLITUDE = value;
+    if((value = ini->getd(section, "swing_right_left",         INVALID_VALUE)) != INVALID_VALUE) Y_SWAP_AMPLITUDE = value;
+    if((value = ini->getd(section, "swing_top_down",           INVALID_VALUE)) != INVALID_VALUE) Z_SWAP_AMPLITUDE = value;
+    if((value = ini->getd(section, "pelvis_offset",            INVALID_VALUE)) != INVALID_VALUE) PELVIS_OFFSET = value;
+    if((value = ini->getd(section, "arm_swing_gain",           INVALID_VALUE)) != INVALID_VALUE) ARM_SWING_GAIN = value;
+    if((value = ini->getd(section, "balance_knee_gain",        INVALID_VALUE)) != INVALID_VALUE) BALANCE_KNEE_GAIN = value;
+    if((value = ini->getd(section, "balance_ankle_pitch_gain", INVALID_VALUE)) != INVALID_VALUE) BALANCE_ANKLE_PITCH_GAIN = value;
+    if((value = ini->getd(section, "balance_hip_roll_gain",    INVALID_VALUE)) != INVALID_VALUE) BALANCE_HIP_ROLL_GAIN = value;
+    if((value = ini->getd(section, "balance_ankle_roll_gain",  INVALID_VALUE)) != INVALID_VALUE) BALANCE_ANKLE_ROLL_GAIN = value;
 
-    if((value = ini->getd(section, "r_shoulder_pitch", INVALID_VALUE)) != INVALID_VALUE)        R_SHOULDER_PITCH = value;
-    if((value = ini->getd(section, "l_shoulder_pitch", INVALID_VALUE)) != INVALID_VALUE)        L_SHOULDER_PITCH = value;
-    if((value = ini->getd(section, "r_shoulder_roll", INVALID_VALUE)) != INVALID_VALUE)         R_SHOULDER_ROLL = value;
-    if((value = ini->getd(section, "l_shoulder_roll", INVALID_VALUE)) != INVALID_VALUE)         L_SHOULDER_ROLL = value;
-    if((value = ini->getd(section, "r_elbow", INVALID_VALUE)) != INVALID_VALUE)                 R_ELBOW = value;
-    if((value = ini->getd(section, "l_elbow", INVALID_VALUE)) != INVALID_VALUE)                 L_ELBOW = value;
-    if((value = ini->getd(section, "head_pan", INVALID_VALUE)) != INVALID_VALUE)                HEAD_PAN = value;
-    if((value = ini->getd(section, "head_tilt", INVALID_VALUE)) != INVALID_VALUE)               HEAD_TILT = value;
+    if((value = ini->getd(section, "r_shoulder_pitch",         INVALID_VALUE)) != INVALID_VALUE) R_SHOULDER_PITCH = value;
+    if((value = ini->getd(section, "l_shoulder_pitch",         INVALID_VALUE)) != INVALID_VALUE) L_SHOULDER_PITCH = value;
+    if((value = ini->getd(section, "r_shoulder_roll",          INVALID_VALUE)) != INVALID_VALUE) R_SHOULDER_ROLL = value;
+    if((value = ini->getd(section, "l_shoulder_roll",          INVALID_VALUE)) != INVALID_VALUE) L_SHOULDER_ROLL = value;
+    if((value = ini->getd(section, "r_elbow",                  INVALID_VALUE)) != INVALID_VALUE) R_ELBOW = value;
+    if((value = ini->getd(section, "l_elbow",                  INVALID_VALUE)) != INVALID_VALUE) L_ELBOW = value;
+    if((value = ini->getd(section, "head_pan",                 INVALID_VALUE)) != INVALID_VALUE) HEAD_PAN = value;
+    if((value = ini->getd(section, "head_tilt",                INVALID_VALUE)) != INVALID_VALUE) HEAD_TILT = value;
 
     int ivalue = INVALID_VALUE;
 
-    if((ivalue = ini->geti(section, "p_gain", INVALID_VALUE)) != INVALID_VALUE)                 P_GAIN = ivalue;
-    if((ivalue = ini->geti(section, "i_gain", INVALID_VALUE)) != INVALID_VALUE)                 I_GAIN = ivalue;
-    if((ivalue = ini->geti(section, "d_gain", INVALID_VALUE)) != INVALID_VALUE)                 D_GAIN = ivalue;
+    if((ivalue = ini->geti(section, "p_gain",                  INVALID_VALUE)) != INVALID_VALUE) P_GAIN = ivalue;
+    if((ivalue = ini->geti(section, "i_gain",                  INVALID_VALUE)) != INVALID_VALUE) I_GAIN = ivalue;
+    if((ivalue = ini->geti(section, "d_gain",                  INVALID_VALUE)) != INVALID_VALUE) D_GAIN = ivalue;
 }
 void Walking::SaveINISettings(minIni* ini)
 {
-    SaveINISettings(ini, WALKING_SECTION);
-}
-void Walking::SaveINISettings(minIni* ini, const std::string &section)
-{
-    ini->put(section,   "x_offset",                 X_OFFSET);
-    ini->put(section,   "y_offset",                 Y_OFFSET);
-    ini->put(section,   "z_offset",                 Z_OFFSET);
-    ini->put(section,   "roll_offset",              R_OFFSET);
-    ini->put(section,   "pitch_offset",             P_OFFSET);
-    ini->put(section,   "yaw_offset",               A_OFFSET);
-    ini->put(section,   "hip_pitch_offset",         HIP_PITCH_OFFSET);
-    ini->put(section,   "period_time",              PERIOD_TIME);
-    ini->put(section,   "dsp_ratio",                DSP_RATIO);
-    ini->put(section,   "step_forward_back_ratio",  STEP_FB_RATIO);
-    ini->put(section,   "foot_height",              Z_MOVE_AMPLITUDE);
-    ini->put(section,   "swing_right_left",         Y_SWAP_AMPLITUDE);
-    ini->put(section,   "swing_top_down",           Z_SWAP_AMPLITUDE);
-    ini->put(section,   "pelvis_offset",            PELVIS_OFFSET);
-    ini->put(section,   "arm_swing_gain",           ARM_SWING_GAIN);
-    ini->put(section,   "balance_knee_gain",        BALANCE_KNEE_GAIN);
-    ini->put(section,   "balance_ankle_pitch_gain", BALANCE_ANKLE_PITCH_GAIN);
-    ini->put(section,   "balance_hip_roll_gain",    BALANCE_HIP_ROLL_GAIN);
-    ini->put(section,   "balance_ankle_roll_gain",  BALANCE_ANKLE_ROLL_GAIN);
+    const char *section = WALKING_SECTION;
 
-    ini->put(section,   "r_shoulder_pitch",         R_SHOULDER_PITCH);
-    ini->put(section,   "l_shoulder_pitch",         L_SHOULDER_PITCH);
-    ini->put(section,   "r_shoulder_roll",          R_SHOULDER_ROLL);
-    ini->put(section,   "l_shoulder_roll",          L_SHOULDER_ROLL);
-    ini->put(section,   "r_elbow",                  R_ELBOW);
-    ini->put(section,   "l_elbow",                  L_ELBOW);
-    ini->put(section,   "head_pan",                 HEAD_PAN);
-    ini->put(section,   "head_tilt",                HEAD_TILT);
+    ini->put(section, "x_offset",                 X_OFFSET);
+    ini->put(section, "y_offset",                 Y_OFFSET);
+    ini->put(section, "z_offset",                 Z_OFFSET);
+    ini->put(section, "roll_offset",              R_OFFSET);
+    ini->put(section, "pitch_offset",             P_OFFSET);
+    ini->put(section, "yaw_offset",               A_OFFSET);
+    ini->put(section, "hip_pitch_offset",         HIP_PITCH_OFFSET);
+    ini->put(section, "period_time",              PERIOD_TIME);
+    ini->put(section, "dsp_ratio",                DSP_RATIO);
+    ini->put(section, "step_forward_back_ratio",  STEP_FB_RATIO);
+    ini->put(section, "foot_height",              Z_MOVE_AMPLITUDE);
+    ini->put(section, "swing_right_left",         Y_SWAP_AMPLITUDE);
+    ini->put(section, "swing_top_down",           Z_SWAP_AMPLITUDE);
+    ini->put(section, "pelvis_offset",            PELVIS_OFFSET);
+    ini->put(section, "arm_swing_gain",           ARM_SWING_GAIN);
+    ini->put(section, "balance_knee_gain",        BALANCE_KNEE_GAIN);
+    ini->put(section, "balance_ankle_pitch_gain", BALANCE_ANKLE_PITCH_GAIN);
+    ini->put(section, "balance_hip_roll_gain",    BALANCE_HIP_ROLL_GAIN);
+    ini->put(section, "balance_ankle_roll_gain",  BALANCE_ANKLE_ROLL_GAIN);
 
-    ini->put(section,   "p_gain",                   P_GAIN);
-    ini->put(section,   "i_gain",                   I_GAIN);
-    ini->put(section,   "d_gain",                   D_GAIN);
+    ini->put(section, "r_shoulder_pitch",         R_SHOULDER_PITCH);
+    ini->put(section, "l_shoulder_pitch",         L_SHOULDER_PITCH);
+    ini->put(section, "r_shoulder_roll",          R_SHOULDER_ROLL);
+    ini->put(section, "l_shoulder_roll",          L_SHOULDER_ROLL);
+    ini->put(section, "r_elbow",                  R_ELBOW);
+    ini->put(section, "l_elbow",                  L_ELBOW);
+    ini->put(section, "head_pan",                 HEAD_PAN);
+    ini->put(section, "head_tilt",                HEAD_TILT);
+
+    ini->put(section, "p_gain",                   P_GAIN);
+    ini->put(section, "i_gain",                   I_GAIN);
+    ini->put(section, "d_gain",                   D_GAIN);
 }
 
 double Walking::wsin(double time, double period, double period_shift, double mag, double mag_shift)

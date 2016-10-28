@@ -161,10 +161,8 @@ namespace Robot
 		void Process();
 		bool IsRunning();
 
-        void LoadINISettings(minIni* ini);
-        void LoadINISettings(minIni* ini, const std::string &section);
-        void SaveINISettings(minIni* ini);
-        void SaveINISettings(minIni* ini, const std::string &section);
+        	void LoadINISettings(minIni* ini);
+        	void SaveINISettings(minIni* ini);
 	};
 }
 
