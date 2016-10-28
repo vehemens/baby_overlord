@@ -33,6 +33,7 @@
 #include "usb_pwr.h"
 #include "CM_DXL_COM.h"
 #include "led.h"
+#include "gyro_acc.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

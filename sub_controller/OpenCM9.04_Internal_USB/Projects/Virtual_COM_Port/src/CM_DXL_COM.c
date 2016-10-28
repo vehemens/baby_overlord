@@ -12,6 +12,7 @@
 #include "hw_config.h"
 #include "CM_DXL_COM.h"
 #include "dynamixel.h"
+#include "led.h"
 
 /* Private define ------------------------------------------------------------*/
 #define TIMEOUT_CHECK

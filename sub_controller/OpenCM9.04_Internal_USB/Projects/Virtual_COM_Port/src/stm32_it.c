@@ -132,7 +132,7 @@ extern volatile uint8_t gbMiliSec;
 
 void TIM2_IRQHandler(void)
 {
-  static b1Sec = 0;
+  static int b1Sec = 0;
 
   if (TIM_GetITStatus(TIM2, TIM_IT_CC4) != RESET) // 120us, 8000Hz
   {
