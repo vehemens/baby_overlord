@@ -89,23 +89,19 @@ void Help()
 {
 	printf( "\n" );
 	printf( " exit : Exits the program\n" );
-	printf( " scan : Outputs the current status of all Dynamixels\n" );
-	printf( " id [ID] : Go to [ID]\n" );
-	printf( " d : Dumps the current control table of CM-730 and all Dynamixels\n" );
-	printf( " reset : Defaults the value of current Dynamixel\n" );
+	printf( " scan : Outputs the current status of Controller and Dynamixels\n" );
+	printf( " id [ID] : Selects the current device (Controller or Dynamixel)\n" );
+	printf( " dump : Dumps the control table of current device\n" );
+	printf( " dump all : Dumps the control table of all Dynamixels\n" );
+	printf( " reset : Defaults the value of current device\n" );
 	printf( " reset all : Defaults the value of all Dynamixels\n" );
-	printf( " wr [ADDR] [VALUE] : Writes value [VALUE] to address [ADDR] of current Dynamixel\n" );
-	printf( " on/off : Turns torque on/off of current Dynamixel\n" );
-	printf( " on/off all : Turns torque on/off of all Dynamixels)\n" );
-	printf( "\n       Copyright ROBOTIS CO.,LTD.\n\n" );
+	printf( " wr [ADDR] [VALUE] : Writes value [VALUE] to address [ADDR] of current device\n" );
+	printf( " on/off : Turns power or torque on/off of Controller or current Dynamixel\n" );
+	printf( " on/off all : Turns torque on/off of all Dynamixels\n" );
 }
 
-void Scan(CM730 *cm730)
+void Scan(CM730 *cm730, int id)
 {
-	printf("\n");
-
-	for(int id=1; id<254; id++)
-	{
         if(cm730->Ping(id, 0) == CM730::SUCCESS)
         {
             printf("                                  ... OK\r");
@@ -116,9 +112,6 @@ void Scan(CM730 *cm730)
             printf("                                  ... FAIL\r");
             printf(" Check ID:%d(%s)\n", id, GetIDString(id));
         }
-	}
-
-	printf("\n");
 }
 
 void Dump(CM730 *cm730, int id)
@@ -126,7 +119,6 @@ void Dump(CM730 *cm730, int id)
 	unsigned char table[128];
 	int addr;
 	int value;
-
 
 	if(id == CM730::ID_CM) // Sub board
 	{
@@ -150,6 +142,7 @@ void Dump(CM730 *cm730, int id)
 		printf( " RETURN_DELAY_TIME      (R/W)[%.3d]:%5d\n", addr, value);
 		addr = CM730::P_RETURN_LEVEL; value = table[addr];
 		printf( " RETURN_LEVEL           (R/W)[%.3d]:%5d\n", addr, value);
+
 		printf( "\n" );
 		printf( " [RAM AREA]\n" );
 		addr = CM730::P_DXL_POWER; value = table[addr];
@@ -232,14 +225,12 @@ void Dump(CM730 *cm730, int id)
 		printf( " TORQUE_ENABLE          (R/W)[%.3d]:%5d\n", addr, value);
 		addr = MX28::P_LED; value = table[addr];
 		printf( " LED                    (R/W)[%.3d]:%5d\n", addr, value);
-
-        addr = MX28::P_D_GAIN; value = table[addr];
-        printf( " D_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
-        addr = MX28::P_I_GAIN; value = table[addr];
-        printf( " I_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
-        addr = MX28::P_P_GAIN; value = table[addr];
-        printf( " P_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
-
+        	addr = MX28::P_D_GAIN; value = table[addr];
+        	printf( " D_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
+        	addr = MX28::P_I_GAIN; value = table[addr];
+        	printf( " I_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
+        	addr = MX28::P_P_GAIN; value = table[addr];
+        	printf( " P_GAIN                 (R/W)[%.3d]:%5d\n", addr, value);
 		addr = MX28::P_GOAL_POSITION_L; value = CM730::MakeWord(table[addr], table[addr+1]);
 		printf( " GOAL_POSITION          (R/W)[%.3d]:%5d (L:0x%.2X H:0x%.2X)\n", addr, value, table[addr], table[addr+1]);
 		addr = MX28::P_MOVING_SPEED_L; value = CM730::MakeWord(table[addr], table[addr+1]);
@@ -275,6 +266,7 @@ void Reset(Robot::CM730 *cm730, int id)
 {
 	int FailCount = 0;
 	int FailMaxCount = 10;
+
 	printf(" Reset ID:%d...", id);
 
 	if(cm730->Ping(id, 0) != CM730::SUCCESS)
@@ -283,38 +275,55 @@ void Reset(Robot::CM730 *cm730, int id)
 		return;
 	}
 
-	FailCount = 0;
-	while(1)
-	{
-		if(cm730->WriteByte(id, MX28::P_RETURN_DELAY_TIME, 0, 0) == CM730::SUCCESS)
-			break;
-
-		FailCount++;
-		if(FailCount > FailMaxCount)
+	if(id == CM730::ID_CM) // Sub board
+	{ 
+		FailCount = 0;
+		while(1)
 		{
-			printf("Fail\n");
-			return;
+			if(cm730->WriteByte(id, CM730::P_RETURN_DELAY_TIME, 0, 0) == CM730::SUCCESS)
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
 		}
-		usleep(10000);
-	}
 
-	FailCount = 0;
-	while(1)
-	{
-		if(cm730->WriteByte(id, MX28::P_RETURN_LEVEL, 2, 0) == CM730::SUCCESS)
-			break;
-
-		FailCount++;
-		if(FailCount > FailMaxCount)
+		FailCount = 0;
+		while(1)
 		{
-			printf("Fail\n");
-			return;
-		}
-		usleep(10000);
-	}
+			if(cm730->WriteByte(id, CM730::P_RETURN_LEVEL, 2, 0) == CM730::SUCCESS)
+				break;
 
-	if(id != CM730::ID_CM)
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}
+	}
+	else // Actuator
 	{
+		FailCount = 0;
+		while(1)
+		{
+			if(cm730->WriteByte(id, MX28::P_RETURN_DELAY_TIME, 0, 0) == CM730::SUCCESS)
+				break;
+
+			FailCount++;
+			if(FailCount > FailMaxCount)
+			{
+				printf("Fail\n");
+				return;
+			}
+			usleep(10000);
+		}
+
 		double cwLimit = MX28::MIN_ANGLE;
 		double ccwLimit = MX28::MAX_ANGLE;
 
@@ -525,14 +534,9 @@ void Reset(Robot::CM730 *cm730, int id)
 
 void Write(Robot::CM730 *cm730, int id, int addr, int value)
 {
-	if(addr == MX28::P_RETURN_DELAY_TIME || addr == MX28::P_RETURN_LEVEL)
-	{
-		printf( " Can not change this address[%d]\n", addr);
-		return;
-	}
-
 	int error = 0;
 	int res;
+
 	if(id == CM730::ID_CM)
 	{
 		if(addr >= CM730::MAXNUM_ADDRESS)
@@ -546,12 +550,18 @@ void Write(Robot::CM730 *cm730, int id, int addr, int value)
 		{
 			res = cm730->WriteByte(addr, value, &error);
 		}
-		else
+		else if(addr == CM730::P_LED_HEAD_L
+			|| addr == CM730::P_LED_EYE_L)
 		{
 			res = cm730->WriteWord(addr, value, &error);
 		}
+		else
+		{
+			printf( " Address not supported!\n");
+			return;
+		}
 	}
-	else
+	else // Actuator
 	{
 		if(addr >= MX28::MAXNUM_ADDRESS)
 		{
@@ -572,24 +582,39 @@ void Write(Robot::CM730 *cm730, int id, int addr, int value)
 		        gID = value;
 		    }
 		}
-		else if(addr == MX28::P_HIGH_LIMIT_TEMPERATURE
-            || addr == MX28::P_LOW_LIMIT_VOLTAGE
-            || addr == MX28::P_HIGH_LIMIT_VOLTAGE
-            || addr == MX28::P_ALARM_LED
-            || addr == MX28::P_ALARM_SHUTDOWN
-            || addr == MX28::P_TORQUE_ENABLE
-            || addr == MX28::P_LED
-			|| addr == MX28::P_P_GAIN
-			|| addr == MX28::P_I_GAIN
+		else if(addr == MX28::P_RETURN_DELAY_TIME
+            		|| addr == MX28::P_HIGH_LIMIT_TEMPERATURE
+            		|| addr == MX28::P_LOW_LIMIT_VOLTAGE
+            		|| addr == MX28::P_HIGH_LIMIT_VOLTAGE
+            		|| addr == MX28::P_RETURN_LEVEL
+            		|| addr == MX28::P_ALARM_LED
+            		|| addr == MX28::P_ALARM_SHUTDOWN
+            		|| addr == MX28::P_RESOLUTION_DIVIDER
+            		|| addr == MX28::P_TORQUE_ENABLE
+            		|| addr == MX28::P_LED
 			|| addr == MX28::P_D_GAIN
-			|| addr == MX28::P_LED
-			|| addr == MX28::P_LED)
+			|| addr == MX28::P_I_GAIN
+			|| addr == MX28::P_P_GAIN
+			|| addr == MX28::P_LOCK
+			|| addr == MX28::P_GOAL_ACCELERATION)
 		{
 			res = cm730->WriteByte(id, addr, value, &error);
 		}
-		else
+		else if(addr == MX28::P_CW_ANGLE_LIMIT_L
+			|| addr == MX28::P_CCW_ANGLE_LIMIT_L
+			|| addr == MX28::P_MAX_TORQUE_L
+			|| addr == MX28::P_MULTI_TURN_OFFSET_L
+			|| addr == MX28::P_GOAL_POSITION_L
+			|| addr == MX28::P_MOVING_SPEED_L
+			|| addr == MX28::P_TORQUE_LIMIT_L
+			|| addr == MX28::P_PUNCH_L)
 		{
 			res = cm730->WriteWord(id, addr, value, &error);
+		}
+		else
+		{
+			printf( " Address not supported!\n");
+			return;
 		}
 	}
 

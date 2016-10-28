@@ -7,7 +7,7 @@
 
 void Prompt(int id);
 void Help();
-void Scan(Robot::CM730 *cm730);
+void Scan(Robot::CM730 *cm730, int id);
 void Dump(Robot::CM730 *cm730, int id);
 void Reset(Robot::CM730 *cm730, int id);
 void Write(Robot::CM730 *cm730, int id, int addr, int value);
