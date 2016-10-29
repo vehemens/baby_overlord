@@ -46,6 +46,10 @@ uint32_t USART_Rx_ptr_out = 0;
 extern uint8_t gbpRxCmBuffer[];
 extern uint8_t gbRxCmBufferWritePointer;
 
+extern uint8_t gbpTxCmBuffer[];
+extern uint8_t gbTxCmBufferReadPointer;
+extern uint8_t gbTxCmBufferWritePointer;
+
 /* Private function prototypes -----------------------------------------------*/
 static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 
@@ -416,13 +420,22 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 
 /*******************************************************************************
 * Function Name  : CNTR_To_USB_Send_Data.
-* Description    : send the received data from CNTR to USB.
+* Description    : send CNTR data to USB.
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void CNTR_To_USB_Send_Data(uint8_t data)
+void CNTR_To_USB_Send_Data()
 {
-  USART_Rx_Buffer[(USART_Rx_ptr_in++)%USART_RX_DATA_SIZE] = data;
+  uint8_t data;
+  uint32_t tmp_in = USART_Rx_ptr_in;
+
+  while (gbTxCmBufferReadPointer != gbTxCmBufferWritePointer)
+  {
+    data = gbpTxCmBuffer[gbTxCmBufferReadPointer++];
+
+    USART_Rx_Buffer[(tmp_in++)%USART_RX_DATA_SIZE] = data;
+  }
+  USART_Rx_ptr_in = tmp_in;
 }
 
 /*******************************************************************************

@@ -684,8 +684,7 @@ void ProcessInstruction(uint8_t length)
       gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bCheckSum;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bCheckSum;
 
-      while (gbTxCmBufferWritePointer != gbTxCmBufferReadPointer)
-        CNTR_To_USB_Send_Data(gbpTxCmBuffer[gbTxCmBufferReadPointer++]);
+      CNTR_To_USB_Send_Data();
     }
   }
 
@@ -823,8 +822,7 @@ void ReturnPacket(uint8_t bError)
     gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bError;
     gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bCheckSum;
 
-    while (gbTxCmBufferWritePointer != gbTxCmBufferReadPointer)
-      CNTR_To_USB_Send_Data(gbpTxCmBuffer[gbTxCmBufferReadPointer++]);
+    CNTR_To_USB_Send_Data();
   }
 }
 
