@@ -121,7 +121,7 @@ void Leave_LowPowerMode(void);
 void USB_Cable_Config(FunctionalState NewState);
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
 void CNTR_To_USB_Send_Data();
-void USART_To_USB_Send_Data(void);
+void USART_To_USB_Send_Data(uint8_t data);
 void Get_SerialNum(void);
 
 /* External variables --------------------------------------------------------*/

@@ -440,13 +440,17 @@ void CNTR_To_USB_Send_Data()
 
 /*******************************************************************************
 * Function Name  : USART_To_USB_Send_Data.
-* Description    : send the received data from USART to USB.
+* Description    : send USART data to USB.
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void USART_To_USB_Send_Data(void)
+void USART_To_USB_Send_Data(uint8_t data)
 {
-  USART_Rx_Buffer[(USART_Rx_ptr_in++)%USART_RX_DATA_SIZE] = USART_ReceiveData(DXL_USART);
+  uint32_t tmp_in = USART_Rx_ptr_in;
+
+  USART_Rx_Buffer[(tmp_in++)%USART_RX_DATA_SIZE] = data;
+
+  USART_Rx_ptr_in = tmp_in;
 }
 
 /*******************************************************************************

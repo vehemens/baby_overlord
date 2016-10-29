@@ -186,10 +186,14 @@ void TIM2_IRQHandler(void)
 
 void DXL_USART_IRQHandler(void)
 {
+  uint8_t data;
+
   if (USART_GetITStatus(DXL_USART, USART_IT_RXNE) != RESET)
   {
-    /* Send the received data to the PC Host*/
-    USART_To_USB_Send_Data();
+    /* Send data to the USB */
+    data = (uint8_t)(USART_ReceiveData(DXL_USART) & (uint16_t)0x00FF);
+
+    USART_To_USB_Send_Data(data);
   }
 
   /* If overrun condition occurs, clear the ORE flag and recover communication */
