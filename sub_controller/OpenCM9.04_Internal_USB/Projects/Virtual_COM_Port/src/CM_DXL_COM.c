@@ -240,12 +240,12 @@ uint8_t ROM_INITIAL_DATA[] =
   0		//			23
 };
 
-volatile uint8_t gbpRxInterruptBuffer[256];
-volatile uint8_t gbpTxInterruptBuffer[256];
-volatile uint8_t gbRxBufferWritePointer;
-volatile uint8_t gbRxBufferReadPointer;
-volatile uint8_t gbTxBufferWritePointer;
-volatile uint8_t gbTxBufferReadPointer;
+volatile uint8_t gbpRxCmBuffer[256];
+volatile uint8_t gbpTxCmBuffer[256];
+volatile uint8_t gbRxCmBufferWritePointer;
+volatile uint8_t gbRxCmBufferReadPointer;
+volatile uint8_t gbTxCmBufferWritePointer;
+volatile uint8_t gbTxCmBufferReadPointer;
 
 volatile uint8_t gbpRxD0Buffer[256];
 volatile uint8_t gbpTxD0Buffer[256];
@@ -302,10 +302,10 @@ void ProcessInit(void)
     gbpControlTable[bCount] = ROM_INITIAL_DATA[bCount];
   }
 
-  gbRxBufferWritePointer = 0;
-  gbRxBufferReadPointer = 0;
-  gbTxBufferWritePointer = 0;
-  gbTxBufferReadPointer = 0;
+  gbRxCmBufferWritePointer = 0;
+  gbRxCmBufferReadPointer = 0;
+  gbTxCmBufferWritePointer = 0;
+  gbTxCmBufferReadPointer = 0;
 
   gbRxD0BufferWritePointer = 0;
   gbRxD0BufferReadPointer = 0;
@@ -347,7 +347,7 @@ RX_PACKET_TIMEOUT:
       #ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
       #endif
-      while (gbRxBufferReadPointer == gbRxBufferWritePointer)
+      while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
@@ -357,7 +357,7 @@ RX_PACKET_TIMEOUT:
         #endif
       }
 
-      if ((gbRxID = gbpRxInterruptBuffer[gbRxBufferReadPointer++]) == 0xff)
+      if ((gbRxID = gbpRxCmBuffer[gbRxCmBufferReadPointer++]) == 0xff)
       {
         bCount0xff++;
       }
@@ -376,7 +376,7 @@ RX_PACKET_TIMEOUT:
       #ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
       #endif
-      while (gbRxBufferReadPointer == gbRxBufferWritePointer)
+      while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
@@ -385,7 +385,7 @@ RX_PACKET_TIMEOUT:
         }
         #endif
       }
-      bLength = gbpRxInterruptBuffer[gbRxBufferReadPointer++];
+      bLength = gbpRxCmBuffer[gbRxCmBufferReadPointer++];
 
       gbParameterLength = bLength - 2;
       if (gbParameterLength > MAX_PACKET_LENGTH)
@@ -398,7 +398,7 @@ RX_PACKET_TIMEOUT:
       #ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
       #endif
-      while (gbRxBufferReadPointer == gbRxBufferWritePointer)
+      while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
         #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
@@ -407,7 +407,7 @@ RX_PACKET_TIMEOUT:
         }
         #endif
       }
-      gbInstruction = gbpRxInterruptBuffer[gbRxBufferReadPointer++];
+      gbInstruction = gbpRxCmBuffer[gbRxCmBufferReadPointer++];
       bCheckSum = gbRxID + bLength + gbInstruction;
 
       for (bCount = 0; bCount < gbParameterLength + 1; bCount++)
@@ -415,7 +415,7 @@ RX_PACKET_TIMEOUT:
         #ifdef TIMEOUT_CHECK
         gbMiliSec = 0;
         #endif
-        while (gbRxBufferReadPointer == gbRxBufferWritePointer)
+        while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
         {
           #ifdef TIMEOUT_CHECK
           if (gbMiliSec > TIMEOUT_MILISEC)
@@ -424,7 +424,7 @@ RX_PACKET_TIMEOUT:
           }
           #endif
         }
-        bCheckSum += (gbpParameter[bCount] = gbpRxInterruptBuffer[gbRxBufferReadPointer++]);
+        bCheckSum += (gbpParameter[bCount] = gbpRxCmBuffer[gbRxCmBufferReadPointer++]);
       }
       //Packet Receiving End
 
@@ -438,7 +438,7 @@ RX_PACKET_TIMEOUT:
       if (bCheckSum != 0xff)
       {
         //buffer initialize
-        gbRxBufferWritePointer = gbRxBufferReadPointer;
+        gbRxCmBufferWritePointer = gbRxCmBufferReadPointer;
 
         if (gbInstruction == INST_PING) {
         }
@@ -632,11 +632,11 @@ void ProcessInstruction(uint8_t length)
 
       bCheckSum = GB_ID + bLength + gbInterruptCheckError;
 
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = GB_ID;
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bLength;
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = gbInterruptCheckError;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = 0xff;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = 0xff;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = GB_ID;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bLength;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = gbInterruptCheckError;
 
       gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++]= 0xff;
@@ -655,14 +655,14 @@ void ProcessInstruction(uint8_t length)
 
           bFixedData = (uint8_t)(wFixedData & 0xff);
 
-          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
+          gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
 
           bFixedData = (uint8_t)((wFixedData >> 8) & 0xff);
 
-          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
+          gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
@@ -673,7 +673,7 @@ void ProcessInstruction(uint8_t length)
         {
           bFixedData = gbpControlTable[bCount];
 
-          gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bFixedData;
+          gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bFixedData;
           gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bFixedData;
 
           bCheckSum += bFixedData;
@@ -681,11 +681,11 @@ void ProcessInstruction(uint8_t length)
       }
       bCheckSum ^= 0xff;
 
-      gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
+      gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bCheckSum;
       gbpTxD0Buffer[gbTxD0BufferWritePointer++] = bCheckSum;
 
-      while (gbTxBufferWritePointer != gbTxBufferReadPointer)
-        CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
+      while (gbTxCmBufferWritePointer != gbTxCmBufferReadPointer)
+        CNTR_To_USB_Send_Data(gbpTxCmBuffer[gbTxCmBufferReadPointer++]);
     }
   }
 
@@ -816,15 +816,15 @@ void ReturnPacket(uint8_t bError)
 
     bCheckSum = ~(GB_ID + 2 + bError);
 
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 0xff;
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = GB_ID;
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = 2;
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bError;
-    gbpTxInterruptBuffer[gbTxBufferWritePointer++] = bCheckSum;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = 0xff;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = 0xff;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = GB_ID;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = 2;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bError;
+    gbpTxCmBuffer[gbTxCmBufferWritePointer++] = bCheckSum;
 
-    while (gbTxBufferWritePointer != gbTxBufferReadPointer)
-      CNTR_To_USB_Send_Data(gbpTxInterruptBuffer[gbTxBufferReadPointer++]);
+    while (gbTxCmBufferWritePointer != gbTxCmBufferReadPointer)
+      CNTR_To_USB_Send_Data(gbpTxCmBuffer[gbTxCmBufferReadPointer++]);
   }
 }
 

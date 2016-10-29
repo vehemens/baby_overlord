@@ -43,6 +43,9 @@ uint32_t USART_Rx_ptr_in = 0;
 uint32_t USART_Rx_ptr_out = 0;
 
 /* Extern variables ----------------------------------------------------------*/
+extern uint8_t gbpRxCmBuffer[];
+extern uint8_t gbRxCmBufferWritePointer;
+
 /* Private function prototypes -----------------------------------------------*/
 static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 
@@ -392,9 +395,6 @@ void USB_Cable_Config(FunctionalState NewState)
                    Nb_bytes: number of bytes to send.
 * Return         : None.
 *******************************************************************************/
-extern uint8_t gbpRxInterruptBuffer[];
-extern uint8_t gbRxBufferWritePointer;
-
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 {
   uint32_t i;
@@ -410,7 +410,7 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 
   for (i = 0; i < Nb_bytes; i++)
   {
-    gbpRxInterruptBuffer[gbRxBufferWritePointer++] = *(data_buffer + i);
+    gbpRxCmBuffer[gbRxCmBufferWritePointer++] = *(data_buffer + i);
   }
 }
 
