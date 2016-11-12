@@ -54,6 +54,8 @@ extern uint8_t gbTxCmBufferWritePointer;
 static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 
 /* Private functions ---------------------------------------------------------*/
+void USB_To_CM_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
+void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes);
 
 /*******************************************************************************
 * Function Name  : Clock_Config
@@ -402,25 +404,30 @@ void USB_Cable_Config(FunctionalState NewState)
 }
 
 /*******************************************************************************
-* Function Name  : USB_To_USART_Send_Data.
-* Description    : send the received data from USB to the UART 0.
+* Function Name  : USB_To_CM_USART_Send_Data.
+* Description    : send USB data to CM and USART.
 * Input          : data_buffer: data address.
                    Nb_bytes: number of bytes to send.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
+void USB_To_CM_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
+{
+  USB_To_USART_Send_Data(data_buffer, Nb_bytes);
+
+  USB_To_CM_Send_Data(data_buffer, Nb_bytes);
+}
+
+/*******************************************************************************
+* Function Name  : USB_To_CM_Send_Data.
+* Description    : send USB data to CM.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
+void USB_To_CM_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 {
   uint32_t i;
-
-  GPIO_SetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
-  for (i = 0; i < Nb_bytes; i++)
-  {
-    USART_SendData(DXL_USART, *(data_buffer + i));
-    while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TXE) == RESET);
-  }
-  while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TC) == RESET);
-  GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
 
   for (i = 0; i < Nb_bytes; i++)
   {
@@ -447,6 +454,27 @@ void CNTR_To_USB_Send_Data()
     USART_Rx_Buffer[(tmp_in++)%USART_RX_DATA_SIZE] = data;
   }
   USART_Rx_ptr_in = tmp_in;
+}
+
+/*******************************************************************************
+* Function Name  : USB_To_USART_Send_Data.
+* Description    : send USB data to USART.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
+void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
+{
+  uint32_t i;
+
+  GPIO_SetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
+  for (i = 0; i < Nb_bytes; i++)
+  {
+    USART_SendData(DXL_USART, *(data_buffer + i));
+    while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TXE) == RESET);
+  }
+  while(USART_GetFlagStatus(DXL_USART, USART_FLAG_TC) == RESET);
+  GPIO_ResetBits(DXL_USART_DIR_GPIO_PORT, DXL_USART_DIR_GPIO_PIN);
 }
 
 /*******************************************************************************
