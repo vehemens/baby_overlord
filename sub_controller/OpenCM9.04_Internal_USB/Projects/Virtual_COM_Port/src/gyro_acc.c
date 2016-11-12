@@ -40,6 +40,7 @@ void SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len);
 * Function Name  : Gyro_Config
 * Description    : Configures GYRO
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void GYRO_Config(void)
@@ -64,6 +65,7 @@ void GYRO_Config(void)
 * Function Name  : ACC_Config
 * Description    : Configures accelerometer
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ACC_Config(void)
@@ -88,6 +90,7 @@ void ACC_Config(void)
 * Function Name  : __GYRO_ISR
 * Description    : Reads GYRO rates
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void __GYRO_ISR(void)
@@ -116,6 +119,7 @@ void __GYRO_ISR(void)
 * Function Name  : __ACC_ISR
 * Description    : Reads accelerometer rates
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void __ACC_ISR(void)
@@ -144,6 +148,7 @@ void __ACC_ISR(void)
 * Function Name  : GYRO_ConvertData
 * Description    : Converts raw data to u10
 * Input          : Message buffer
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void GYRO_ConvertData(uint8_t rxbuf[])
@@ -190,6 +195,7 @@ void GYRO_ConvertData(uint8_t rxbuf[])
 * Function Name  : ACC_ConvertData
 * Description    : Converts raw data to u10
 * Input          : Message buffer
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ACC_ConvertData(uint8_t rxbuf[])
@@ -236,6 +242,7 @@ void ACC_ConvertData(uint8_t rxbuf[])
 * Function Name  : GYRO_SPI_TR
 * Description    : TR GYRO
 * Input          : Message buffers and length
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void GYRO_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
@@ -253,6 +260,7 @@ void GYRO_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
 * Function Name  : ACC_SPI_TR
 * Description    : TR accelerometer
 * Input          : Message buffers and length
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ACC_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
@@ -270,6 +278,7 @@ void ACC_SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)
 * Function Name  : SPI_TR
 * Description    : TR device
 * Input          : Message buffers and length
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void SPI_TR(uint8_t txbuf[], uint8_t rxbuf[], uint16_t len)

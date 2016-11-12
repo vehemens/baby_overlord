@@ -23,6 +23,7 @@
 * Function Name  : LED_SetState
 * Description    : Sets the LEDs to the specified state
 * Input          : LEDs, State
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void LED_SetState(uint8_t LED_PORT, PowerState NewState)
@@ -51,6 +52,7 @@ void LED_SetState(uint8_t LED_PORT, PowerState NewState)
 * Function Name  : LED_GetState
 * Description    : Gets the state of the specified LED
 * Input          : LEDs
+* Output         : None.
 * Return         : State
 *******************************************************************************/
 PowerState LED_GetState(uint8_t LED_PORT)

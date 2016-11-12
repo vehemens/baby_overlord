@@ -291,6 +291,7 @@ void ProcessAfterWriting(void);
 * Function Name  : ProcessInit
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ProcessInit(void)
@@ -330,6 +331,7 @@ void ProcessInit(void)
 * Function Name  : ProcessPackets
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ProcessPackets(void)
@@ -344,18 +346,16 @@ RX_PACKET_TIMEOUT:
     bCount0xff = 0;
     while (1)
     {
-      #ifdef TIMEOUT_CHECK
+#ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
-      #endif
       while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
-        #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
         {
           goto RX_PACKET_TIMEOUT;
         }
-        #endif
       }
+#endif
 
       if ((gbRxID = gbpRxCmBuffer[gbRxCmBufferReadPointer++]) == 0xff)
       {
@@ -373,18 +373,16 @@ RX_PACKET_TIMEOUT:
 
     if (gbRxID == GB_ID || gbRxID == BROADCASTING_ID)
     {
-      #ifdef TIMEOUT_CHECK
+#ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
-      #endif
       while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
-        #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
         {
           goto RX_PACKET_TIMEOUT;
         }
-        #endif
       }
+#endif
       bLength = gbpRxCmBuffer[gbRxCmBufferReadPointer++];
 
       gbParameterLength = bLength - 2;
@@ -395,35 +393,31 @@ RX_PACKET_TIMEOUT:
 
       //from this state, status packet will be returned
 
-      #ifdef TIMEOUT_CHECK
+#ifdef TIMEOUT_CHECK
       gbMiliSec = 0;
-      #endif
       while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
       {
-        #ifdef TIMEOUT_CHECK
         if (gbMiliSec > TIMEOUT_MILISEC)
         {
           goto RX_PACKET_TIMEOUT;
         }
-        #endif
       }
+#endif
       gbInstruction = gbpRxCmBuffer[gbRxCmBufferReadPointer++];
       bCheckSum = gbRxID + bLength + gbInstruction;
 
       for (bCount = 0; bCount < gbParameterLength + 1; bCount++)
       {
-        #ifdef TIMEOUT_CHECK
+#ifdef TIMEOUT_CHECK
         gbMiliSec = 0;
-        #endif
         while (gbRxCmBufferReadPointer == gbRxCmBufferWritePointer)
         {
-          #ifdef TIMEOUT_CHECK
           if (gbMiliSec > TIMEOUT_MILISEC)
           {
             goto RX_PACKET_TIMEOUT;
           }
-          #endif
         }
+#endif
         bCheckSum += (gbpParameter[bCount] = gbpRxCmBuffer[gbRxCmBufferReadPointer++]);
       }
       //Packet Receiving End
@@ -458,6 +452,7 @@ RX_PACKET_TIMEOUT:
 * Function Name  : ProcessInstruction
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ProcessInstruction(uint8_t length)
@@ -737,6 +732,7 @@ RX_PACKET_TIMEOUT:
 * Function Name  : WriteControlTable
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void WriteControlTable(void)
@@ -773,6 +769,7 @@ void WriteControlTable(void)
 * Function Name  : WriteControlTableRangeCheck
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 uint8_t WriteControlTableRangeCheck(void)
@@ -803,6 +800,7 @@ uint8_t WriteControlTableRangeCheck(void)
 * Function Name  : ReturnPacket
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ReturnPacket(uint8_t bError)
@@ -830,6 +828,7 @@ void ReturnPacket(uint8_t bError)
 * Function Name  : ProcessAfterWriting
 * Description    : XX
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void ProcessAfterWriting(void)

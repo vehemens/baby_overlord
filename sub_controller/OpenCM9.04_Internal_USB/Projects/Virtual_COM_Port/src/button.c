@@ -23,6 +23,7 @@
 * Function Name  : __Button_ISR
 * Description    : Reads button state
 * Input          : None.
+* Output         : None.
 * Return         : Button state
 *******************************************************************************/
 void __Button_ISR(void)

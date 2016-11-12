@@ -59,6 +59,7 @@ static void IntToUnicode(uint32_t value , uint8_t *pbuf , uint8_t len);
 * Function Name  : Clock_Config
 * Description    : Configures system clocks & power
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void Clock_Config(void)
@@ -84,6 +85,7 @@ void Clock_Config(void)
 * Function Name  : IO_Config
 * Description    : Configures GPIO and EXTI interfaces
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void IO_Config(void)
@@ -209,6 +211,7 @@ void IO_Config(void)
 * Function Name  : Interrupt_Config
 * Description    : Configures the interrupts
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void Interrupt_Config(void)
@@ -249,6 +252,7 @@ void Interrupt_Config(void)
 * Function Name  : USART_Config
 * Description    : Configures USART Devices
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void USART_Config(void)
@@ -275,6 +279,7 @@ void USART_Config(void)
 * Function Name  : SPI_Config
 * Description    : Configures SPI Devices
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void SPI_Config(void)
@@ -302,6 +307,7 @@ void SPI_Config(void)
 * Function Name  : Timer_Config
 * Description    : Configures Timer Devices
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 volatile uint16_t CCR4_Val = 12; // 12 us
@@ -342,6 +348,7 @@ void Timer_Config(void)
 * Function Name  : Enter_LowPowerMode
 * Description    : Power-off system clocks and power while entering suspend mode
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void Enter_LowPowerMode(void)
@@ -354,6 +361,7 @@ void Enter_LowPowerMode(void)
 * Function Name  : Leave_LowPowerMode
 * Description    : Restores system clocks and power while exiting suspend mode
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void Leave_LowPowerMode(void)
@@ -378,6 +386,7 @@ void Leave_LowPowerMode(void)
 * Function Name  : USB_Cable_Config
 * Description    : Software Connection/Disconnection of USB Cable
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void USB_Cable_Config(FunctionalState NewState)
@@ -397,6 +406,7 @@ void USB_Cable_Config(FunctionalState NewState)
 * Description    : send the received data from USB to the UART 0.
 * Input          : data_buffer: data address.
                    Nb_bytes: number of bytes to send.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
@@ -422,6 +432,7 @@ void USB_To_USART_Send_Data(uint8_t* data_buffer, uint32_t Nb_bytes)
 * Function Name  : CNTR_To_USB_Send_Data.
 * Description    : send CNTR data to USB.
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void CNTR_To_USB_Send_Data()
@@ -442,6 +453,7 @@ void CNTR_To_USB_Send_Data()
 * Function Name  : USART_To_USB_Send_Data.
 * Description    : send USART data to USB.
 * Input          : None.
+* Output         : None.
 * Return         : None.
 *******************************************************************************/
 void USART_To_USB_Send_Data(uint8_t data)
